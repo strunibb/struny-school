@@ -1,0 +1,30 @@
+{
+  "name": "struny-budushchego",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vinext dev",
+    "build": "vinext build",
+    "build:pages": "GITHUB_PAGES=true next build",
+    "build:sites": "node scripts/build-sites-worker.mjs",
+    "postbuild": "node scripts/copy-hosting.mjs",
+    "start": "vinext start",
+    "start:worker": "wrangler dev --config dist/server/wrangler.json"
+  },
+  "dependencies": {
+    "@vinext/cloudflare": "1.0.0-beta.1",
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "react-server-dom-webpack": "19.2.7",
+    "vinext": "0.2.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.45.0",
+    "@vitejs/plugin-react": "6.0.3",
+    "@vitejs/plugin-rsc": "0.5.27",
+    "vite": "8.1.4",
+    "wrangler": "4.111.0"
+  }
+}
