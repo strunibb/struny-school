@@ -144,8 +144,8 @@ export default function Home() {
         <div className="hero-visual reveal delay">
           <div className="photo-frame">
             <div className="photo-overlay" />
-            <div className="photo-placeholder" aria-label="Акустическая гитара">
-              <img className="hero-guitar-image" src="./hero-guitar.webp" alt="Акустическая гитара" />
+            <div className="photo-placeholder">
+              <img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" />
             </div>
             <div className="floating-card fc-top"><span className="mini-icon"><Icon name="music" /></span><div><small>Наставничество</small><b>1–3 песни в неделю</b></div></div>
             <div className="floating-card fc-bottom"><span className="wave"><i/><i/><i/><i/><i/><i/></span><div><small>Обратная связь</small><b>личная проверка ДЗ</b></div></div>
@@ -179,6 +179,10 @@ export default function Home() {
           <h2>От первого занятия до <em>3–5 песен</em></h2>
           <p>Четыре недели коротких уроков по 10–20 минут. Занимаетесь по понятному плану и последовательно собираете базу.</p>
           <button className="link-arrow" onClick={() => setQuiz(true)}>Записаться на модуль <Icon name="arrow" /></button>
+          <figure className="program-photo">
+            <img src="./lesson-planning.webp" alt="Подготовка персонального материала для ученика" loading="lazy" />
+            <figcaption>Материалы под конкретную задачу ученика</figcaption>
+          </figure>
         </div>
         <div className="timeline">
           <article><span className="timeline-no">01</span><div><h3>Знакомство с инструментом</h3><p>Посадка за гитарой, базовая постановка правой и левой рук, исправление ошибок, из-за которых появляется напряжение.</p><small>1–3 урок</small></div></article>
@@ -206,11 +210,28 @@ export default function Home() {
         <p className="format-note">Не знаете, что выбрать? <button onClick={() => setQuiz(true)}>Ответьте на 3 вопроса</button> — Никита предложит подходящий формат.</p>
       </section>
 
+      <section className="section real-learning">
+        <div className="real-learning-photo">
+          <img src="./personal-lesson.webp" alt="Индивидуальное занятие Никиты Осадчука с учеником" loading="lazy" />
+          <span>Личная работа с учеником</span>
+        </div>
+        <div className="real-learning-copy">
+          <span className="eyebrow">как проходят занятия</span>
+          <h2>Разбираем именно то, что мешает <em>играть увереннее</em></h2>
+          <p>На личных онлайн-занятиях Никита проверяет посадку, постановку рук, технику, ритм и домашнее задание. Материал подбирается под инструмент, уровень и цель ученика.</p>
+          <ul>
+            <li><Icon name="check" /> Гитара и электрогитара</li>
+            <li><Icon name="check" /> Укулеле и фортепиано</li>
+            <li><Icon name="check" /> Обратная связь по домашним заданиям</li>
+          </ul>
+          <button className="btn btn-primary" onClick={() => setQuiz(true)}>Подобрать формат <Icon name="arrow" /></button>
+        </div>
+      </section>
+
       <section className="section course-strip">
-        <div className="course-visual">
-          <div className="chord-card chord-a"><small>урок 04</small><b>Am</b><span>● ● ●</span></div>
-          <div className="chord-card chord-c"><small>урок 07</small><b>C</b><span>● ● ●</span></div>
-          <div className="pick-shape">SF</div>
+        <div className="course-visual course-photo">
+          <img src="./lesson-planning.webp" alt="Подготовка урока по гитаре" loading="lazy" />
+          <span>Практика · аккорды · ритм · песни</span>
         </div>
         <div className="course-copy">
           <span className="eyebrow">курс «базовый минимум»</span>
@@ -230,10 +251,21 @@ export default function Home() {
         </div>
         <div className="lesson-feature">
           <div className="lesson-video">
-            <div className="lesson-art"><span>{instrument === "Гитара" ? "G" : instrument === "Укулеле" ? "U" : "P"}</span><div className="art-lines" /></div>
+            {instrument === "Гитара"
+              ? <img className="lesson-preview-image" src="./material-rhythm.webp" alt="Фрагмент видеоурока по гитарному бою" loading="lazy" />
+              : <div className="lesson-art"><span>{instrument === "Укулеле" ? "U" : "P"}</span><div className="art-lines" /></div>}
             <a className="big-play" href={instrument === "Гитара" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" : instrument === "Укулеле" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239064" : "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239059&hd=3"} target="_blank" rel="noreferrer"><Icon name="play" /></a>
           </div>
           <div className="lesson-info"><span className="card-tag">БЕСПЛАТНЫЙ УРОК · {instrument.toUpperCase()}</span><h3>{instrument === "Фортепиано" ? "Первый урок по фортепиано" : instrument === "Укулеле" ? "Первый урок по укулеле" : "Знакомство с гитарой"}</h3><p>{instrument === "Гитара" ? "Знакомство с инструментом, правильная посадка и первые шаги перед началом игры." : "Откройте первый урок по выбранному инструменту и попробуйте формат обучения до покупки."}</p><ul><li><Icon name="play"/> Видео открывается сразу</li><li><Icon name="music"/> Практический материал</li><li><Icon name="message"/> Можно задать вопрос преподавателю</li></ul><a className="link-arrow" href={instrument === "Гитара" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" : instrument === "Укулеле" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239064" : "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239059&hd=3"} target="_blank" rel="noreferrer">Смотреть бесплатно <Icon name="arrow" /></a></div>
+        </div>
+        <div className="materials-head">
+          <span className="eyebrow">примеры материалов</span>
+          <h3>Не только видео: схемы и готовые подсказки остаются у ученика</h3>
+        </div>
+        <div className="materials-gallery">
+          <figure><img src="./material-song.webp" alt="Материал с текстом песни и аккордами" loading="lazy" /><figcaption><b>Разбор песни</b><span>Текст, аккорды и последовательность</span></figcaption></figure>
+          <figure><img src="./material-rhythm.webp" alt="Схема гитарного боя в видеоуроке" loading="lazy" /><figcaption><b>Схема ритма</b><span>Движения правой руки по счёту</span></figcaption></figure>
+          <figure><img src="./material-trainer.webp" alt="Тренажёр гитарного боя в видеоуроке" loading="lazy" /><figcaption><b>Тренажёр боя</b><span>Практика под метроном</span></figcaption></figure>
         </div>
       </section>
 
@@ -244,7 +276,7 @@ export default function Home() {
 
       <section className="section about" id="about">
         <div className="about-visual">
-          <div className="portrait-placeholder"><span>NO</span><small>Никита<br/>Осадчук</small></div>
+          <img className="about-portrait" src="./nikita-about.webp" alt="Никита Осадчук играет на акустической гитаре" loading="lazy" />
           <div className="experience-badge"><b>500+</b><span>учеников</span></div>
         </div>
         <div className="about-copy">
@@ -260,6 +292,10 @@ export default function Home() {
           <div><span className="stars">★★★★★</span><h3>Отзывы учеников</h3><p>Оценки и тексты реальных клиентов находятся в профиле Никиты Осадчука.</p><a className="btn btn-ghost" href="https://profi.ru/profile/OsadchukNA2" target="_blank" rel="noreferrer">Открыть отзывы на Profi.ru <Icon name="arrow" /></a></div>
           <div><span className="eyebrow">видео</span><h3>Результаты учеников</h3><p>Примеры игры учеников можно запросить у преподавателя вместе с подбором формата.</p><a className="btn btn-ghost" href={`${tg}?text=${encodeURIComponent("Здравствуйте! Хочу посмотреть результаты учеников и подобрать формат обучения.")}`} target="_blank" rel="noreferrer">Запросить примеры <Icon name="arrow" /></a></div>
         </div>
+        <figure className="student-group">
+          <img src="./students-group.webp" alt="Никита Осадчук с группой учеников" loading="lazy" />
+          <figcaption><span>Опыт работы</span><b>Индивидуальные и групповые занятия с детьми и взрослыми</b></figcaption>
+        </figure>
       </section>
 
       <section className="section faq">
