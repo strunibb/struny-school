@@ -522,27 +522,32 @@ export default function Home() {
       </header>
 
       <section className="hero" id="top">
+        <div className="hero-glow glow-one" /><div className="hero-glow glow-two" />
         <div className="hero-copy reveal">
-          <div className="hero-label"><span className="live-dot" /> Онлайн-школа музыки · Никита Осадчук</div>
-          <h1>От первых аккордов<br/><em>до целой песни</em></h1>
-          <p className="hero-lead">Пошаговое обучение игре на гитаре, электрогитаре, укулеле и фортепиано. Практика на реальных песнях и обратная связь по домашним заданиям.</p>
+          <div className="hero-label"><span className="live-dot" /> Онлайн-школа Никиты Осадчука</div>
+          <h1>Научитесь играть<br/><em>на гитаре</em></h1>
+          <p className="hero-lead">Пошаговое обучение для новичков и продолжающих: постановка рук, аккорды, ритм, любимые песни и личная обратная связь.</p>
           <div className="hero-actions">
-            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Подобрать формат <Icon name="arrow" /></button>
-            <a className="btn btn-ghost" href="#program">Изучить программу</a>
+            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Получить бесплатную диагностику <Icon name="arrow" /></button>
+            <a className="btn btn-ghost" href="#formats">Посмотреть форматы</a>
           </div>
           <div className="hero-proof">
-            <strong>С 2019 года</strong><span className="proof-separator">/</span><span>500+ учеников</span><span className="proof-separator">/</span><span>4 инструмента</span>
+            <div className="avatars"><span>🎸</span><span>🎹</span><span>🎶</span><span>500+</span></div>
+            <p><b>Более 500 учеников</b><br/>прошли обучение с 2019 года</p>
           </div>
         </div>
         <div className="hero-visual reveal delay" data-pointer-depth>
-          <div className="hero-photo-backdrop" />
           <div className="photo-frame">
-            <img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" />
-            <div className="teacher-tag"><span>Никита Осадчук</span><small>Преподаватель · аранжировщик</small></div>
+            <div className="photo-overlay" />
+            <div className="photo-placeholder">
+              <img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" />
+            </div>
+            <div className="floating-card fc-top"><span className="mini-icon"><Icon name="music" /></span><div><small>Наставничество</small><b>1–3 песни в неделю</b></div></div>
+            <div className="floating-card fc-bottom"><span className="wave"><i/><i/><i/><i/><i/><i/></span><div><small>Обратная связь</small><b>личная проверка ДЗ</b></div></div>
+            <div className="teacher-tag"><span>Никита Осадчук</span><small>мультиинструменталист · аранжировщик</small></div>
           </div>
-          <div className="hero-photo-index"><span>01</span><i /> ГИТАРА · ПРАКТИКА · ПЕСНИ</div>
         </div>
-        <div className="scroll-hint"><span /> Прокрутите, чтобы увидеть программу</div>
+        <div className="scroll-hint"><span /> листайте</div>
       </section>
 
       <section className="marquee" aria-label="Направления обучения">
@@ -602,7 +607,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="story-stage-bottom"><span>ЭТАПЫ КУРСА</span><i>↓</i><div className="story-progress-track"><span /></div><span>ПРОКРУТИТЕ</span></div>
+          <div className="story-stage-bottom"><span>БАЗОВЫЙ МИНИМУМ</span><i>↓</i><div className="story-progress-track"><span /></div><span>ПРОКРУТИТЕ</span></div>
         </div>
       </section>
 
