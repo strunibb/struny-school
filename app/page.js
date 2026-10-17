@@ -26,8 +26,8 @@ const formats = [
   {
     tag: "Индивидуально",
     title: "Личные онлайн-занятия",
-    text: "Занятия по гитаре, электрогитаре, фортепиано или укулеле с разбором техники и домашних заданий.",
-    points: ["Гитара: 4 урока — 3 790 ₽", "Фортепиано: 4 занятия — 3 190 ₽", "Укулеле: 4 занятия — 3 390 ₽"],
+    text: "Индивидуальные занятия по акустической и электрогитаре: техника, ритм, аккорды, песни и разбор домашних заданий.",
+    points: ["4 урока по гитаре — 3 790 ₽"],
     price: "разовое занятие — 1 100 ₽",
     accent: "cyan"
   },
@@ -55,7 +55,7 @@ const faq = [
   ["Что делать, если нет постоянного расписания?", "Можно выбрать наставничество: вы занимаетесь в удобное время, отправляете домашнее задание в Telegram и получаете личные правки."],
   ["Можно заказать разбор, если я почти не играю?", "Да. Начнём с одной простой песни, сложные места можно упростить, а материал будет подготовлен под ваш уровень."],
   ["Сколько готовится разбор песни?", "Обычно от 2 до 5 рабочих дней. Срок зависит от сложности песни и количества треков."],
-  ["Можно попробовать бесплатно?", "Да. На сайте собраны бесплатные уроки по гитаре и электрогитаре, укулеле и фортепиано." ]
+  ["Можно попробовать бесплатно?", "Да. На сайте есть бесплатный урок по гитаре, чтобы познакомиться с форматом обучения до покупки." ]
 ];
 
 
@@ -390,7 +390,6 @@ export default function Home() {
   const [menu, setMenu] = useState(false);
   const [quiz, setQuiz] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
-  const [instrument, setInstrument] = useState("Гитара");
   const [programTrack, setProgramTrack] = useState("base");
   const [expandedModule, setExpandedModule] = useState("");
   const activeProgram = programTracks.find((track) => track.id === programTrack) || programTracks[0];
@@ -506,7 +505,7 @@ export default function Home() {
             <a className="btn btn-ghost" href="#formats">Посмотреть форматы</a>
           </div>
           <div className="hero-proof">
-            <div className="avatars"><span>🎸</span><span>🎹</span><span>🎶</span><span>500+</span></div>
+            <div className="avatars"><span>🎸</span><span>♪</span><span>↗</span><span>500+</span></div>
             <p><b>Более 500 учеников</b><br/>прошли обучение с 2019 года</p>
           </div>
         </div>
@@ -599,14 +598,10 @@ export default function Home() {
 
       <section className="section program" id="program">
         <div className="program-aside">
-          <span className="eyebrow">модуль «Базовый минимум»</span>
-          <h2>От первых аккордов до <em>первой песни</em></h2>
-          <p>Сначала проходим 7 последовательных этапов базового старта и собираем первую песню. Дальше — разные виды боя, деление рисунка между аккордами и переборы. Расширенные темы можно подбирать по уровню: их точная очерёдность в исходной карте не везде подтверждена.</p>
-          <button className="link-arrow" onClick={() => setQuiz(true)}>Подобрать формат обучения <Icon name="arrow" /></button>
-          <figure className="program-photo">
-            <img src="./lesson-planning.webp" alt="Учебные материалы и подготовка урока по гитаре" loading="lazy" />
-            <figcaption>Видео, схемы, PDF и практические упражнения</figcaption>
-          </figure>
+          <span className="eyebrow">программа курса по гитаре</span>
+          <h2>Программа <em>обучения</em></h2>
+          <p>От знакомства с гитарой и первых упражнений до исполнения песни целиком. Каждый этап включает содержание, ожидаемый результат и материалы для самостоятельной практики.</p>
+          
         </div>
         <div className="curriculum">
           <div className="curriculum-topline"><span>ПРОГРАММА ОБУЧЕНИЯ</span><b>{programTracks.reduce((sum, track) => sum + track.modules.length, 0)} узлов карты</b></div>
@@ -676,7 +671,6 @@ export default function Home() {
           <p>На личных онлайн-занятиях Никита проверяет посадку, постановку рук, технику, ритм и домашнее задание. Материал подбирается под инструмент, уровень и цель ученика.</p>
           <ul>
             <li><Icon name="check" /> Гитара и электрогитара</li>
-            <li><Icon name="check" /> Укулеле и фортепиано</li>
             <li><Icon name="check" /> Обратная связь по домашним заданиям</li>
           </ul>
           <button className="btn btn-primary" onClick={() => setQuiz(true)}>Подобрать формат <Icon name="arrow" /></button>
@@ -699,19 +693,15 @@ export default function Home() {
 
       <section className="section free" id="free">
         <div className="section-head split-head">
-          <div><span className="eyebrow">бесплатные материалы</span><h2>Выберите инструмент<br/>и <em>посмотрите урок</em></h2></div>
-          <div className="instrument-tabs" role="tablist">
-            {["Гитара", "Укулеле", "Фортепиано"].map(x => <button key={x} className={instrument === x ? "active" : ""} onClick={() => setInstrument(x)}>{x}</button>)}
-          </div>
+          <div><span className="eyebrow">бесплатные материалы</span><h2>Первый урок<br/><em>по гитаре</em></h2></div>
+          <p>Познакомьтесь с инструментом, посадкой и первыми движениями перед началом обучения.</p>
         </div>
         <div className="lesson-feature">
           <div className="lesson-video">
-            {instrument === "Гитара"
-              ? <img className="lesson-preview-image" src="./material-rhythm.webp" alt="Фрагмент видеоурока по гитарному бою" loading="lazy" />
-              : <div className="lesson-art"><span>{instrument === "Укулеле" ? "U" : "P"}</span><div className="art-lines" /></div>}
-            <a className="big-play" href={instrument === "Гитара" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" : instrument === "Укулеле" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239064" : "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239059&hd=3"} target="_blank" rel="noreferrer"><Icon name="play" /></a>
+            <img className="lesson-preview-image" src="./material-rhythm.webp" alt="Фрагмент бесплатного видеоурока по гитаре" loading="lazy" />
+            <a className="big-play" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer"><Icon name="play" /></a>
           </div>
-          <div className="lesson-info"><span className="card-tag">БЕСПЛАТНЫЙ УРОК · {instrument.toUpperCase()}</span><h3>{instrument === "Фортепиано" ? "Первый урок по фортепиано" : instrument === "Укулеле" ? "Первый урок по укулеле" : "Знакомство с гитарой"}</h3><p>{instrument === "Гитара" ? "Знакомство с инструментом, правильная посадка и первые шаги перед началом игры." : "Откройте первый урок по выбранному инструменту и попробуйте формат обучения до покупки."}</p><ul><li><Icon name="play"/> Видео открывается сразу</li><li><Icon name="music"/> Практический материал</li><li><Icon name="message"/> Можно задать вопрос преподавателю</li></ul><a className="link-arrow" href={instrument === "Гитара" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" : instrument === "Укулеле" ? "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239064" : "https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239059&hd=3"} target="_blank" rel="noreferrer">Смотреть бесплатно <Icon name="arrow" /></a></div>
+          <div className="lesson-info"><span className="card-tag">БЕСПЛАТНЫЙ УРОК · ГИТАРА</span><h3>Знакомство с гитарой</h3><p>Первый урок помогает подготовиться к игре: разобраться с инструментом, удобной посадкой и первыми шагами.</p><ul><li><Icon name="play"/> Видео открывается сразу</li><li><Icon name="music"/> Практический материал</li><li><Icon name="message"/> Можно задать вопрос преподавателю</li></ul><a className="link-arrow" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer">Смотреть бесплатно <Icon name="arrow" /></a></div>
         </div>
         <div className="materials-head">
           <span className="eyebrow">примеры материалов</span>
@@ -737,7 +727,7 @@ export default function Home() {
         <div className="about-copy">
           <span className="eyebrow">ваш преподаватель</span><h2>Никита Осадчук</h2>
           <p className="about-lead">Мультиинструменталист и аранжировщик. Руководитель отделения «Музыка» в детском центре «Зебра» в Санкт-Петербурге.</p>
-          <div className="about-points"><div><b>с 2019 года</b><span>преподаёт музыку детям и взрослым</span></div><div><b>более 500 учеников</b><span>от полных новичков до продолжающих музыкантов</span></div><div><b>несколько направлений</b><span>гитара, электрогитара, укулеле и фортепиано</span></div></div>
+          <div className="about-points"><div><b>с 2019 года</b><span>преподаёт музыку детям и взрослым</span></div><div><b>более 500 учеников</b><span>от полных новичков до продолжающих музыкантов</span></div><div><b>направление обучения</b><span>акустическая и электрогитара</span></div></div>
         </div>
       </section>
 
@@ -768,7 +758,7 @@ export default function Home() {
       </section>
 
       <footer>
-        <div className="footer-top"><a href="#top" className="brand"><span className="brand-mark"><span/><span/><span/><span/></span><span><b>СТРУНЫ</b><small>БУДУЩЕГО</small></span></a><p>Онлайн-школа музыки Никиты Осадчука.<br/>Гитара, электрогитара, укулеле и фортепиано.</p><div className="socials"><a href="https://t.me/nikguita" target="_blank" rel="noreferrer">TG</a><a href="https://vk.com/strunib?from=groups" target="_blank" rel="noreferrer">VK</a><a href="https://www.instagram.com/osadchukguitar" target="_blank" rel="noreferrer">IG</a></div></div>
+        <div className="footer-top"><a href="#top" className="brand"><span className="brand-mark"><span/><span/><span/><span/></span><span><b>СТРУНЫ</b><small>БУДУЩЕГО</small></span></a><p>Онлайн-обучение гитаре с Никитой Осадчуком.<br/>Акустическая и электрогитара.</p><div className="socials"><a href="https://t.me/nikguita" target="_blank" rel="noreferrer">TG</a><a href="https://vk.com/strunib?from=groups" target="_blank" rel="noreferrer">VK</a><a href="https://www.instagram.com/osadchukguitar" target="_blank" rel="noreferrer">IG</a></div></div>
         <div className="footer-bottom"><span>© 2026 «Струны будущего»</span><div><a href="#formats">Форматы</a><a href="#about">О преподавателе</a><a href={tg}>Контакты</a></div></div>
       </footer>
 
