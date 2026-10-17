@@ -59,243 +59,79 @@ const faq = [
 
 const programTracks = [
   {
-    id: "base",
-    label: "Базовый старт",
-    intro: "Семь этапов в подтверждённом авторском порядке: от знакомства с инструментом до первой песни.",
+    id: "base", label: "Базовый старт",
+    intro: "Семь последовательных этапов: от знакомства с инструментом до исполнения первой песни целиком.",
     modules: [
-      { no: "01", title: "Знакомство с гитарой", desc: "Устройство инструмента, посадка, руки и струны, настройка через тюнер, табулатура и первое упражнение на открытых струнах.", result: "Могу настроить гитару и выполнить первое упражнение." },
-      { no: "02", title: "Чувство ритма и метроном", desc: "Хроматические упражнения и лады 1–4 под ровный пульс. Начинаем примерно с 60 BPM и повышаем темп шагами по 5–10 BPM после удачного выполнения.", result: "Сохраняю ровный пульс на комфортной скорости." },
-      { no: "03", title: "Первые аккорды", desc: "Аппликатуры Em, Am, C и D, чистое звучание и последовательность переходов. Для тренировки используется тренажёр смены аккордов.", result: "Ставлю четыре аккорда и постепенно сокращаю паузы между ними." },
-      { no: "04", title: "Аккорды соединяются со словами", desc: "На песне «Пачка сигарет» учимся менять Em → Am → C → D в нужных местах текста. Пока играем по одному удару вниз на аккорд, не добавляя бой.", result: "Не теряю последовательность аккордов в тексте." },
-      { no: "05", title: "Первый бой с глушением", desc: "Разбираем знак глушения X, счёт «1-и-2-и» и рисунок: вниз → вверх → глушение → вверх. Сначала тренируем правую руку отдельно.", result: "Повторяю рисунок боя циклически." },
-      { no: "06", title: "Соединяем бой и аккорды", desc: "Упражнение «Скакалка»: освобождаем и возвращаем аккорд, не останавливая движение правой руки. Затем тренируем пары Em–Am, Am–C, C–D и D–Em.", result: "Выполняю «Скакалку» минимум 4 раза подряд и тренирую переходы." },
-      { no: "07", title: "Первая песня целиком", desc: "Собираем аккорды, бой и текст в учебной версии «Пачки сигарет». Петь одновременно необязательно: главное — сыграть без остановок между аккордами.", result: "Исполняю учебную версию песни без пауз между аккордами." }
+      { no: "01", title: "Знакомство с гитарой", desc: "Строение инструмента, посадка, пальцы и струны. Настройка, постановка рук, табулатура и первая практика на открытых струнах.", result: "Настроить гитару и сыграть первое упражнение на открытых струнах." },
+      { no: "02", title: "Метроном и координация", desc: "Хроматическое упражнение и координация обеих рук. Начинаем с 60 BPM, затем постепенно повышаем скорость.", result: "Играть упражнение ровно под метроном. В материалах указан ориентир до 120 BPM." },
+      { no: "03", title: "Первые аккорды", desc: "Em, Am, C и D: изучаем схемы аппликатур и тренируем смену аккордов в отдельном тренажёре.", result: "Ставить основные аккорды и отрабатывать переходы между ними." },
+      { no: "04", title: "Аккорды и слова", desc: "На песне «Кино — Пачка сигарет» учимся менять аккорды по тексту. На этом этапе играем по одному удару вниз на аккорд, пока без боя.", result: "Соединять текст песни с последовательностью аккордов." },
+      { no: "05", title: "Первый бой: четвёрка с глушением", desc: "Рисунок ↓ ↑ X ↑, счёт «1-и-2-и». Сначала разбираем движения, затем закрепляем их по видео и в тренажёре боя.", result: "Повторять рисунок боя ровно и циклически." },
+      { no: "06", title: "Аккорды и бой без слов", desc: "Упражнение «Скакалка»: сначала работаем на одном аккорде, затем соединяем переходы Em–Am, Am–C, C–D и D–Em.", result: "Менять аккорды без остановки движения правой руки." },
+      { no: "07", title: "Финал базового старта", desc: "Объединяем аккорды, бой и слова в учебной версии «Пачки сигарет» и отрабатываем исполнение вместе с преподавателем по видео.", result: "Сыграть учебную версию песни целиком." }
     ]
   },
   {
-    id: "battles",
-    label: "Бои и песни",
-    intro: "Расширяем репертуар, осваивая разные рисунки боя. Эти темы есть в материалах, но их точная последовательность не подтверждена, поэтому они не пронумерованы как обязательная лестница.",
+    id: "battles", label: "Библиотека боёв",
+    intro: "Новый рисунок боя — песни для закрепления. Основные и бонусные композиции разделены так, как указано в интеллект-карте.",
     modules: [
-      { no: "A1", title: "Четвёрка с глушением", desc: "Закрепляем знакомый рисунок боя и переносим его на другие песни.", songs: "Основные: Кино — «Звезда по имени Солнце», «Пачка сигарет». Бонус: Сплин — «Орбит без сахара»." },
-      { no: "A2", title: "Шестёрка с глушением", desc: "Разбираем схему, глушение и движения правой руки, затем пробуем их в песнях.", songs: "Dabro — «Юность»; Кино — «Закрой за мной дверь»; Агата Кристи — «Как на войне»." },
-      { no: "A3", title: "Бой «шестёрка»", desc: "Осваиваем рисунок, повторяем его в ровном темпе и соединяем с аккордами.", songs: "Король и Шут — «Кукла колдуна»; Кино — «Когда твоя девушка больна»." },
-      { no: "A4", title: "Рок-бой: варианты 4 и 5", desc: "Работаем со схемой, счётом и акцентом на доле, затем переносим рисунок в песню.", songs: "Основная: «Районы-кварталы». По желанию: Земфира — «Искала»." },
-      { no: "A5", title: "Восьмёрка", desc: "Считаем восемь долей, отрабатываем рисунок и постепенно добавляем аккорды.", songs: "Амега — «Лететь»; Баста — «Сансара». Бонус: Бумбокс — «Вахтёрам»." },
-      { no: "A6", title: "Четвёрка с акцентом", desc: "Знакомимся с вариантом боя, в котором важно выделять нужную долю. Конкретную песню привязываем после сверки исходного урока.", songs: "В материалах песни для этого блока пока не подтверждены." },
-      { no: "A7", title: "Дворовый бой: два варианта", desc: "Сравниваем два варианта дворового рисунка и применяем выбранный в песне.", songs: "Братья Грим — «Кустурица»; Звери — «До скорой встречи»." }
+      { no: "B1", title: "Четвёрка с глушением", desc: "Закрепляем базовый рисунок на знакомых композициях.", songs: "Основные: Кино — «Звезда по имени Солнце», «Пачка сигарет». Бонус: Сплин — «Орбит без сахара»." },
+      { no: "B2", title: "Шестёрка с глушением", desc: "Разбираем рисунок шестёрки с глушением и переносим его в песни.", songs: "Dabro — «Юность»; Кино — «Закрой за мной дверь»; Агата Кристи — «Как на войне»." },
+      { no: "B3", title: "Шестёрка", desc: "Отрабатываем рисунок боя и закрепляем его на музыкальном материале.", songs: "Король и Шут — «Кукла колдуна»; Кино — «Когда твоя девушка больна»." },
+      { no: "B4", title: "Рок 4 / Рок 5", desc: "Изучаем схемы и применяем рок-бо́й в песне.", songs: "Основная: Звери — «Районы-кварталы». По желанию: Земфира — «Искала»." },
+      { no: "B5", title: "Восьмёрка", desc: "Осваиваем восьмёрку и отрабатываем рисунок на песнях.", songs: "Амега — «Лететь»; Баста — «Сансара». Бонус: Бумбокс — «Вахтёрам»." },
+      { no: "B6", title: "Четвёрка с акцентом", desc: "Разбираем акцентированный рисунок и закрепляем его на примерах из репертуара.", songs: "Кино — «Кукушка», «Группа крови». Бонус: Кино — «Невесёлая песня»." },
+      { no: "B7", title: "Шестёрка с делением", desc: "Учимся распределять один бой между двумя аккордами.", songs: "Виктор Салтыков — «Белая ночь»; Сплин — «Моё сердце»." },
+      { no: "B8", title: "Восьмёрка с делением", desc: "Разбираем восьмёрку с делением. Привязку всех песен к конкретному уроку стоит сверить перед окончательной публикацией.", songs: "Материалы: Ария — «Я свободен»; Женя Трофимов — «Поезда»." },
+      { no: "B9", title: "Песни на выбор", desc: "Для закрепления можно выбрать композицию из каталога разборов и отправить название в личный чат.", songs: "Каталог PDF-разборов и возможность заказать выбранную песню." }
     ]
   },
   {
-    id: "division",
-    label: "Деление боёв",
-    intro: "Учимся распределять рисунок между аккордами, чтобы менять гармонию вовремя и не терять общий счёт.",
+    id: "tech", label: "Другие приёмы",
+    intro: "Дополнительные технические блоки из авторской карты. Они расширяют базу и библиотеку боёв.",
     modules: [
-      { no: "D1", title: "Что такое деление боя", desc: "Понимаем, в какой точке рисунка меняется аккорд. Это вводная тема перед отдельными вариантами деления.", songs: "Схемы и графические примеры; материал готовит к шестёрке и восьмёрке с делением." },
-      { no: "D2", title: "Шестёрка с делением", desc: "Распределяем движения между двумя аккордами. В варианте без глушения: ↓↓ на первый аккорд, ↑↑↑ — на второй; с глушением: ↓X и затем ↑↑X↑.", songs: "Виктор Салтыков — «Белая ночь»; Сплин — «Моё сердце»." },
-      { no: "D3", title: "Восьмёрка с делением", desc: "Переносим принцип деления на восьмёрку и сравниваем с исполнением целым боем.", songs: "Ария — «Я свободен». Связь песни «Поезда» с этим блоком требует проверки." }
+      { no: "T1", title: "Деление боёв", desc: "Шестёрка и восьмёрка с делением между двумя аккордами. Отдельно разбираем, что означает деление рисунка.", result: "Понимать, как распределить движения боя между двумя аккордами." },
+      { no: "T2", title: "Дворовый бой: два варианта", desc: "Сравниваем два варианта дворового боя и применяем подходящий рисунок в песне.", songs: "Братья Грим — «Кустурица»; Звери — «До скорой встречи». Также доступна песня на выбор." },
+      { no: "T3", title: "Первый перебор: «Четвёрка»", desc: "Положение пальцев правой руки, бас, перебираемые струны и одновременное извлечение нот.", songs: "В материалах также есть Жуки — «Батарейка». Точную связь песни с рисунком нужно сверить с исходным уроком." }
     ]
   },
   {
-    id: "picking",
-    label: "Переборы",
-    intro: "Отдельная тематическая ветка. В мастер-карте точное место переборов в общем маршруте пока не установлено.",
+    id: "tools", label: "Материалы и инструменты",
+    intro: "Материалы, которые сопровождают занятия и помогают повторять технику самостоятельно.",
     modules: [
-      { no: "P1", title: "Первый перебор «Четвёрка»", desc: "Знакомимся с пальцами правой руки, выбором басовой струны и последовательностью нот. Сначала играем рисунок на одном аккорде, затем переносим его в песню.", songs: "Жуки — «Батарейка»; также предусмотрены песни на выбор." }
+      { no: "M1", title: "Видеоразборы", desc: "Объяснение, демонстрация крупным планом и исполнение песни. Видео можно замедлять.", result: "Разбирать движения и фрагменты песни в удобном темпе." },
+      { no: "M2", title: "Схемы и PDF", desc: "Аппликатуры, направления ударов, акценты, табулатура и разборы песен.", result: "Иметь визуальную опору во время самостоятельной практики." },
+      { no: "M3", title: "Тренажёры и ссылки", desc: "Метроном, тренажёр аккордов и тренажёр боя для самостоятельной практики.", result: "Отрабатывать конкретный навык отдельно от песни." },
+      { no: "M4", title: "Завершение блока", desc: "В материалах используются поздравления о прохождении раздела.", result: "Отметить завершение учебного блока." }
     ]
   }
-];;
+];
 
 const programDetails = {
-  "01": { label: "Внутри блока", content: "Устройство гитары; удобная посадка; нумерация пальцев левой руки и струн; настройка через приложение-тюнер; место прижатия струн; положение левой руки; чтение табулатуры; обозначения пальцев правой руки. Первая практика на открытых струнах: по четыре раза на струну пальцами I/M.", materials: "Схемы и иллюстрации, нотный стан и табулатура, упражнение на открытых струнах, итоговое видео около 15 минут.", check: "Показать части гитары, настроить инструмент тюнером и сыграть упражнение." },
-  "02": { label: "Практика и темп", content: "Обсуждаем, зачем нужен метроном. Играем хроматическое упражнение поперёк грифа, затем упражнение в пределах ладов 1–4 соответствующими пальцами левой руки.", materials: "Метроном и технические упражнения. В материалах указан старт с 60 BPM, повышение на 5–10 BPM после удачного выполнения и ориентир до 120 BPM.", check: "Сохранять ровный пульс на своей скорости; повышать темп только после стабильного повторения." },
-  "03": { label: "Аккорды и тренажёр", content: "Разбираем упрощённые обозначения мажора и минора, смотрим аппликатуры Em, Am, C и D, затем проходим переходы по порядку Em → Am → C → D.", materials: "Схемы аппликатур и тренажёр смены аккордов с ручным порядком переходов.", check: "Ставить каждый аккорд и постепенно сокращать паузу перед следующим." },
-  "04": { label: "Практика на песне", content: "Берём «Пачку сигарет», проговариваем слова и меняем Em → Am → C → D там, где это требуется. На этом этапе полноценный бой намеренно не добавляем.", materials: "Песня «Пачка сигарет» и последовательность аккордов.", check: "Не терять место в тексте и вовремя менять аккорд." },
-  "05": { label: "Рисунок боя", content: "Объясняем знак X и глушение, считаем «1-и-2-и», разбираем движение вниз, вверх, глушение, вверх. Сначала техника отдельно, затем повторение под видео с регулируемой скоростью.", materials: "Схема боя, видеоурок и онлайн-тренажёр боя.", check: "Повторять рисунок циклически в ровном темпе." },
-  "06": { label: "Упражнение «Скакалка»", content: "Играем вниз → вверх → глушение, отпускаем зажим левой руки и выполняем удар вверх по открытым струнам, возвращаем аккорд и повторяем. Затем отдельно отрабатываем переходы Em–Am, Am–C, C–D и D–Em.", materials: "Техническое упражнение без слов и видео для отработки.", check: "Сохранять движение правой руки при отпускании и возврате аккорда." },
-  "07": { label: "Финальная сборка", content: "Играем вместе с преподавателем учебную версию «Пачки сигарет», соединяя аккорды, бой и слова. Пение необязательно: главная цель — пройти песню без остановок на смене аккордов.", materials: "Финальное видео и отдельная запись для дополнительной практики.", check: "Исполнить учебную версию, объединив аккорды и бой без пауз." },
-  A1: { label: "Материалы и практика", content: "Переносим уже знакомую четвёрку с глушением на разные песни. Для каждой композиции предусмотрены отдельные материалы.", materials: "PDF, видеоразборы и видео для отработки. Также доступна песня на выбор.", check: "Порядок относительно базового блока и точная последовательность песен требуют сверки." },
-  A2: { label: "Материалы и практика", content: "Изучаем направление движений и схему шестёрки с глушением, затем применяем рисунок в песнях.", materials: "Вводное видео, схема, демонстрация движений и отдельные разборы песен.", check: "Критерий прохождения в исходных материалах не зафиксирован." },
-  A3: { label: "Материалы и практика", content: "Разбираем схему шестёрки по направлениям правой руки. При необходимости снижаем скорость видео и постепенно возвращаемся к обычному темпу.", materials: "Видеоурок «Бой шестёрка», схема и разборы песен.", check: "Полное содержание блока требует дополнительной сверки." },
-  A4: { label: "Материалы и практика", content: "Смотрим схемы на счёт «1-и-2-и-3-и-4-и», направления ударов и акценты, затем закрепляем рисунок на песне.", materials: "Видео «Рок 5», схемы, PDF и короткие видео по песням. Основная композиция — «Районы-кварталы», «Искала» — дополнительная по желанию.", check: "Не добавлять дополнительные песни как обязательные без отдельного решения." },
-  A5: { label: "Материалы и практика", content: "Разбираем восьмёрку, считаем восемь долей, повторяем рисунок под видео, затем используем его на песнях.", materials: "Схема боя, видео объяснения/разбора и демонстрация рисунка. Есть песни на выбор; «Вахтёрам» отмечена как бонус.", check: "Точный порядок внутри расширенной программы не подтверждён." },
-  A6: { label: "Материалы и практика", content: "Изучаем схему с ударами по басовым струнам и акцентированным ударом.", materials: "Схема и видео «Бой 4 с акцентом».", check: "Точный рисунок нужно сверить с оригинальным видео. Песни к этому блоку пока не привязаны." },
-  A7: { label: "Материалы и практика", content: "Смотрим короткое вводное видео и сравниваем два варианта дворового боя: движения вниз, вверх и глушение.", materials: "Видео «Бой дворовый» и схема двух вариантов. В репертуаре можно выбрать песню.", check: "Положение блока относительно других расширенных тем не подтверждено." },
-  D1: { label: "Материалы и практика", content: "Разбираемся, что значит делить рисунок боя между аккордами и как распределять движения, чтобы смена гармонии приходилась на нужное место.", materials: "Отдельная вводная тема и графические схемы.", check: "Это вводный материал перед шестёркой и восьмёркой с делением." },
-  D2: { label: "Материалы и практика", content: "В варианте без глушения: ↓↓ играем на первый аккорд, ↑↑↑ — на второй. В варианте с глушением: ↓X на первый, затем ↑↑X↑ на второй.", materials: "PDF, видео разбора «Белая ночь» и отдельное видео по теме.", check: "Следить за точкой смены аккорда, не теряя общий счёт." },
-  D3: { label: "Материалы и практика", content: "Разбираем восьмёрку с делением и сравниваем её с исполнением того же рисунка целиком.", materials: "Схемы и видео с разбором «Я свободен», плюс сравнение с цельным боем.", check: "Привязка песни «Поезда» к этому блоку пока требует подтверждения." },
-  P1: { label: "Материалы и практика", content: "Знакомимся с опорой пальцев, выбором басовой струны и одновременным извлечением нот, изучаем рисунок перебора и пробуем применить его в песне.", materials: "Видео «Переборы» и короткое видео, схемы пальцев правой руки; «Батарейка» и песни на выбор.", check: "Положение переборов в общем маршруте пока не установлено." }
+  "01": { label: "Знакомство с гитарой", content: "Строение инструмента; посадка; пальцы левой руки и струны; настройка; постановка рук; табулатура; первое упражнение на открытых струнах.", materials: "Схемы и иллюстрации, табулатура, упражнения и видеоурок.", check: "Настроить инструмент и сыграть упражнение на открытых струнах." },
+  "02": { label: "Метроном и координация", content: "Хроматическое упражнение и координация обеих рук. Постепенно увеличиваем скорость от комфортного темпа.", materials: "Метроном и технические упражнения. В карте указан старт 60 BPM и ориентир до 120 BPM.", check: "Сохранять ровный пульс; повышать темп постепенно." },
+  "03": { label: "Аккорды и тренажёр", content: "Аппликатуры Em, Am, C, D и смена аккордов в отдельном тренажёре.", materials: "Схемы аппликатур и ссылка на тренажёр аккордов.", check: "Поставить аккорды и выполнить переходы между ними." },
+  "04": { label: "Работа с текстом", content: "Песня «Пачка сигарет»; один удар вниз на аккорд; смена аккордов в соответствующих местах текста.", materials: "Текст песни, последовательность аккордов и видео для практики.", check: "Менять аккорды по тексту без боя." },
+  "05": { label: "Первый бой", content: "Четвёрка с глушением: ↓ ↑ X ↑. Разбираем движения и счёт «1-и-2-и».", materials: "Видео и тренажёр боя.", check: "Ровно повторять рисунок боя." },
+  "06": { label: "Упражнение «Скакалка»", content: "Переходы на одном аккорде, затем пары Em–Am, Am–C, C–D, D–Em.", materials: "Техническое упражнение и видеоразбор.", check: "Сменять аккорды без паузы в движении правой руки." },
+  "07": { label: "Финал базы", content: "Аккорды, бой и слова объединяются в учебной версии «Пачки сигарет».", materials: "Видео для совместной отработки с преподавателем.", check: "Сыграть учебную версию песни целиком." },
+  B1: { label: "Четвёрка с глушением", content: "Новый рисунок → песни для закрепления.", materials: "Основные песни: «Звезда по имени Солнце», «Пачка сигарет». Бонусная: «Орбит без сахара».", check: "Песни разделены на основные и бонусные согласно карте." },
+  B2: { label: "Шестёрка с глушением", content: "Изучаем рисунок и переносим его на песни из списка.", materials: "Dabro — «Юность»; Кино — «Закрой за мной дверь»; Агата Кристи — «Как на войне».", check: "Критерий прохождения в карте отдельно не указан." },
+  B3: { label: "Шестёрка", content: "Закрепляем рисунок на песнях.", materials: "Король и Шут — «Кукла колдуна»; Кино — «Когда твоя девушка больна».", check: "Критерий прохождения в карте отдельно не указан." },
+  B4: { label: "Рок 4 / Рок 5", content: "Схемы рок-боя и песни для практики.", materials: "Звери — «Районы-кварталы»; Земфира — «Искала» по желанию.", check: "«Искала» указана как необязательная песня." },
+  B5: { label: "Восьмёрка", content: "Новый рисунок и музыкальный материал для закрепления.", materials: "Амега — «Лететь»; Баста — «Сансара»; бонус — Бумбокс «Вахтёрам».", check: "«Вахтёрам» отмечена как бонус." },
+  B6: { label: "Четвёрка с акцентом", content: "Рисунок с акцентом и песни для закрепления.", materials: "Кино — «Кукушка», «Группа крови»; бонус — «Невесёлая песня».", check: "Список песен приведён по мастер-карте." },
+  B7: { label: "Шестёрка с делением", content: "На один рисунок боя приходится два аккорда.", materials: "Виктор Салтыков — «Белая ночь»; Сплин — «Моё сердце».", check: "Сохранять общий счёт при смене аккорда." },
+  B8: { label: "Восьмёрка с делением", content: "Восьмёрка, разделённая между аккордами.", materials: "Ария — «Я свободен»; Женя Трофимов — «Поезда».", check: "Распределение всех песен по конкретным урокам требует сверки." },
+  B9: { label: "Песни на выбор", content: "Можно выбрать песню, чтобы закрепить изученные приёмы.", materials: "Каталог PDF-разборов и отправка выбранного названия в личный чат.", check: "Список подбирается по выбору ученика." },
+  T1: { label: "Деление боёв", content: "Шестёрка и восьмёрка; распределение рисунка между двумя аккордами; отдельное объяснение «Что такое деление?».", materials: "Схемы и вводное объяснение.", check: "Понимать, где меняется аккорд в рисунке." },
+  T2: { label: "Дворовый бой", content: "Два варианта дворового рисунка.", materials: "Братья Грим — «Кустурица»; Звери — «До скорой встречи»; песня на выбор.", check: "Сопоставить рисунок и песню." },
+  T3: { label: "Перебор «Четвёрка»", content: "Положение пальцев правой руки, бас, перебираемые струны и одновременные ноты.", materials: "Видео по переборам; в карте также упомянута «Батарейка».", check: "Связь песни с конкретным рисунком требует проверки." },
+  M1: { label: "Видеоразборы", content: "Объяснение, демонстрация крупным планом и исполнение песни с возможностью замедления.", materials: "Видеоуроки и разборы песен.", check: "Использовать замедление для разбора сложного движения." },
+  M2: { label: "Схемы и PDF", content: "Аппликатуры, направления ударов, акценты, табулатуры и разборы.", materials: "Схемы, табулатуры и PDF.", check: "Повторять приём по визуальной подсказке." },
+  M3: { label: "Тренажёры и ссылки", content: "Метроном, тренажёр аккордов и тренажёр боя.", materials: "Ссылки на инструменты для самостоятельной практики.", check: "Тренировать один навык отдельно от исполнения песни." },
+  M4: { label: "Завершение блока", content: "В материалах предусмотрены поздравления о прохождении раздела.", materials: "Сообщение о завершении блока.", check: "Отметить прохождение раздела." }
 };
-
-
-
-const chordLibrary = {
-  Em: { notes: [0, 2, 2, 0, 0, 0], fingers: [{ string: 1, fret: 2, finger: 2 }, { string: 2, fret: 2, finger: 3 }], frequencies: [82.41, 123.47, 164.81, 196.0, 246.94, 329.63], detail: "Два пальца на втором ладу. Остальные струны звучат открытыми." },
-  Am: { notes: [-1, 0, 2, 2, 1, 0], fingers: [{ string: 2, fret: 2, finger: 2 }, { string: 3, fret: 2, finger: 3 }, { string: 4, fret: 1, finger: 1 }], frequencies: [null, 110.0, 164.81, 220.0, 261.63, 329.63], detail: "Пять струн, три пальца. Шестую струну не играем." },
-  C: { notes: [-1, 3, 2, 0, 1, 0], fingers: [{ string: 1, fret: 3, finger: 3 }, { string: 2, fret: 2, finger: 2 }, { string: 4, fret: 1, finger: 1 }], frequencies: [null, 130.81, 164.81, 196.0, 261.63, 329.63], detail: "Три прижатые струны и три открытые. Шестую струну не играем." },
-  D: { notes: [-1, -1, 0, 2, 3, 2], fingers: [{ string: 3, fret: 2, finger: 1 }, { string: 4, fret: 3, finger: 3 }, { string: 5, fret: 2, finger: 2 }], frequencies: [null, null, 146.83, 220.0, 293.66, 369.99], detail: "Играем четыре нижние струны. Пальцы собираются в треугольник." }
-};
-
-function ChordTrainer() {
-  const [activeChord, setActiveChord] = useState("Em");
-  const [playing, setPlaying] = useState(false);
-
-  const playChord = async () => {
-    if (playing) return;
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) {
-      setPlaying(false);
-      return;
-    }
-    setPlaying(true);
-    const context = new AudioContextClass();
-    await context.resume();
-    const frequencies = chordLibrary[activeChord].frequencies.filter(Boolean);
-    frequencies.forEach((frequency, index) => {
-      const startAt = context.currentTime + index * 0.035;
-      const oscillator = context.createOscillator();
-      const overtone = context.createOscillator();
-      const gain = context.createGain();
-      const overtoneGain = context.createGain();
-      oscillator.type = "triangle";
-      oscillator.frequency.value = frequency;
-      overtone.type = "sine";
-      overtone.frequency.value = frequency * 2.01;
-      overtoneGain.gain.value = 0.13;
-      gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(0.11, startAt + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.85);
-      oscillator.connect(gain);
-      overtone.connect(overtoneGain);
-      overtoneGain.connect(gain);
-      gain.connect(context.destination);
-      oscillator.start(startAt);
-      overtone.start(startAt);
-      oscillator.stop(startAt + 0.9);
-      overtone.stop(startAt + 0.9);
-    });
-    window.setTimeout(() => {
-      context.close().catch(() => {});
-      setPlaying(false);
-    }, 1050);
-  };
-
-  const data = chordLibrary[activeChord];
-  const stringNames = ["E", "A", "D", "G", "B", "e"];
-  const fingerByString = new Map(data.fingers.map((f) => [f.string, f]));
-
-  return (
-    <div className="chord-lab">
-      <div className="chord-lab-top"><span>АППЛИКАТУРЫ · ОТКРЫТАЯ ПОЗИЦИЯ</span><b>01 — 04</b></div>
-      <div className="chord-picker" role="tablist" aria-label="Выбрать аккорд">
-        {Object.keys(chordLibrary).map((chord) => (
-          <button key={chord} role="tab" aria-selected={activeChord === chord} className={activeChord === chord ? "active" : ""} onClick={() => setActiveChord(chord)}>{chord}</button>
-        ))}
-      </div>
-      <div className={"fretboard-wrap " + (playing ? "playing" : "")}>
-        <svg className="fretboard" viewBox="0 0 340 258" role="img" aria-label={"Аппликатура аккорда " + activeChord}>
-          <text x="18" y="18" className="fretboard-label">СТРУНЫ</text>
-          {stringNames.map((name, i) => {
-            const x = 40 + i * 44;
-            const note = data.notes[i];
-            return <g key={name}>
-              <text x={x} y="43" textAnchor="middle" className={"string-mark " + (note === -1 ? "muted" : note === 0 ? "open" : "")}>{note === -1 ? "×" : note === 0 ? "○" : ""}</text>
-              <text x={x} y="224" textAnchor="middle" className="string-name">{name}</text>
-              <line x1={x} y1="56" x2={x} y2="211" className="guitar-string" style={{ strokeWidth: 1 + i * 0.16 }} />
-            </g>;
-          })}
-          {[0,1,2,3,4].map((fret) => <line key={fret} x1="18" y1={56 + fret * 38} x2="282" y2={56 + fret * 38} className={fret === 0 ? "fret-line nut" : "fret-line"} />)}
-          {[1,2,3].map((fret) => <text key={fret} x="294" y={78 + (fret - 1) * 38} className="fret-number">{fret}</text>)}
-          {data.fingers.map(({string, fret, finger}) => {
-            const x = 40 + string * 44;
-            const y = 56 + (fret - 0.5) * 38;
-            return <g key={string + "-" + fret}>
-              <circle cx={x} cy={y} r="13.5" className="finger-dot" />
-              <text x={x} y={y + 3.8} textAnchor="middle" className="finger-number">{finger}</text>
-            </g>;
-          })}
-          <text x="294" y="210" className="fretboard-label">ЛАДЫ</text>
-        </svg>
-        <div className="chord-note"><span>{activeChord}</span><p>{data.detail}</p></div>
-      </div>
-      <div className="chord-lab-bottom">
-        <span>ЗВУЧАНИЕ — СИНТЕЗИРОВАННОЕ ПРЕВЬЮ</span>
-        <button className="play-chord" onClick={playChord} disabled={playing}><span>{playing ? "Ⅱ" : "▶"}</span>{playing ? "Звучит аккорд…" : "Послушать аккорд"}</button>
-      </div>
-    </div>
-  );
-}
-
-function MetronomeDemo() {
-  const [bpm, setBpm] = useState(60);
-  const [running, setRunning] = useState(false);
-  const [beat, setBeat] = useState(0);
-  const audioRef = useRef(null);
-
-  const ensureAudio = async () => {
-    if (!audioRef.current) {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (AudioContextClass) audioRef.current = new AudioContextClass();
-    }
-    if (audioRef.current && audioRef.current.state === "suspended") await audioRef.current.resume();
-  };
-
-  useEffect(() => {
-    if (!running || !audioRef.current) return undefined;
-    const context = audioRef.current;
-    let currentBeat = 0;
-    const tick = () => {
-      const now = context.currentTime;
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = "sine";
-      oscillator.frequency.value = currentBeat % 4 === 0 ? 1100 : 760;
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.16, now + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.start(now);
-      oscillator.stop(now + 0.06);
-      setBeat(currentBeat % 4);
-      currentBeat += 1;
-    };
-    tick();
-    const timer = window.setInterval(tick, 60000 / bpm);
-    return () => window.clearInterval(timer);
-  }, [running, bpm]);
-
-  useEffect(() => () => {
-    if (audioRef.current) audioRef.current.close().catch(() => {});
-  }, []);
-
-  const toggle = async () => {
-    if (running) {
-      setRunning(false);
-      return;
-    }
-    await ensureAudio();
-    setRunning(true);
-  };
-
-  return (
-    <div className={"metronome-demo " + (running ? "is-running" : "")}>
-      <div className="metronome-meta"><span>ТРЕНАЖЁР РИТМА</span><span>4/4</span></div>
-      <div className="metronome-display">
-        <div className="beat-indicators">{[0,1,2,3].map((n) => <span key={n} className={running && beat === n ? "active" : ""} />)}</div>
-        <div className="tempo-number">{bpm}<small>BPM</small></div>
-        <div className="tempo-caption">{running ? "МЕТРОНОМ РАБОТАЕТ" : "ВЫБЕРИ УДОБНЫЙ ТЕМП"}</div>
-      </div>
-      <div className="tempo-control">
-        <label htmlFor="tempo-range">Темп <b>{bpm} ударов/мин</b></label>
-        <input id="tempo-range" type="range" min="40" max="120" step="5" value={bpm} onChange={(event) => setBpm(Number(event.target.value))} />
-        <div className="tempo-minmax"><span>40</span><span>120</span></div>
-      </div>
-      <button className="metronome-toggle" onClick={toggle}><span>{running ? "Ⅱ" : "▶"}</span>{running ? "Остановить" : "Запустить метроном"}</button>
-      <p className="metronome-note">Сначала находим ровный пульс. Повышаем скорость, только когда получается играть без остановок.</p>
-    </div>
-  );
-}
 
 function Quiz({ onClose }) {
   const questions = [
@@ -461,16 +297,7 @@ export default function Home() {
       const progress = Math.max(0, Math.min(1, -rect.top / travel));
       story.style.setProperty("--story-progress", (progress * 100) + "%");
 
-      // Cross-fade the four scenes continuously with scroll progress; no snap between panels.
-      const scenePosition = Math.max(0, Math.min(3, progress * 4 - 0.5));
-      const scenes = story.querySelectorAll(".story-scene");
-      scenes.forEach((scene, index) => {
-        const opacity = Math.max(0, 1 - Math.abs(scenePosition - index));
-        scene.style.setProperty("--scene-opacity", String(opacity));
-        scene.style.transform = "translate3d(0," + ((1 - opacity) * 15) + "px,0) scale(" + (0.992 + opacity * 0.008) + ")";
-        scene.style.visibility = opacity > 0.005 ? "visible" : "hidden";
-      });
-
+      // One active scene at a time: animate the entry, never stack two headings.
       const nextScene = Math.min(3, Math.floor(progress * 4));
       if (nextScene !== lastScene) {
         lastScene = nextScene;
@@ -576,10 +403,10 @@ export default function Home() {
               <small>ЭТАП 01 / ПОДГОТОВКА</small>
               <h2>Знакомство<br/>с гитарой</h2>
               <p>Устройство инструмента, удобная посадка, положение рук, настройка и первое упражнение на открытых струнах.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Содержание первого этапа <Icon name="arrow" /></button>
+              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть программу <Icon name="arrow" /></button>
             </div>
             <div className="story-art story-art-portrait" data-pointer-depth>
-              <img src="./nikita-hero.webp" alt="Никита Осадчук во время занятия с гитарой" loading="lazy" />
+              <img src="./guitar-parts.webp" alt="Строение акустической гитары: колки, гриф, лад, розетка и дека" loading="lazy" />
               <div className="story-art-caption"><span>01</span><i /> ПОСТАНОВКА РУК И НАСТРОЙКА</div>
             </div>
           </div>
@@ -646,7 +473,7 @@ export default function Home() {
           </figure>
         </div>
         <div className="curriculum">
-          <div className="curriculum-topline"><span>ПРОГРАММА ОБУЧЕНИЯ</span><b>18 учебных блоков</b></div>
+          <div className="curriculum-topline"><span>ПРОГРАММА ОБУЧЕНИЯ</span><b>{programTracks.reduce((sum, track) => sum + track.modules.length, 0)} узлов карты</b></div>
           <div className="curriculum-tabs" role="tablist" aria-label="Разделы программы">
             {programTracks.map((track) => (
               <button key={track.id} role="tab" aria-selected={programTrack === track.id} className={programTrack === track.id ? "curriculum-tab active" : "curriculum-tab"} onClick={() => setProgramTrack(track.id)}>
@@ -658,20 +485,25 @@ export default function Home() {
           <div className="curriculum-grid" role="tabpanel" key={activeProgram.id} aria-label={activeProgram.label}>
             {activeProgram.modules.map((module, index) => (
               <article className={"curriculum-card " + (expandedModule === module.no ? "expanded" : "")} key={module.no}>
-                <div className="curriculum-card-head"><span>{module.no}</span><i>{String(index + 1).padStart(2, "0")} / {String(activeProgram.modules.length).padStart(2, "0")}</i></div>
-                <h3>{module.title}</h3>
-                <p>{module.desc}</p>
-                <button className="curriculum-expand" type="button" aria-expanded={expandedModule === module.no} onClick={() => setExpandedModule(expandedModule === module.no ? "" : module.no)}>
-                  {expandedModule === module.no ? "Свернуть содержание" : "Посмотреть содержание"}<span>{expandedModule === module.no ? "−" : "+"}</span>
-                </button>
-                {expandedModule === module.no && <div className="curriculum-expanded">
-                  <b>{programDetails[module.no]?.label || "Внутри блока"}</b>
-                  <p>{programDetails[module.no]?.content || module.desc}</p>
-                  <small>МАТЕРИАЛЫ</small><p>{programDetails[module.no]?.materials || "Материалы и порядок раздела уточняются по исходному уроку."}</p>
-                  <small>ПРОВЕРКА / ПРИМЕЧАНИЕ</small><p>{programDetails[module.no]?.check || module.result || "Содержание зафиксировано; точный критерий прохождения требует сверки."}</p>
-                </div>}
-                {module.result && <div className="curriculum-result"><span>↗ РЕЗУЛЬТАТ</span>{module.result}</div>}
-                {module.songs && <div className="curriculum-songs"><span>♪ РЕПЕРТУАР</span>{module.songs}</div>}
+                <div className="curriculum-card-top">
+                  <div className="curriculum-card-head"><span>{activeProgram.id === "base" ? "ЭТАП" : activeProgram.id === "tools" ? "МАТЕРИАЛ" : "БЛОК"} {module.no}</span><i>{String(index + 1).padStart(2, "0")} / {String(activeProgram.modules.length).padStart(2, "0")}</i></div>
+                  <h3>{module.title}</h3>
+                </div>
+                <div className="curriculum-card-body">
+                  <small className="curriculum-card-label">СОДЕРЖАНИЕ</small>
+                  <p>{module.desc}</p>
+                  {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ УРОКА</span><p>{module.result}</p></div>}
+                  {module.songs && <div className="curriculum-songs"><span>{activeProgram.id === "tools" ? "ЧТО ВНУТРИ" : "МАТЕРИАЛЫ / РЕПЕРТУАР"}</span><p>{module.songs}</p></div>}
+                  <button className="curriculum-expand" type="button" aria-expanded={expandedModule === module.no} onClick={() => setExpandedModule(expandedModule === module.no ? "" : module.no)}>
+                    {expandedModule === module.no ? "Свернуть подробности" : "Подробнее и материалы"}<span>{expandedModule === module.no ? "−" : "+"}</span>
+                  </button>
+                  {expandedModule === module.no && <div className="curriculum-expanded">
+                    <b>{programDetails[module.no]?.label || module.title}</b>
+                    <p>{programDetails[module.no]?.content || module.desc}</p>
+                    <small>МАТЕРИАЛЫ</small><p>{programDetails[module.no]?.materials || module.songs || "Дополнительные материалы в карте не указаны."}</p>
+                    <small>РЕЗУЛЬТАТ / ПРИМЕЧАНИЕ</small><p>{programDetails[module.no]?.check || module.result || "Отдельный критерий прохождения в карте не указан."}</p>
+                  </div>}
+                </div>
               </article>
             ))}
           </div>
