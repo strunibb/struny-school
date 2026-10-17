@@ -321,6 +321,12 @@ export default function Home() {
         <div className="footer-bottom"><span>© 2026 «Струны будущего»</span><div><a href="#formats">Форматы</a><a href="#about">О преподавателе</a><a href={tg}>Контакты</a></div></div>
       </footer>
 
+      <div className="mobile-sticky-cta">
+        <button type="button" onClick={() => setQuiz(true)} aria-label="Подобрать формат обучения">
+          <span><b>Подобрать обучение</b><small>3 вопроса · бесплатно</small></span>
+          <Icon name="arrow" />
+        </button>
+      </div>
       {quiz && <Quiz onClose={() => setQuiz(false)} />}
     </main>
   );
