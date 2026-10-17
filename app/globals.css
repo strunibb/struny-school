@@ -1132,7 +1132,7 @@ footer { color: #211b2a; }
 .hero-visual .fc-top { transform: translate3d(calc(var(--pointer-x, 0) * -9px), calc(var(--pointer-y, 0) * -7px), 0); }
 .hero-visual .fc-bottom { transform: translate3d(calc(var(--pointer-x, 0) * 11px), calc(var(--pointer-y, 0) * 8px), 0); }
 .hero-visual:after {
-  content: "MOVE YOUR CURSOR";
+  content: "ДВИГАЙ МЫШЬЮ";
   position: absolute; z-index: 5; left: -12px; top: 32px;
   padding: 8px 10px; border-radius: 3px; background: #d8f16e; color: #211b2a;
   font-size: 8px; font-weight: 900; letter-spacing: .14em; transform: rotate(-5deg);
@@ -1317,6 +1317,7 @@ footer { color: #211b2a; }
   .story-finish-note b { font-size: 10px; }
   .story-stage-bottom { left: 18px; right: 18px; bottom: 13px; font-size: 7px; gap: 8px; }
   .hero-visual:after { left: 0; top: 20px; font-size: 6px; padding: 7px; }
+  .hero-visual:after { display: none; }
   .hero-visual .photo-frame { transform: none; }
   .hero-visual .floating-card { transform: none; }
 }
