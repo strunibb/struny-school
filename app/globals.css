@@ -948,3 +948,31 @@ a:focus-visible {
 @media(prefers-reduced-motion:reduce) {
   .story-scene,.story-scene.active { animation:none; transition:none; transform:none; }
 }
+
+
+/* Display the supplied labeled-guitar infographic in full, without cropping it like a portrait. */
+.story-art-guitar-parts {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:8px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  background:#080c13;
+}
+.story-art-guitar-parts:after { display:none; }
+.story-art-guitar-parts img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  padding:0;
+  filter:none;
+}
+.story-scene.active .story-art-guitar-parts img { transform:none; }
+
+@media(max-width:760px) {
+  .story-art-guitar-parts { padding:4px; border-radius:12px; }
+  .story-art-guitar-parts img { object-fit:contain; }
+}
