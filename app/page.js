@@ -460,6 +460,17 @@ export default function Home() {
       const travel = Math.max(1, story.offsetHeight - window.innerHeight);
       const progress = Math.max(0, Math.min(1, -rect.top / travel));
       story.style.setProperty("--story-progress", (progress * 100) + "%");
+
+      // Cross-fade the four scenes continuously with scroll progress; no snap between panels.
+      const scenePosition = Math.max(0, Math.min(3, progress * 4 - 0.5));
+      const scenes = story.querySelectorAll(".story-scene");
+      scenes.forEach((scene, index) => {
+        const opacity = Math.max(0, 1 - Math.abs(scenePosition - index));
+        scene.style.setProperty("--scene-opacity", String(opacity));
+        scene.style.transform = "translate3d(0," + ((1 - opacity) * 15) + "px,0) scale(" + (0.992 + opacity * 0.008) + ")";
+        scene.style.visibility = opacity > 0.005 ? "visible" : "hidden";
+      });
+
       const nextScene = Math.min(3, Math.floor(progress * 4));
       if (nextScene !== lastScene) {
         lastScene = nextScene;
