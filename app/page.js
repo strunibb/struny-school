@@ -128,6 +128,175 @@ const programDetails = {
 };
 
 
+
+const chordLibrary = {
+  Em: { notes: [0, 2, 2, 0, 0, 0], fingers: [{ string: 1, fret: 2, finger: 2 }, { string: 2, fret: 2, finger: 3 }], frequencies: [82.41, 123.47, 164.81, 196.0, 246.94, 329.63], detail: "Два пальца на втором ладу. Остальные струны звучат открытыми." },
+  Am: { notes: [-1, 0, 2, 2, 1, 0], fingers: [{ string: 2, fret: 2, finger: 2 }, { string: 3, fret: 2, finger: 3 }, { string: 4, fret: 1, finger: 1 }], frequencies: [null, 110.0, 164.81, 220.0, 261.63, 329.63], detail: "Пять струн, три пальца. Шестую струну не играем." },
+  C: { notes: [-1, 3, 2, 0, 1, 0], fingers: [{ string: 1, fret: 3, finger: 3 }, { string: 2, fret: 2, finger: 2 }, { string: 4, fret: 1, finger: 1 }], frequencies: [null, 130.81, 164.81, 196.0, 261.63, 329.63], detail: "Три прижатые струны и три открытые. Шестую струну не играем." },
+  D: { notes: [-1, -1, 0, 2, 3, 2], fingers: [{ string: 3, fret: 2, finger: 1 }, { string: 4, fret: 3, finger: 3 }, { string: 5, fret: 2, finger: 2 }], frequencies: [null, null, 146.83, 220.0, 293.66, 369.99], detail: "Играем четыре нижние струны. Пальцы собираются в треугольник." }
+};
+
+function ChordTrainer() {
+  const [activeChord, setActiveChord] = useState("Em");
+  const [playing, setPlaying] = useState(false);
+
+  const playChord = async () => {
+    if (playing) return;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      setPlaying(false);
+      return;
+    }
+    setPlaying(true);
+    const context = new AudioContextClass();
+    await context.resume();
+    const frequencies = chordLibrary[activeChord].frequencies.filter(Boolean);
+    frequencies.forEach((frequency, index) => {
+      const startAt = context.currentTime + index * 0.035;
+      const oscillator = context.createOscillator();
+      const overtone = context.createOscillator();
+      const gain = context.createGain();
+      const overtoneGain = context.createGain();
+      oscillator.type = "triangle";
+      oscillator.frequency.value = frequency;
+      overtone.type = "sine";
+      overtone.frequency.value = frequency * 2.01;
+      overtoneGain.gain.value = 0.13;
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.11, startAt + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.85);
+      oscillator.connect(gain);
+      overtone.connect(overtoneGain);
+      overtoneGain.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(startAt);
+      overtone.start(startAt);
+      oscillator.stop(startAt + 0.9);
+      overtone.stop(startAt + 0.9);
+    });
+    window.setTimeout(() => {
+      context.close().catch(() => {});
+      setPlaying(false);
+    }, 1050);
+  };
+
+  const data = chordLibrary[activeChord];
+  const stringNames = ["E", "A", "D", "G", "B", "e"];
+  const fingerByString = new Map(data.fingers.map((f) => [f.string, f]));
+
+  return (
+    <div className="chord-lab" data-pointer-depth>
+      <div className="chord-lab-top"><span>АППЛИКАТУРЫ · ОТКРЫТАЯ ПОЗИЦИЯ</span><b>01 — 04</b></div>
+      <div className="chord-picker" role="tablist" aria-label="Выбрать аккорд">
+        {Object.keys(chordLibrary).map((chord) => (
+          <button key={chord} role="tab" aria-selected={activeChord === chord} className={activeChord === chord ? "active" : ""} onClick={() => setActiveChord(chord)}>{chord}</button>
+        ))}
+      </div>
+      <div className={"fretboard-wrap " + (playing ? "playing" : "")}>
+        <svg className="fretboard" viewBox="0 0 340 258" role="img" aria-label={"Аппликатура аккорда " + activeChord}>
+          <text x="18" y="18" className="fretboard-label">СТРУНЫ</text>
+          {stringNames.map((name, i) => {
+            const x = 48 + i * 48;
+            const note = data.notes[i];
+            return <g key={name}>
+              <text x={x} y="43" textAnchor="middle" className={"string-mark " + (note === -1 ? "muted" : note === 0 ? "open" : "")}>{note === -1 ? "×" : note === 0 ? "○" : ""}</text>
+              <text x={x} y="224" textAnchor="middle" className="string-name">{name}</text>
+              <line x1={x} y1="56" x2={x} y2="211" className="guitar-string" style={{ strokeWidth: 1 + i * 0.16 }} />
+            </g>;
+          })}
+          {[0,1,2,3,4].map((fret) => <line key={fret} x1="24" y1={56 + fret * 38} x2="264" y2={56 + fret * 38} className={fret === 0 ? "fret-line nut" : "fret-line"} />)}
+          {[1,2,3].map((fret) => <text key={fret} x="294" y={78 + (fret - 1) * 38} className="fret-number">{fret}</text>)}
+          {data.fingers.map(({string, fret, finger}) => {
+            const x = 48 + string * 48;
+            const y = 56 + (fret - 0.5) * 38;
+            return <g key={string + "-" + fret}>
+              <circle cx={x} cy={y} r="13.5" className="finger-dot" />
+              <text x={x} y={y + 3.8} textAnchor="middle" className="finger-number">{finger}</text>
+            </g>;
+          })}
+          <text x="294" y="210" className="fretboard-label">ЛАДЫ</text>
+        </svg>
+        <div className="chord-note"><span>{activeChord}</span><p>{data.detail}</p></div>
+      </div>
+      <div className="chord-lab-bottom">
+        <span>ЗВУЧАНИЕ — СИНТЕЗИРОВАННОЕ ПРЕВЬЮ</span>
+        <button className="play-chord" onClick={playChord} disabled={playing}><span>{playing ? "Ⅱ" : "▶"}</span>{playing ? "Звучит аккорд…" : "Послушать аккорд"}</button>
+      </div>
+    </div>
+  );
+}
+
+function MetronomeDemo() {
+  const [bpm, setBpm] = useState(60);
+  const [running, setRunning] = useState(false);
+  const [beat, setBeat] = useState(0);
+  const audioRef = useRef(null);
+
+  const ensureAudio = async () => {
+    if (!audioRef.current) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) audioRef.current = new AudioContextClass();
+    }
+    if (audioRef.current && audioRef.current.state === "suspended") await audioRef.current.resume();
+  };
+
+  useEffect(() => {
+    if (!running || !audioRef.current) return undefined;
+    const context = audioRef.current;
+    let currentBeat = 0;
+    const tick = () => {
+      const now = context.currentTime;
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value = currentBeat % 4 === 0 ? 1100 : 760;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.16, now + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.06);
+      setBeat(currentBeat % 4);
+      currentBeat += 1;
+    };
+    tick();
+    const timer = window.setInterval(tick, 60000 / bpm);
+    return () => window.clearInterval(timer);
+  }, [running, bpm]);
+
+  useEffect(() => () => {
+    if (audioRef.current) audioRef.current.close().catch(() => {});
+  }, []);
+
+  const toggle = async () => {
+    if (running) {
+      setRunning(false);
+      return;
+    }
+    await ensureAudio();
+    setRunning(true);
+  };
+
+  return (
+    <div className={"metronome-demo " + (running ? "is-running" : "")}>
+      <div className="metronome-meta"><span>ТРЕНАЖЁР РИТМА</span><span>4/4</span></div>
+      <div className="metronome-display">
+        <div className="beat-indicators">{[0,1,2,3].map((n) => <span key={n} className={running && beat === n ? "active" : ""} />)}</div>
+        <div className="tempo-number">{bpm}<small>BPM</small></div>
+        <div className="tempo-caption">{running ? "МЕТРОНОМ РАБОТАЕТ" : "ВЫБЕРИ УДОБНЫЙ ТЕМП"}</div>
+      </div>
+      <div className="tempo-control">
+        <label htmlFor="tempo-range">Темп <b>{bpm} ударов/мин</b></label>
+        <input id="tempo-range" type="range" min="40" max="120" step="5" value={bpm} onChange={(event) => setBpm(Number(event.target.value))} />
+        <div className="tempo-minmax"><span>40</span><span>120</span></div>
+      </div>
+      <button className="metronome-toggle" onClick={toggle}><span>{running ? "Ⅱ" : "▶"}</span>{running ? "Остановить" : "Запустить метроном"}</button>
+      <p className="metronome-note">Сначала находим ровный пульс. Повышаем скорость, только когда получается играть без остановок.</p>
+    </div>
+  );
+}
+
 function Quiz({ onClose }) {
   const questions = [
     { key: "experience", title: "Какой у тебя сейчас опыт?", options: ["Начинаю с нуля", "Знаю несколько аккордов", "Уже играю, но упёрся(лась) в потолок"] },
@@ -353,32 +522,27 @@ export default function Home() {
       </header>
 
       <section className="hero" id="top">
-        <div className="hero-glow glow-one" /><div className="hero-glow glow-two" />
         <div className="hero-copy reveal">
-          <div className="hero-label"><span className="live-dot" /> Онлайн-школа Никиты Осадчука</div>
-          <h1>Научитесь играть<br/><em>свою музыку</em></h1>
-          <p className="hero-lead">Гитара, электрогитара, укулеле и фортепиано. Понятный путь от первых движений до любимых песен, с практикой и живой обратной связью.</p>
+          <div className="hero-label"><span className="live-dot" /> Онлайн-школа музыки · Никита Осадчук</div>
+          <h1>От первых аккордов<br/><em>до целой песни</em></h1>
+          <p className="hero-lead">Пошаговое обучение игре на гитаре, электрогитаре, укулеле и фортепиано. Практика на реальных песнях и обратная связь по домашним заданиям.</p>
           <div className="hero-actions">
-            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Ответить на 3 вопроса <Icon name="arrow" /></button>
-            <a className="btn btn-ghost" href="#formats">Посмотреть форматы</a>
+            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Подобрать формат <Icon name="arrow" /></button>
+            <a className="btn btn-ghost" href="#program">Изучить программу</a>
           </div>
           <div className="hero-proof">
-            <div className="avatars"><span>🎸</span><span>🎹</span><span>🎶</span><span>500+</span></div>
-            <p><b>Более 500 учеников</b><br/>прошли обучение с 2019 года</p>
+            <strong>С 2019 года</strong><span className="proof-separator">/</span><span>500+ учеников</span><span className="proof-separator">/</span><span>4 инструмента</span>
           </div>
         </div>
         <div className="hero-visual reveal delay" data-pointer-depth>
+          <div className="hero-photo-backdrop" />
           <div className="photo-frame">
-            <div className="photo-overlay" />
-            <div className="photo-placeholder">
-              <img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" />
-            </div>
-            <div className="floating-card fc-top"><span className="mini-icon"><Icon name="music" /></span><div><small>Наставничество</small><b>1–3 песни в неделю</b></div></div>
-            <div className="floating-card fc-bottom"><span className="wave"><i/><i/><i/><i/><i/><i/></span><div><small>Обратная связь</small><b>личная проверка ДЗ</b></div></div>
-            <div className="teacher-tag"><span>Никита Осадчук</span><small>мультиинструменталист · аранжировщик</small></div>
+            <img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" />
+            <div className="teacher-tag"><span>Никита Осадчук</span><small>Преподаватель · аранжировщик</small></div>
           </div>
+          <div className="hero-photo-index"><span>01</span><i /> ГИТАРА · ПРАКТИКА · ПЕСНИ</div>
         </div>
-        <div className="scroll-hint"><span /> листайте</div>
+        <div className="scroll-hint"><span /> Прокрутите, чтобы увидеть программу</div>
       </section>
 
       <section className="marquee" aria-label="Направления обучения">
@@ -386,65 +550,59 @@ export default function Home() {
           {Array(2).fill(["АКУСТИЧЕСКАЯ ГИТАРА", "ЭЛЕКТРОГИТАРА", "УКУЛЕЛЕ", "ФОРТЕПИАНО", "РАЗБОР ПЕСЕН"]).flat().map((x, i) => <span key={i}>{x}<b>✦</b></span>)}
         </div>
       </section>
-      <section className="music-story" aria-label="Как строится обучение">
+      <section className="music-story" aria-label="Этапы обучения">
         <div className="music-story-stage" data-scene={storyScene} data-pointer-depth>
-          <div className="story-stage-top"><span>СТРУНЫ БУДУЩЕГО / НА ПРАКТИКЕ</span><b>0{storyScene + 1}<i> / 04</i></b></div>
+          <div className="story-stage-top"><span>БАЗОВЫЙ МИНИМУМ / ЭТАПЫ ОБУЧЕНИЯ</span><b>0{storyScene + 1}<i> / 04</i></b></div>
           <div className="story-progress"><span /></div>
+
           <div className={"story-scene " + (storyScene === 0 ? "active" : "")} aria-hidden={storyScene !== 0}>
             <div className="story-copy">
-              <small>01 · НАЧАТЬ</small>
-              <h2>Не нужно быть музыкантом, <em>чтобы начать.</em></h2>
-              <p>Нужен понятный первый шаг. Без экзаменов, сложных терминов и ощущения, что ты уже отстал.</p>
-              <button className="story-link" onClick={() => setQuiz(true)}>Найти свой старт <Icon name="arrow" /></button>
+              <small>ЭТАП 01 / ПОДГОТОВКА</small>
+              <h2>Знакомство<br/>с гитарой</h2>
+              <p>Устройство инструмента, удобная посадка, положение рук, настройка и первое упражнение на открытых струнах.</p>
+              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Содержание первого этапа <Icon name="arrow" /></button>
             </div>
-            <div className="story-art story-art-portrait">
-              <div className="story-sticker sticker-a">С НУЛЯ<br/>МОЖНО</div>
-              <div className="story-orbit orbit-a" />
-              <div className="story-orbit orbit-b" />
-              <img src="./nikita-hero.webp" alt="Преподаватель с гитарой" loading="lazy" />
-              <div className="story-art-caption">МУЗЫКА / 01</div>
+            <div className="story-art story-art-portrait" data-pointer-depth>
+              <img src="./nikita-hero.webp" alt="Никита Осадчук во время занятия с гитарой" loading="lazy" />
+              <div className="story-art-caption"><span>01</span><i /> ПОСТАНОВКА РУК И НАСТРОЙКА</div>
             </div>
           </div>
+
           <div className={"story-scene " + (storyScene === 1 ? "active" : "")} aria-hidden={storyScene !== 1}>
             <div className="story-copy">
-              <small>02 · ПЕРВЫЙ ЗВУК</small>
-              <h2>Один аккорд. <em>Уже музыка.</em></h2>
-              <p>Em, Am, C, D. Ставим пальцы, слушаем звучание и связываем аккорды. Маленькие действия, из которых собирается навык.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Посмотреть базовый путь <Icon name="arrow" /></button>
+              <small>ЭТАП 02 / АККОРДЫ</small>
+              <h2>Первые аккорды<br/>и переходы</h2>
+              <p>Разбираем аппликатуры Em, Am, C и D. Затем учимся менять их вовремя, не теряя ритм.</p>
+              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Посмотреть уроки и упражнения <Icon name="arrow" /></button>
             </div>
-            <div className="story-art story-art-chords">
-              <div className="chord-string string-one" /><div className="chord-string string-two" /><div className="chord-string string-three" />
-              {["Em", "Am", "C", "D"].map((chord, i) => <span key={chord} className={"floating-chord chord-" + i}>{chord}<small>АККОРД</small></span>)}
-              <div className="story-side-note">4 АККОРДА<br/>ПЕРВЫЙ НАБОР</div>
-            </div>
+            <div className="story-art story-art-chords"><ChordTrainer /></div>
           </div>
+
           <div className={"story-scene " + (storyScene === 2 ? "active" : "")} aria-hidden={storyScene !== 2}>
             <div className="story-copy">
-              <small>03 · ПОЙМАТЬ РИТМ</small>
-              <h2>Не быстрее. <em>Ровнее.</em></h2>
-              <p>Метроном, рисунки боя и движение правой руки. Темп растёт только тогда, когда движение становится уверенным.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("battles"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть раздел боёв <Icon name="arrow" /></button>
+              <small>ЭТАП 03 / РИТМ</small>
+              <h2>Ритм, бой<br/>и координация</h2>
+              <p>Работаем с метрономом, осваиваем бой с глушением, затем соединяем движение правой руки со сменой аккордов.</p>
+              <button className="story-link" onClick={() => { setProgramTrack("battles"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть раздел с боями <Icon name="arrow" /></button>
             </div>
-            <div className="story-art story-art-rhythm">
-              <div className="rhythm-dial"><span>60</span><small>BPM</small><i /></div>
-              <div className="rhythm-bars">{Array.from({length: 17}, (_, i) => <span key={i} style={{"--bar": String(15 + Math.abs(Math.sin(i * 1.35)) * 74) + "%", "--delay": (i * 0.045) + "s"}} />)}</div>
-              <div className="rhythm-caption">СЧЁТ · ДВИЖЕНИЕ · ЗВУК</div>
-            </div>
+            <div className="story-art story-art-rhythm"><MetronomeDemo /></div>
           </div>
+
           <div className={"story-scene " + (storyScene === 3 ? "active" : "")} aria-hidden={storyScene !== 3}>
             <div className="story-copy">
-              <small>04 · СОБРАТЬ ПЕСНЮ</small>
-              <h2>От упражнений <em>до «сыграл!».</em></h2>
-              <p>Сначала соединяем аккорды и бой, затем собираем первую песню. А после базового курса выбираем следующий маршрут.</p>
-              <button className="story-link" onClick={() => setQuiz(true)}>Подобрать маршрут <Icon name="arrow" /></button>
+              <small>ЭТАП 04 / РЕПЕРТУАР</small>
+              <h2>Собираем<br/>песню целиком</h2>
+              <p>На примере учебной версии «Пачки сигарет» соединяем аккорды, бой и текст. Дальше можно переходить к другим песням и техникам.</p>
+              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Вся программа курса <Icon name="arrow" /></button>
             </div>
             <div className="story-art story-art-finish">
-              <img className="story-sheet" src="./material-song.webp" alt="Учебный материал с аккордами и текстом" loading="lazy" />
-              <div className="story-sticker sticker-b">PLAY<br/>YOUR<br/>PART</div>
-              <div className="story-finish-note">ПЕРВАЯ ПЕСНЯ<br/><b>СОБРАНА</b></div>
+              <img className="story-sheet" src="./material-song.webp" alt="Учебные материалы с аккордами и текстом песни" loading="lazy" />
+              <div className="story-sheet-caption"><span>УЧЕБНЫЕ МАТЕРИАЛЫ</span><b>Аккорды · ритм · текст песни</b></div>
+              <span className="story-sheet-index">04 / 07</span>
             </div>
           </div>
-          <div className="story-stage-bottom"><span>ЛИСТАЙ ВНИЗ</span><i>↓</i><div className="story-progress-track"><span /></div></div>
+
+          <div className="story-stage-bottom"><span>ЭТАПЫ КУРСА</span><i>↓</i><div className="story-progress-track"><span /></div><span>ПРОКРУТИТЕ</span></div>
         </div>
       </section>
 
@@ -481,7 +639,7 @@ export default function Home() {
             ))}
           </div>
           <div className="curriculum-intro"><span className="curriculum-status">{activeProgram.id === "base" ? "ПОРЯДОК ПОДТВЕРЖДЁН" : "ТЕМАТИЧЕСКИЙ РАЗДЕЛ"}</span><p>{activeProgram.intro}</p></div>
-          <div className="curriculum-grid" role="tabpanel" key={activeProgram.id}>
+          <div className="curriculum-grid" role="tabpanel" key={activeProgram.id} aria-label={activeProgram.label}>
             {activeProgram.modules.map((module, index) => (
               <article className={"curriculum-card " + (expandedModule === module.no ? "expanded" : "")} key={module.no}>
                 <div className="curriculum-card-head"><span>{module.no}</span><i>{String(index + 1).padStart(2, "0")} / {String(activeProgram.modules.length).padStart(2, "0")}</i></div>
