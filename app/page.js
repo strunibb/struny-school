@@ -177,7 +177,7 @@ export default function Home() {
         <div className="program-aside">
           <span className="eyebrow">модуль «Базовый минимум»</span>
           <h2>От первых аккордов до <em>первой песни</em></h2>
-          <p>12 коротких видеоуроков собраны в 7 последовательных этапов. Ниже — примерный план на четыре недели: двигайтесь в своём темпе и переходите дальше, когда предыдущий навык начинает получаться уверенно.</p>
+          <p>Программа состоит из 7 последовательных этапов: знакомство с гитарой, чувство ритма, первые аккорды, бой и сборка первой песни. План рассчитан примерно на четыре недели, но двигаться можно в комфортном темпе.</p>
           <button className="link-arrow" onClick={() => setQuiz(true)}>Подобрать формат обучения <Icon name="arrow" /></button>
           <figure className="program-photo">
             <img src="./lesson-planning.webp" alt="Учебные материалы и подготовка урока по гитаре" loading="lazy" />
@@ -239,9 +239,9 @@ export default function Home() {
         </div>
         <div className="course-copy">
           <span className="eyebrow">курс «базовый минимум»</span>
-          <h2>С нуля до<br/><em>первых 3–5 песен</em></h2>
-          <p>За четыре недели вы поставите руки, выучите первые аккорды, освоите простой бой и соберёте песни целиком.</p>
-          <div className="course-stats"><div><b>4</b><span>недели</span></div><div><b>12</b><span>коротких уроков</span></div><div><b>3–5</b><span>песен</span></div></div>
+          <h2>С нуля до<br/><em>первой песни</em></h2>
+          <p>Пошагово познакомитесь с гитарой, освоите первые аккорды и простой бой, а затем соедините навыки в учебной версии песни «Пачка сигарет». Так вы поймёте основу игры и сможете дальше разучивать песни самостоятельно.</p>
+          <div className="course-stats"><div><b>4</b><span>недели в плане</span></div><div><b>7</b><span>этапов обучения</span></div><div><b>4</b><span>первых аккорда</span></div></div>
           <a className="btn btn-light" href={`${tg}?text=${encodeURIComponent("Здравствуйте! Хочу узнать о курсе «Базовый минимум»")}`} target="_blank" rel="noreferrer">Узнать о курсе <Icon name="arrow" /></a>
         </div>
       </section>
@@ -274,8 +274,8 @@ export default function Home() {
       </section>
 
       <section className="section results">
-        <div className="results-copy"><span className="eyebrow">результат базового модуля</span><h2>Что вы сможете<br/>после <em>четырёх недель</em></h2></div>
-        <div className="result-cards"><article><b>01</b><p>Правильно сидеть и держать гитару без лишнего напряжения</p></article><article><b>02</b><p>Стабильно брать 5–7 базовых аккордов</p></article><article><b>03</b><p>Играть простой ритм и менять аккорды без долгих пауз</p></article><article><b>04</b><p>Сыграть 3–5 песен от начала до конца</p></article></div>
+        <div className="results-copy"><span className="eyebrow">результат базового модуля</span><h2>Что вы освоите<br/>в <em>базовом модуле</em></h2></div>
+        <div className="result-cards"><article><b>01</b><p>Правильно сидеть и держать гитару без лишнего напряжения</p></article><article><b>02</b><p>Ставить первые аккорды и добиваться чистого звучания струн</p></article><article><b>03</b><p>Играть простой бой и менять аккорды без долгих остановок</p></article><article><b>04</b><p>Соединить аккорды, бой и текст в учебной версии «Пачки сигарет»</p></article></div>
       </section>
 
       <section className="section about" id="about">
