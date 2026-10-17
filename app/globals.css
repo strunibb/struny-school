@@ -839,3 +839,20 @@ a:focus-visible {
   .motion-enabled .motion-reveal { opacity:1;transform:none; }
   .story-stage-bottom i,.typing-bubble span { animation:none; }
 }
+
+
+/* Scene cross-fades follow the scroll position continuously, not a threshold jump. */
+.story-scene {
+  opacity:var(--scene-opacity,0);
+  transition:none;
+  will-change:opacity,transform;
+}
+.story-scene.active { opacity:var(--scene-opacity,1); }
+@media(max-width:760px) {
+  .music-story { height:220svh; }
+  .story-stage-bottom { display:none; }
+  .story-scene { inset:53px 15px 17px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .story-scene { opacity:1; }
+}
