@@ -36,3 +36,546 @@
 @media(max-width:1000px){.nav{gap:16px}.nav>a{display:none}.hero{grid-template-columns:1fr .8fr;gap:30px}.hero-visual{height:540px}.program{gap:55px}.real-learning{gap:45px}.formats{margin-left:14px;margin-right:14px;padding-left:25px;padding-right:25px}.format-card{padding:25px}.course-copy{padding:60px 40px}.about,.results,.faq{gap:55px}}
 @media(max-width:760px){.section{padding:85px 20px}.header{height:70px;padding:0 20px;position:absolute}.nav{display:none}.nav.open{display:flex;position:absolute;left:12px;right:12px;top:76px;background:#111621;border:1px solid var(--line);border-radius:18px;padding:20px;flex-direction:column;align-items:stretch;box-shadow:0 30px 60px rgba(0,0,0,.5)}.nav.open a{display:block;padding:8px}.menu-button{display:block}.nav-cta{padding:15px}.hero{min-height:960px;height:auto;max-height:none;padding:115px 20px 70px;grid-template-columns:1fr;align-items:start}.hero h1{font-size:48px}.hero-lead{font-size:15px}.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}.hero-proof{margin-top:25px}.hero-visual{height:480px;width:calc(100% - 24px);margin:10px auto 0}.photo-frame{border-radius:130px 130px 24px 24px}.fc-top{right:-16px;top:100px}.fc-bottom{left:-16px;bottom:100px}.scroll-hint{display:none}.split-head{grid-template-columns:1fr;gap:28px}.section h2,.final-cta h2{font-size:35px}.problem-section{padding-top:110px}.problem-grid{grid-template-columns:1fr}.problem-grid article{min-height:190px;border-right:0;border-bottom:1px solid var(--line);padding:28px}.problem-grid h3{margin-top:45px}.program{grid-template-columns:1fr;gap:55px}.program-aside{position:relative;top:0}.program-photo{max-width:520px}.program-aside h2,.results-copy h2,.about-copy h2,.faq-head h2{font-size:35px}.timeline article{grid-template-columns:38px 1fr;padding-left:25px;gap:10px}.real-learning{grid-template-columns:1fr;gap:42px}.real-learning-photo{min-height:410px}.real-learning-copy h2{font-size:34px}.formats{margin:0 8px;border-radius:32px;padding:80px 14px}.format-grid{grid-template-columns:1fr}.format-card{min-height:500px}.format-note{margin-bottom:0}.course-strip{margin:10px;border-radius:32px;grid-template-columns:1fr}.course-visual{min-height:450px}.course-copy{padding:55px 25px}.course-copy h2{font-size:34px}.course-stats{gap:27px}.free .split-head{align-items:start}.instrument-tabs{width:100%;overflow:auto}.instrument-tabs button{white-space:nowrap;flex:1}.lesson-feature{grid-template-columns:1fr}.lesson-video{min-height:300px}.lesson-info{padding:35px 25px}.materials-head{margin-top:55px}.materials-head h3{font-size:24px}.materials-gallery{grid-template-columns:1fr}.results{grid-template-columns:1fr;gap:40px}.results-copy{position:relative;top:0}.result-cards{grid-template-columns:1fr}.result-cards article{min-height:160px}.about{grid-template-columns:1fr;gap:45px}.about-visual{height:500px;border-radius:150px 150px 24px 24px}.about-points{grid-template-columns:1fr}.about-points div:last-child{grid-column:auto}.proof-panel{grid-template-columns:1fr}.proof-panel>div{min-height:270px;padding:28px}.student-group{min-height:290px}.student-group figcaption{left:20px;right:20px;bottom:20px}.student-group figcaption b{font-size:16px}.reviews .split-head .link-arrow{align-self:start}.faq{grid-template-columns:1fr;gap:40px}.faq-head{position:relative;top:0}.final-cta{margin:10px;border-radius:32px;padding:80px 20px}.final-cta h2{font-size:34px}.footer-top{grid-template-columns:1fr;gap:30px}.footer-bottom{flex-direction:column;gap:18px}.footer-bottom div{flex-wrap:wrap}.modal-card{padding:42px 22px 25px}.modal-card h2{font-size:25px}.marquee-track{animation-duration:20s}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.marquee-track{animation:none}.btn,.format-card,.problem-grid article{transition:none}}
+
+/* Visual refresh: clearer text, calmer spacing, easier navigation */
+:root {
+  --muted: #b0b8c4;
+  --line: rgba(255, 255, 255, .13);
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 14% 0%, rgba(87, 226, 229, .065), transparent 34%),
+    radial-gradient(ellipse at 88% 28%, rgba(154, 124, 255, .055), transparent 32%),
+    var(--bg);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+.section {
+  padding-top: 104px;
+  padding-bottom: 104px;
+}
+
+.section-head {
+  margin-bottom: 42px;
+}
+
+.program {
+  gap: 76px;
+}
+
+.timeline {
+  display: grid;
+  gap: 12px;
+  border-left: 0;
+}
+
+.timeline article {
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.timeline article:before {
+  display: none;
+}
+
+.timeline article:hover {
+  border-color: rgba(87, 226, 229, .32);
+  background: linear-gradient(145deg, rgba(87,226,229,.055), rgba(255,255,255,.015));
+  transform: translateY(-2px);
+}
+
+.timeline-no {
+  color: var(--cyan);
+  font-size: 13px;
+}
+
+.timeline h3 {
+  font-size: clamp(18px, 1.6vw, 23px);
+  line-height: 1.35;
+}
+
+.timeline p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #c0c7d1;
+}
+
+.timeline small {
+  font-size: 11px;
+}
+
+.format-card > p,
+.real-learning-copy > p,
+.lesson-info p,
+.problem-grid p,
+.answer p {
+  color: #b5bdc8;
+}
+
+.format-card li {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.course-strip {
+  min-height: 560px;
+}
+
+.mobile-sticky-cta {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  body {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+
+  .section {
+    padding: 64px 18px;
+  }
+
+  .section-head {
+    margin-bottom: 32px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: .14em;
+    margin-bottom: 15px;
+  }
+
+  .section h2,
+  .final-cta h2 {
+    font-size: clamp(32px, 8.5vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -.04em;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 108px 18px 48px;
+    gap: 22px;
+  }
+
+  .hero h1 {
+    font-size: clamp(41px, 11vw, 49px);
+    line-height: 1.02;
+  }
+
+  .hero-lead {
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 22px 0 26px;
+    color: #c0c7d1;
+  }
+
+  .hero-actions {
+    gap: 10px;
+  }
+
+  .hero-actions .btn {
+    min-height: 54px;
+    height: auto;
+    padding: 14px 18px;
+    font-size: 14px;
+  }
+
+  .hero-visual {
+    height: 390px;
+    width: calc(100% - 18px);
+    margin-top: 4px;
+  }
+
+  .fc-top {
+    right: -8px;
+    top: 74px;
+  }
+
+  .fc-bottom {
+    left: -8px;
+    bottom: 66px;
+  }
+
+  .hero-proof p {
+    font-size: 12px;
+  }
+
+  .problem-section {
+    padding-top: 64px;
+  }
+
+  .problem-grid article {
+    min-height: auto;
+    padding: 24px;
+  }
+
+  .problem-grid h3 {
+    margin-top: 28px;
+    font-size: 20px;
+  }
+
+  .problem-grid p,
+  .split-head > p,
+  .program-aside p,
+  .timeline p,
+  .format-card > p,
+  .real-learning-copy > p,
+  .lesson-info p,
+  .faq-head p,
+  .answer p {
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  .program {
+    gap: 34px;
+  }
+
+  .program-aside h2,
+  .results-copy h2,
+  .about-copy h2,
+  .faq-head h2 {
+    font-size: 34px;
+    line-height: 1.13;
+  }
+
+  .program-photo {
+    margin-top: 24px;
+  }
+
+  .timeline {
+    gap: 10px;
+  }
+
+  .timeline article {
+    grid-template-columns: 31px minmax(0, 1fr);
+    gap: 11px;
+    padding: 18px 15px;
+    border-radius: 17px;
+  }
+
+  .timeline h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .timeline p {
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+
+  .timeline-no {
+    font-size: 11px;
+    padding-top: 3px;
+  }
+
+  .timeline small {
+    font-size: 10px;
+    padding: 6px 9px;
+  }
+
+  .formats {
+    padding: 62px 14px;
+  }
+
+  .format-card {
+    min-height: auto;
+    padding: 25px 22px;
+  }
+
+  .format-card h3 {
+    font-size: 23px;
+    line-height: 1.3;
+    margin: 22px 0 13px;
+  }
+
+  .format-card li {
+    font-size: 14px;
+    align-items: flex-start;
+  }
+
+  .card-bottom {
+    gap: 12px;
+    padding-top: 18px;
+  }
+
+  .card-bottom strong {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .card-bottom button {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+  }
+
+  .format-note {
+    line-height: 1.7;
+    margin-top: 22px;
+  }
+
+  .course-strip {
+    min-height: auto;
+    margin: 8px;
+  }
+
+  .course-visual {
+    min-height: 320px;
+  }
+
+  .course-copy {
+    padding: 36px 23px;
+  }
+
+  .course-copy h2 {
+    font-size: 33px;
+    line-height: 1.14;
+  }
+
+  .course-copy > p {
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  .course-stats {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .course-stats b {
+    font-size: 25px;
+  }
+
+  .course-stats span {
+    font-size: 10px;
+  }
+
+  .instrument-tabs button {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  .lesson-video {
+    min-height: 260px;
+  }
+
+  .lesson-info {
+    padding: 28px 22px;
+  }
+
+  .lesson-info h3 {
+    font-size: 23px;
+    line-height: 1.3;
+  }
+
+  .materials-head {
+    margin-top: 44px;
+  }
+
+  .materials-head h3 {
+    font-size: 22px;
+    line-height: 1.35;
+  }
+
+  .materials-gallery figcaption {
+    padding: 16px 17px 18px;
+  }
+
+  .result-cards {
+    gap: 10px;
+  }
+
+  .result-cards article {
+    min-height: 136px;
+    padding: 21px;
+  }
+
+  .result-cards p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .about {
+    gap: 32px;
+  }
+
+  .about-visual {
+    height: 420px;
+  }
+
+  .about-lead {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .about-points div {
+    padding: 17px 0;
+  }
+
+  .proof-panel > div {
+    padding: 24px;
+  }
+
+  .proof-panel h3 {
+    font-size: 22px;
+  }
+
+  .proof-panel p {
+    font-size: 15px;
+  }
+
+  .student-group {
+    min-height: 260px;
+  }
+
+  .faq {
+    gap: 28px;
+  }
+
+  .accordion button {
+    min-height: 62px;
+    padding: 19px 0;
+    gap: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .accordion button i {
+    flex: 0 0 35px;
+  }
+
+  .final-cta {
+    padding: 64px 18px;
+  }
+
+  .final-cta p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .btn,
+  .nav-cta {
+    min-height: 48px;
+  }
+
+  .footer-top {
+    gap: 23px;
+  }
+
+  .footer-top > p {
+    font-size: 13px;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+  }
+
+  .footer-bottom div {
+    gap: 18px;
+  }
+
+  .mobile-sticky-cta {
+    display: block;
+    position: fixed;
+    z-index: 120;
+    left: 12px;
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-sticky-cta button {
+    width: 100%;
+    min-height: 60px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 18px;
+    background: var(--yellow);
+    color: #11140a;
+    padding: 9px 18px 9px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+    box-shadow: 0 10px 35px rgba(0,0,0,.4);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-sticky-cta button span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobile-sticky-cta button b {
+    font-size: 15px;
+    line-height: 1.25;
+    font-weight: 800;
+  }
+
+  .mobile-sticky-cta button small {
+    font-size: 11px;
+    line-height: 1.3;
+    color: rgba(17,20,10,.72);
+  }
+
+  .mobile-sticky-cta button .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mobile-sticky-cta button:active {
+    transform: scale(.99);
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modal-card {
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: 42px 20px 22px;
+    border-radius: 22px;
+  }
+
+  .modal-card h2 {
+    font-size: 24px;
+  }
+
+  .quiz-options button {
+    min-height: 54px;
+    gap: 12px;
+    line-height: 1.45;
+    padding: 15px;
+  }
+
+  .quiz-next {
+    min-height: 54px;
+  }
+}
+
+@media (hover: none) {
+  .format-card:hover,
+  .problem-grid article:hover,
+  .timeline article:hover,
+  .btn:hover {
+    transform: none;
+  }
+}
+
