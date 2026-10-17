@@ -976,3 +976,5 @@ a:focus-visible {
   .story-art-guitar-parts { padding:4px; border-radius:12px; }
   .story-art-guitar-parts img { object-fit:contain; }
 }
+
+.story-art-guitar-parts .story-art-caption { display:none; }
