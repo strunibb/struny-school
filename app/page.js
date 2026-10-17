@@ -502,8 +502,8 @@ export default function Home() {
                   {expandedModule === module.no && <div className="curriculum-expanded">
                     <b>{programDetails[module.no]?.label || module.title}</b>
                     <p>{programDetails[module.no]?.content || module.desc}</p>
-                    <small>МАТЕРИАЛЫ</small><p>{programDetails[module.no]?.materials || module.songs || "Дополнительные материалы в карте не указаны."}</p>
-                    <small>РЕЗУЛЬТАТ / ПРИМЕЧАНИЕ</small><p>{programDetails[module.no]?.check || module.result || "Отдельный критерий прохождения в карте не указан."}</p>
+                    {!module.songs && <><small>МАТЕРИАЛЫ</small><p>{programDetails[module.no]?.materials || "Дополнительные материалы в карте не указаны."}</p></>}
+                    <small>ПРИМЕЧАНИЕ / КРИТЕРИЙ</small><p>{programDetails[module.no]?.check || "Отдельный критерий прохождения в карте не указан."}</p>
                   </div>}
                 </div>
               </article>
