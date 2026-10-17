@@ -978,3 +978,36 @@ a:focus-visible {
 }
 
 .story-art-guitar-parts .story-art-caption { display:none; }
+
+
+/* Centered full-width guitar curriculum, styled as lesson cards. */
+.program {
+  display:block;
+  width:min(calc(100% - 40px),1260px);
+  max-width:1260px;
+  margin:0 auto;
+  padding:clamp(34px,5vw,70px) clamp(18px,4vw,58px);
+}
+.program-aside { position:static; top:auto; max-width:820px; margin:0 auto 38px; text-align:center; }
+.program-aside .eyebrow { text-align:center; }
+.program-aside h2 { max-width:800px; margin:0 auto; font-size:clamp(36px,4.7vw,58px); line-height:1.08; letter-spacing:-.055em; }
+.program-aside p { max-width:760px; margin:18px auto 0; color:rgba(245,247,242,.72); font-size:14px; line-height:1.8; }
+.program-aside .link-arrow,.program-photo { display:none; }
+.curriculum { width:100%; max-width:1120px; min-width:0; margin:0 auto; }
+.curriculum-topline { align-items:center; }
+.curriculum-tabs { justify-content:center; }
+.curriculum-intro { max-width:900px; margin:16px auto 25px; align-items:center; }
+.curriculum-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); max-width:1120px; margin:0 auto; gap:18px; }
+.curriculum-card { min-width:0; }
+.curriculum-card-top { min-height:112px; }
+.curriculum-card-body { min-width:0; }
+.curriculum-card-body p { overflow-wrap:anywhere; }
+@media(max-width:760px) {
+  .program { width:calc(100% - 20px); padding:30px 14px; }
+  .program-aside { margin-bottom:27px; }
+  .program-aside h2 { font-size:clamp(30px,8vw,39px); }
+  .program-aside p { font-size:12px; line-height:1.7; }
+  .curriculum-grid { grid-template-columns:1fr; gap:13px; }
+  .curriculum-intro { margin:14px 0 19px; }
+}
+@media(prefers-reduced-motion:reduce) { .curriculum-grid { animation:none; } }
