@@ -517,15 +517,15 @@ export default function Home() {
             </div>
             <div className="floating-card fc-top"><span className="mini-icon"><Icon name="music" /></span><div><small>Наставничество</small><b>1–3 песни в неделю</b></div></div>
             <div className="floating-card fc-bottom"><span className="wave"><i/><i/><i/><i/><i/><i/></span><div><small>Обратная связь</small><b>личная проверка ДЗ</b></div></div>
-            <div className="teacher-tag"><span>Никита Осадчук</span><small>мультиинструменталист · аранжировщик</small></div>
+            <div className="teacher-tag"><span>Никита Осадчук</span><small>преподаватель гитары · аранжировщик</small></div>
           </div>
         </div>
         <div className="scroll-hint"><span /> листайте</div>
       </section>
 
-      <section className="marquee" aria-label="Направления обучения">
+      <section className="marquee" aria-label="Направления обучения игре на гитаре">
         <div className="marquee-track">
-          {Array(2).fill(["АКУСТИЧЕСКАЯ ГИТАРА", "ЭЛЕКТРОГИТАРА", "УКУЛЕЛЕ", "ФОРТЕПИАНО", "РАЗБОР ПЕСЕН"]).flat().map((x, i) => <span key={i}>{x}<b>✦</b></span>)}
+          {Array(2).fill(["АКУСТИЧЕСКАЯ ГИТАРА", "ЭЛЕКТРОГИТАРА", "АККОРДЫ", "ГИТАРНЫЙ БОЙ", "ПЕРЕБОРЫ", "ЛЮБИМЫЕ ПЕСНИ"]).flat().map((x, i) => <span key={i}>{x}<b>✦</b></span>)}
         </div>
       </section>
       <section className="music-story" aria-label="Этапы обучения">
@@ -726,7 +726,7 @@ export default function Home() {
         </div>
         <div className="about-copy">
           <span className="eyebrow">ваш преподаватель</span><h2>Никита Осадчук</h2>
-          <p className="about-lead">Мультиинструменталист и аранжировщик. Руководитель отделения «Музыка» в детском центре «Зебра» в Санкт-Петербурге.</p>
+          <p className="about-lead">Преподаватель гитары и аранжировщик. Руководитель отделения «Музыка» в детском центре «Зебра» в Санкт-Петербурге.</p>
           <div className="about-points"><div><b>с 2019 года</b><span>преподаёт музыку детям и взрослым</span></div><div><b>более 500 учеников</b><span>от полных новичков до продолжающих музыкантов</span></div><div><b>направление обучения</b><span>акустическая и электрогитара</span></div></div>
         </div>
       </section>
