@@ -185,7 +185,7 @@ function ChordTrainer() {
   const fingerByString = new Map(data.fingers.map((f) => [f.string, f]));
 
   return (
-    <div className="chord-lab" data-pointer-depth>
+    <div className="chord-lab">
       <div className="chord-lab-top"><span>АППЛИКАТУРЫ · ОТКРЫТАЯ ПОЗИЦИЯ</span><b>01 — 04</b></div>
       <div className="chord-picker" role="tablist" aria-label="Выбрать аккорд">
         {Object.keys(chordLibrary).map((chord) => (
@@ -196,7 +196,7 @@ function ChordTrainer() {
         <svg className="fretboard" viewBox="0 0 340 258" role="img" aria-label={"Аппликатура аккорда " + activeChord}>
           <text x="18" y="18" className="fretboard-label">СТРУНЫ</text>
           {stringNames.map((name, i) => {
-            const x = 48 + i * 48;
+            const x = 40 + i * 44;
             const note = data.notes[i];
             return <g key={name}>
               <text x={x} y="43" textAnchor="middle" className={"string-mark " + (note === -1 ? "muted" : note === 0 ? "open" : "")}>{note === -1 ? "×" : note === 0 ? "○" : ""}</text>
@@ -204,10 +204,10 @@ function ChordTrainer() {
               <line x1={x} y1="56" x2={x} y2="211" className="guitar-string" style={{ strokeWidth: 1 + i * 0.16 }} />
             </g>;
           })}
-          {[0,1,2,3,4].map((fret) => <line key={fret} x1="24" y1={56 + fret * 38} x2="264" y2={56 + fret * 38} className={fret === 0 ? "fret-line nut" : "fret-line"} />)}
+          {[0,1,2,3,4].map((fret) => <line key={fret} x1="18" y1={56 + fret * 38} x2="282" y2={56 + fret * 38} className={fret === 0 ? "fret-line nut" : "fret-line"} />)}
           {[1,2,3].map((fret) => <text key={fret} x="294" y={78 + (fret - 1) * 38} className="fret-number">{fret}</text>)}
           {data.fingers.map(({string, fret, finger}) => {
-            const x = 48 + string * 48;
+            const x = 40 + string * 44;
             const y = 56 + (fret - 0.5) * 38;
             return <g key={string + "-" + fret}>
               <circle cx={x} cy={y} r="13.5" className="finger-dot" />
