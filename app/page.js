@@ -135,6 +135,140 @@ const programDetails = {
   M4: { label: "Завершение блока", content: "В материалах предусмотрены поздравления о прохождении раздела.", materials: "Сообщение о завершении блока.", check: "Отметить прохождение раздела." }
 };
 
+
+const chordLibrary = {
+  Em: { fingers: [{string:1,fret:2,finger:2},{string:2,fret:2,finger:3}], frequencies:[82.41,123.47,164.81,196,246.94,329.63], detail:"Два пальца на втором ладу. Остальные струны звучат открытыми." },
+  Am: { fingers:[{string:2,fret:2,finger:2},{string:3,fret:2,finger:3},{string:4,fret:1,finger:1}], frequencies:[null,110,164.81,220,261.63,329.63], detail:"Три прижатые струны и три открытые. Шестую струну не играем." },
+  C: { fingers:[{string:1,fret:3,finger:3},{string:2,fret:2,finger:2},{string:4,fret:1,finger:1}], frequencies:[null,130.81,164.81,196,261.63,329.63], detail:"Три прижатые струны и три открытые. Шестую струну не играем." },
+  D: { fingers:[{string:3,fret:2,finger:1},{string:4,fret:3,finger:3},{string:5,fret:2,finger:2}], frequencies:[null,null,146.83,220,293.66,369.99], detail:"Играем четыре нижние струны. Пальцы образуют треугольник." }
+};
+
+function ChordTrainer() {
+  const [activeChord, setActiveChord] = useState("Em");
+  const [playing, setPlaying] = useState(false);
+  const playChord = async () => {
+    if (playing) return;
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    if (!Audio) return;
+    setPlaying(true);
+    const ctx = new Audio();
+    try {
+      await ctx.resume();
+      chordLibrary[activeChord].frequencies.filter(Boolean).forEach((hz,i) => {
+        const start = ctx.currentTime + i * 0.035;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.value = hz;
+        gain.gain.setValueAtTime(0.0001,start);
+        gain.gain.exponentialRampToValueAtTime(0.12,start+0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001,start+0.8);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(start); osc.stop(start+0.85);
+      });
+    } finally {
+      window.setTimeout(() => { ctx.close().catch(() => {}); setPlaying(false); }, 950);
+    }
+  };
+  const chord = chordLibrary[activeChord];
+  const strings = ["E","A","D","G","B","e"];
+  return (
+    <div className="chord-lab">
+      <div className="chord-lab-top"><span>АППЛИКАТУРЫ · ОТКРЫТАЯ ПОЗИЦИЯ</span><b>01—04</b></div>
+      <div className="chord-picker" role="tablist" aria-label="Выбрать аккорд">
+        {Object.keys(chordLibrary).map(name => <button key={name} role="tab" aria-selected={activeChord===name} className={activeChord===name?"active":""} onClick={() => setActiveChord(name)}>{name}</button>)}
+      </div>
+      <div className="fretboard-wrap">
+        <svg className="fretboard" viewBox="0 0 340 258" role="img" aria-label={"Аппликатура аккорда "+activeChord}>
+          <text x="18" y="18" className="fretboard-label">СТРУНЫ</text>
+          {strings.map((name,i) => {
+            const x = 40 + i*44;
+            const note = chord.frequencies[i];
+            const finger = chord.fingers.find(f => f.string===i);
+            return <g key={name}>
+              <text x={x} y="43" textAnchor="middle" className={"string-mark "+(!note?"muted":!finger?"open":"")}>{!note?"×":!finger?"○":""}</text>
+              <text x={x} y="224" textAnchor="middle" className="string-name">{name}</text>
+              <line x1={x} y1="56" x2={x} y2="211" className="guitar-string" style={{strokeWidth:1+i*.16}} />
+            </g>;
+          })}
+          {[0,1,2,3,4].map(fret => <line key={fret} x1="18" y1={56+fret*38} x2="282" y2={56+fret*38} className={fret===0?"fret-line nut":"fret-line"} />)}
+          {[1,2,3].map(fret => <text key={fret} x="294" y={78+(fret-1)*38} className="fret-number">{fret}</text>)}
+          {chord.fingers.map(({string,fret,finger}) => {
+            const x = 40+string*44;
+            const y = 56+(fret-.5)*38;
+            return <g key={string+"-"+fret}><circle cx={x} cy={y} r="13" className="finger-dot"/><text x={x} y={y+3.8} textAnchor="middle" className="finger-number">{finger}</text></g>;
+          })}
+        </svg>
+        <div className="chord-note"><span>{activeChord}</span><p>{chord.detail}</p></div>
+      </div>
+      <div className="chord-lab-bottom">
+        <span>ЗВУЧАНИЕ — СИНТЕЗИРОВАННОЕ ПРЕВЬЮ</span>
+        <button className="play-chord" disabled={playing} onClick={playChord}><span>{playing?"Ⅱ":"▶"}</span>{playing?"Звучит аккорд…":"Послушать аккорд"}</button>
+      </div>
+    </div>
+  );
+}
+
+function MetronomeDemo() {
+  const [bpm,setBpm] = useState(60);
+  const [running,setRunning] = useState(false);
+  const [beat,setBeat] = useState(0);
+  const audioRef = useRef(null);
+  const ensureAudio = async () => {
+    if (!audioRef.current) {
+      const Audio = window.AudioContext || window.webkitAudioContext;
+      if (Audio) audioRef.current = new Audio();
+    }
+    if (audioRef.current?.state==="suspended") await audioRef.current.resume();
+  };
+  useEffect(() => {
+    if (!running || !audioRef.current) return undefined;
+    const ctx = audioRef.current;
+    let count = 0;
+    const tick = () => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+      osc.type = "sine";
+      osc.frequency.value = count%4===0 ? 1050 : 720;
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.17,now+0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.055);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(now); osc.stop(now+0.06);
+      setBeat(count%4);
+      count++;
+    };
+    tick();
+    const timer = window.setInterval(tick,60000/bpm);
+    return () => window.clearInterval(timer);
+  },[running,bpm]);
+  useEffect(() => () => { if(audioRef.current) audioRef.current.close().catch(()=>{}); },[]);
+  const toggle = async () => {
+    if(running){setRunning(false);return;}
+    await ensureAudio();
+    if(audioRef.current)setRunning(true);
+  };
+  return (
+    <div className={"metronome-demo "+(running?"is-running":"")}>
+      <div className="metronome-meta"><span>ТРЕНАЖЁР РИТМА</span><span>4/4</span></div>
+      <div className="metronome-display">
+        <div className="beat-indicators">{[0,1,2,3].map(n=><span key={n} className={running&&beat===n?"active":""}/>)}</div>
+        <div className="tempo-number">{bpm}<small>BPM</small></div>
+        <div className="tempo-caption">{running?"МЕТРОНОМ РАБОТАЕТ":"ВЫБЕРИ УДОБНЫЙ ТЕМП"}</div>
+      </div>
+      <div className="tempo-control">
+        <label htmlFor="tempo-range">Темп <b>{bpm} ударов/мин</b></label>
+        <input id="tempo-range" type="range" min="40" max="120" step="5" value={bpm} onChange={e=>setBpm(Number(e.target.value))}/>
+        <div className="tempo-minmax"><span>40</span><span>120</span></div>
+      </div>
+      <button className="metronome-toggle" onClick={toggle}><span>{running?"Ⅱ":"▶"}</span>{running?"Остановить":"Запустить метроном"}</button>
+      <p className="metronome-note">Сначала находим ровный пульс. Повышаем скорость, только когда получается играть без остановок.</p>
+    </div>
+  );
+}
+
+
 function Quiz({ onClose }) {
   const questions = [
     { key: "experience", title: "Какой у тебя сейчас опыт?", options: ["Начинаю с нуля", "Знаю несколько аккордов", "Уже играю, но упёрся(лась) в потолок"] },
