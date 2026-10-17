@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const tg = "https://t.me/nikguita";
 
@@ -56,47 +56,163 @@ const faq = [
   ["Можно попробовать бесплатно?", "Да. На сайте собраны бесплатные уроки по гитаре и электрогитаре, укулеле и фортепиано." ]
 ];
 
+
+const programTracks = [
+  {
+    id: "base",
+    label: "Базовый старт",
+    intro: "Семь этапов в подтверждённом авторском порядке: от знакомства с инструментом до первой песни.",
+    modules: [
+      { no: "01", title: "Знакомство с гитарой", desc: "Устройство инструмента, посадка, руки и струны, настройка через тюнер, табулатура и первое упражнение на открытых струнах.", result: "Могу настроить гитару и выполнить первое упражнение." },
+      { no: "02", title: "Чувство ритма и метроном", desc: "Хроматические упражнения и лады 1–4 под ровный пульс. Начинаем примерно с 60 BPM и повышаем темп шагами по 5–10 BPM после удачного выполнения.", result: "Сохраняю ровный пульс на комфортной скорости." },
+      { no: "03", title: "Первые аккорды", desc: "Аппликатуры Em, Am, C и D, чистое звучание и последовательность переходов. Для тренировки используется тренажёр смены аккордов.", result: "Ставлю четыре аккорда и постепенно сокращаю паузы между ними." },
+      { no: "04", title: "Аккорды соединяются со словами", desc: "На песне «Пачка сигарет» учимся менять Em → Am → C → D в нужных местах текста. Пока играем по одному удару вниз на аккорд, не добавляя бой.", result: "Не теряю последовательность аккордов в тексте." },
+      { no: "05", title: "Первый бой с глушением", desc: "Разбираем знак глушения X, счёт «1-и-2-и» и рисунок: вниз → вверх → глушение → вверх. Сначала тренируем правую руку отдельно.", result: "Повторяю рисунок боя циклически." },
+      { no: "06", title: "Соединяем бой и аккорды", desc: "Упражнение «Скакалка»: освобождаем и возвращаем аккорд, не останавливая движение правой руки. Затем тренируем пары Em–Am, Am–C, C–D и D–Em.", result: "Выполняю «Скакалку» минимум 4 раза подряд и тренирую переходы." },
+      { no: "07", title: "Первая песня целиком", desc: "Собираем аккорды, бой и текст в учебной версии «Пачки сигарет». Петь одновременно необязательно: главное — сыграть без остановок между аккордами.", result: "Исполняю учебную версию песни без пауз между аккордами." }
+    ]
+  },
+  {
+    id: "battles",
+    label: "Бои и песни",
+    intro: "Расширяем репертуар, осваивая разные рисунки боя. Эти темы есть в материалах, но их точная последовательность не подтверждена, поэтому они не пронумерованы как обязательная лестница.",
+    modules: [
+      { no: "A1", title: "Четвёрка с глушением", desc: "Закрепляем знакомый рисунок боя и переносим его на другие песни.", songs: "Основные: Кино — «Звезда по имени Солнце», «Пачка сигарет». Бонус: Сплин — «Орбит без сахара»." },
+      { no: "A2", title: "Шестёрка с глушением", desc: "Разбираем схему, глушение и движения правой руки, затем пробуем их в песнях.", songs: "Dabro — «Юность»; Кино — «Закрой за мной дверь»; Агата Кристи — «Как на войне»." },
+      { no: "A3", title: "Бой «шестёрка»", desc: "Осваиваем рисунок, повторяем его в ровном темпе и соединяем с аккордами.", songs: "Король и Шут — «Кукла колдуна»; Кино — «Когда твоя девушка больна»." },
+      { no: "A4", title: "Рок-бой: варианты 4 и 5", desc: "Работаем со схемой, счётом и акцентом на доле, затем переносим рисунок в песню.", songs: "Основная: «Районы-кварталы». По желанию: Земфира — «Искала»." },
+      { no: "A5", title: "Восьмёрка", desc: "Считаем восемь долей, отрабатываем рисунок и постепенно добавляем аккорды.", songs: "Амега — «Лететь»; Баста — «Сансара». Бонус: Бумбокс — «Вахтёрам»." },
+      { no: "A6", title: "Четвёрка с акцентом", desc: "Знакомимся с вариантом боя, в котором важно выделять нужную долю. Конкретную песню привязываем после сверки исходного урока.", songs: "В материалах песни для этого блока пока не подтверждены." },
+      { no: "A7", title: "Дворовый бой: два варианта", desc: "Сравниваем два варианта дворового рисунка и применяем выбранный в песне.", songs: "Братья Грим — «Кустурица»; Звери — «До скорой встречи»." }
+    ]
+  },
+  {
+    id: "division",
+    label: "Деление боёв",
+    intro: "Учимся распределять рисунок между аккордами, чтобы менять гармонию вовремя и не терять общий счёт.",
+    modules: [
+      { no: "D1", title: "Что такое деление боя", desc: "Понимаем, в какой точке рисунка меняется аккорд. Это вводная тема перед отдельными вариантами деления.", songs: "Схемы и графические примеры; материал готовит к шестёрке и восьмёрке с делением." },
+      { no: "D2", title: "Шестёрка с делением", desc: "Распределяем движения между двумя аккордами. В варианте без глушения: ↓↓ на первый аккорд, ↑↑↑ — на второй; с глушением: ↓X и затем ↑↑X↑.", songs: "Виктор Салтыков — «Белая ночь»; Сплин — «Моё сердце»." },
+      { no: "D3", title: "Восьмёрка с делением", desc: "Переносим принцип деления на восьмёрку и сравниваем с исполнением целым боем.", songs: "Ария — «Я свободен». Связь песни «Поезда» с этим блоком требует проверки." }
+    ]
+  },
+  {
+    id: "picking",
+    label: "Переборы",
+    intro: "Отдельная тематическая ветка. В мастер-карте точное место переборов в общем маршруте пока не установлено.",
+    modules: [
+      { no: "P1", title: "Первый перебор «Четвёрка»", desc: "Знакомимся с пальцами правой руки, выбором басовой струны и последовательностью нот. Сначала играем рисунок на одном аккорде, затем переносим его в песню.", songs: "Жуки — «Батарейка»; также предусмотрены песни на выбор." }
+    ]
+  }
+];
+
 function Quiz({ onClose }) {
+  const questions = [
+    { key: "experience", title: "Какой у тебя сейчас опыт?", options: ["Начинаю с нуля", "Знаю несколько аккордов", "Уже играю, но упёрся(лась) в потолок"] },
+    { key: "goal", title: "Что хочется уметь в первую очередь?", options: ["Играть любимые песни", "Прокачать ритм и технику", "Разобрать конкретные песни"] },
+    { key: "pace", title: "Какой формат тебе ближе?", options: ["Заниматься с преподавателем", "Учиться в своём темпе с проверкой", "Получать готовые разборы песен"] }
+  ];
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({ experience: "", goal: "", pace: "" });
-  const questions = [
-    { key: "experience", kicker: "1 / 3", title: "Какой у вас опыт?", options: ["Никогда не играл(а)", "Знаю несколько аккордов", "Играю, но застрял(а)"] },
-    { key: "goal", kicker: "2 / 3", title: "Что хочется получить?", options: ["Сыграть первые песни", "Улучшить технику и ритм", "Разобрать конкретные песни"] },
-    { key: "pace", kicker: "3 / 3", title: "Как удобнее заниматься?", options: ["Личные онлайн-занятия", "Самостоятельно с проверкой", "Разбор выбранных песен"] }
-  ];
-  const q = questions[step];
-  const isDone = step === questions.length;
+  const [pending, setPending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: "bot", text: "Привет! Помогу подобрать формат музыкального обучения под твои цели. Это всего три коротких вопроса." },
+    { role: "bot", text: questions[0].title }
+  ]);
+  const recommendation = useMemo(() => {
+    if (answers.pace === "Учиться в своём темпе с проверкой") return { title: "Личное наставничество", text: "Уроки в удобное время, обратная связь по домашним заданиям и поддержка в Telegram." };
+    if (answers.pace === "Получать готовые разборы песен") return { title: "Разбор любимых песен", text: "Подготовим материал под твой уровень: аккорды, бой или перебор и видеоразбор." };
+    return { title: "Личные онлайн-занятия", text: "Индивидуальная работа с преподавателем, чтобы пройти сложные места вместе и выстроить понятный план." };
+  }, [answers.pace]);
   const link = useMemo(() => {
-    const msg = `Здравствуйте! Прошёл(ла) подбор формата на сайте.%0AОпыт: ${answers.experience}%0AЦель: ${answers.goal}%0AФормат: ${answers.pace}`;
-    return `${tg}?text=${encodeURI(msg)}`;
-  }, [answers]);
+    const msg = [
+      "Привет! Я прошёл подбор обучения на сайте «Струны будущего».",
+      "Опыт: " + answers.experience,
+      "Цель: " + answers.goal,
+      "Формат: " + answers.pace,
+      "Рекомендация сайта: " + recommendation.title
+    ].join("\n");
+    return tg + "?text=" + encodeURIComponent(msg);
+  }, [answers, recommendation.title]);
+
+  useEffect(() => {
+    if (!pending) return undefined;
+    const timer = setTimeout(() => {
+      setMessages((previous) => {
+        const clean = previous.filter((message) => message.role !== "typing");
+        if (step < questions.length - 1) {
+          return clean.concat([{ role: "bot", text: "Понял! Ещё один момент." }, { role: "bot", text: questions[step + 1].title }]);
+        }
+        return clean.concat([{ role: "bot", text: "Судя по ответам, стоит начать с формата «" + recommendation.title + "». " + recommendation.text }]);
+      });
+      if (step < questions.length - 1) setStep(step + 1);
+      else setDone(true);
+      setPending(false);
+    }, 620);
+    return () => clearTimeout(timer);
+  }, [pending, step, answers, recommendation, questions.length]);
+
+  const chooseOption = (option) => {
+    if (pending || done) return;
+    setAnswers((previous) => ({ ...previous, [questions[step].key]: option }));
+    setMessages((previous) => previous.concat([{ role: "user", text: option }, { role: "typing", text: "набирает сообщение" }]));
+    setPending(true);
+  };
+
+  const restart = () => {
+    setStep(0);
+    setAnswers({ experience: "", goal: "", pace: "" });
+    setPending(false);
+    setDone(false);
+    setMessages([
+      { role: "bot", text: "Привет! Помогу подобрать формат музыкального обучения под твои цели. Это всего три коротких вопроса." },
+      { role: "bot", text: questions[0].title }
+    ]);
+  };
 
   return (
-    <div className="modal" role="dialog" aria-modal="true" aria-label="Подбор формата">
-      <button className="modal-backdrop" onClick={onClose} aria-label="Закрыть" />
-      <div className="modal-card">
-        <button className="modal-close" onClick={onClose} aria-label="Закрыть"><Icon name="close" /></button>
-        {!isDone ? <>
-          <span className="eyebrow">{q.kicker} · подбор обучения</span>
-          <h2>{q.title}</h2>
-          <div className="quiz-options">
-            {q.options.map(option => (
-              <button key={option} className={answers[q.key] === option ? "selected" : ""} onClick={() => setAnswers({ ...answers, [q.key]: option })}>
-                <span>{option}</span><span className="radio" />
-              </button>
-            ))}
-          </div>
-          <button className="btn btn-primary quiz-next" disabled={!answers[q.key]} onClick={() => setStep(step + 1)}>
-            {step === 2 ? "Получить рекомендацию" : "Дальше"}<Icon name="arrow" />
-          </button>
-        </> : <div className="quiz-result">
-          <span className="result-icon"><Icon name="spark" /></span>
-          <span className="eyebrow">Ответы заполнены</span>
-          <h2>Отправьте ответы Никите</h2>
-          <p>Сообщение уже сформировано. В Telegram Никита уточнит детали и предложит подходящий формат обучения.</p>
-          <a className="btn btn-primary" href={link} target="_blank" rel="noreferrer">Написать Никите <Icon name="arrow" /></a>
-          <button className="text-button" onClick={() => setStep(0)}>Пройти ещё раз</button>
+    <div className="modal chat-modal" role="dialog" aria-modal="true" aria-label="Чат подбора обучения">
+      <button className="modal-backdrop" onClick={onClose} aria-label="Закрыть чат" />
+      <div className="modal-card chat-card">
+        <div className="chat-header">
+          <div className="chat-brand-avatar">С<span>♪</span></div>
+          <div className="chat-person"><b>Струны будущего</b><small><i /> Подбор обучения · обычно 1 минута</small></div>
+          <button className="modal-close" onClick={onClose} aria-label="Закрыть"><Icon name="close" /></button>
+        </div>
+        <div className="chat-progress" aria-label={"Вопрос " + (done ? 3 : step + 1) + " из 3"}>
+          <span style={{ width: ((done ? 3 : step + (pending ? 1 : 0)) / questions.length * 100) + "%" }} />
+        </div>
+        <div className="chat-history" aria-live="polite">
+          <div className="chat-day">СЕГОДНЯ</div>
+          {messages.map((message, index) => (
+            <div className={"chat-line " + message.role} key={index}>
+              {message.role === "bot" && <span className="chat-mini-avatar">С</span>}
+              {message.role === "typing"
+                ? <div className="chat-bubble typing-bubble"><span /><span /><span /></div>
+                : <div className="chat-bubble">{message.text}</div>}
+              {message.role === "user" && <span className="chat-read">✓✓</span>}
+            </div>
+          ))}
+          {done && <div className="chat-result-actions">
+            <div className="chat-recommendation"><small>ТВОЯ РЕКОМЕНДАЦИЯ</small><b>{recommendation.title}</b><p>{recommendation.text}</p></div>
+            <a className="btn btn-primary chat-send" href={link} target="_blank" rel="noreferrer">Отправить ответы Никите <Icon name="arrow" /></a>
+            <button className="text-button" onClick={restart}>Пройти заново</button>
+          </div>}
+        </div>
+        {!done && <div className="chat-replies">
+          {pending
+            ? <div className="chat-wait">Подбираем следующий вопрос…</div>
+            : <>
+                <span className="chat-reply-label">ВЫБЕРИ ОТВЕТ</span>
+                {questions[step].options.map((option) => (
+                  <button key={option} className="chat-reply" onClick={() => chooseOption(option)}>
+                    {option}<span>↗</span>
+                  </button>
+                ))}
+              </>}
         </div>}
+        <div className="chat-footer-note"><span>🔒</span> Ответы никуда не отправятся, пока ты сам не нажмёшь кнопку в конце.</div>
       </div>
     </div>
   );
@@ -107,6 +223,8 @@ export default function Home() {
   const [quiz, setQuiz] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const [instrument, setInstrument] = useState("Гитара");
+  const [programTrack, setProgramTrack] = useState("base");
+  const activeProgram = programTracks.find((track) => track.id === programTrack) || programTracks[0];
 
   return (
     <main>
@@ -121,7 +239,7 @@ export default function Home() {
           <a href="#program" onClick={() => setMenu(false)}>Как учимся</a>
           <a href="#free" onClick={() => setMenu(false)}>Бесплатно</a>
           <a href="#about" onClick={() => setMenu(false)}>О преподавателе</a>
-          <button className="nav-cta" onClick={() => { setQuiz(true); setMenu(false); }}>Подобрать обучение</button>
+          <button className="nav-cta" onClick={() => { setQuiz(true); setMenu(false); }}>Помочь с выбором</button>
         </nav>
         <button className="menu-button" onClick={() => setMenu(!menu)} aria-label="Открыть меню"><Icon name={menu ? "close" : "menu"} /></button>
       </header>
@@ -130,10 +248,10 @@ export default function Home() {
         <div className="hero-glow glow-one" /><div className="hero-glow glow-two" />
         <div className="hero-copy reveal">
           <div className="hero-label"><span className="live-dot" /> Онлайн-школа Никиты Осадчука</div>
-          <h1>Научитесь играть<br/><em>на гитаре</em></h1>
-          <p className="hero-lead">Пошаговое обучение для новичков и продолжающих: постановка рук, аккорды, ритм, любимые песни и личная обратная связь.</p>
+          <h1>Научитесь играть<br/><em>свою музыку</em></h1>
+          <p className="hero-lead">Гитара, электрогитара, укулеле и фортепиано. Понятный путь от первых движений до любимых песен, с практикой и живой обратной связью.</p>
           <div className="hero-actions">
-            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Получить бесплатную диагностику <Icon name="arrow" /></button>
+            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Ответить на 3 вопроса <Icon name="arrow" /></button>
             <a className="btn btn-ghost" href="#formats">Посмотреть форматы</a>
           </div>
           <div className="hero-proof">
@@ -184,15 +302,28 @@ export default function Home() {
             <figcaption>Видео, схемы, PDF и практические упражнения</figcaption>
           </figure>
         </div>
-        <div className="timeline">
-          <article><span className="timeline-no">01</span><div><h3>Знакомимся с гитарой</h3><p>Разбираемся в устройстве инструмента, посадке, положении рук и струн. Учимся настраивать гитару и пробуем первое упражнение на открытых струнах.</p><small>Неделя 1 · этап 1</small></div></article>
-          <article><span className="timeline-no">02</span><div><h3>Привыкаем к ровному ритму</h3><p>Знакомимся с метрономом и играем простые упражнения. Сначала добиваемся ровного пульса, затем понемногу повышаем темп — без гонки за скоростью.</p><small>Неделя 1 · этап 2</small></div></article>
-          <article><span className="timeline-no">03</span><div><h3>Осваиваем первые аккорды</h3><p>Учимся ставить Em, Am, C и D, добиваемся чистого звучания и тренируем переходы между аккордами.</p><small>Неделя 2 · этап 3</small></div></article>
-          <article><span className="timeline-no">04</span><div><h3>Соединяем аккорды со словами</h3><p>На примере песни «Пачка сигарет» меняем аккорды в нужных местах текста. Пока играем по одному удару вниз на аккорд, не добавляя сложный бой слишком рано.</p><small>Неделя 2 · этап 4</small></div></article>
-          <article><span className="timeline-no">05</span><div><h3>Учимся играть первый бой</h3><p>Разбираем рисунок с глушением: вниз, вверх, глушение, вверх. Сначала тренируем движение правой руки отдельно, затем повторяем под видео в удобном темпе.</p><small>Неделя 3 · этап 5</small></div></article>
-          <article><span className="timeline-no">06</span><div><h3>Соединяем бой и аккорды</h3><p>В упражнении «Скакалка» учимся сохранять движение правой руки при смене аккорда. Затем отрабатываем переходы Em–Am, Am–C, C–D и D–Em без остановок.</p><small>Неделя 3 · этап 6</small></div></article>
-          <article><span className="timeline-no">07</span><div><h3>Собираем песню целиком</h3><p>Соединяем аккорды, бой и текст в учебной версии «Пачки сигарет». Главная цель базового этапа — сыграть без остановок между аккордами; петь одновременно необязательно.</p><small>Неделя 4 · этап 7</small></div></article>
-          <article><span className="timeline-no">→</span><div><h3>Что дальше?</h3><p>После базового старта можно закреплять навыки на других песнях, осваивать новые виды боя, деление боя между аккордами и переборы. Дополнительные темы подбираются по уровню и не обязаны идти в одном жёстком порядке.</p><small>Следующий этап · практика и репертуар</small></div></article>
+        <div className="curriculum">
+          <div className="curriculum-topline"><span>ПРОГРАММА ОБУЧЕНИЯ</span><b>18 учебных блоков</b></div>
+          <div className="curriculum-tabs" role="tablist" aria-label="Разделы программы">
+            {programTracks.map((track) => (
+              <button key={track.id} role="tab" aria-selected={programTrack === track.id} className={programTrack === track.id ? "curriculum-tab active" : "curriculum-tab"} onClick={() => setProgramTrack(track.id)}>
+                {track.label}<span>{track.modules.length.toString().padStart(2, "0")}</span>
+              </button>
+            ))}
+          </div>
+          <div className="curriculum-intro"><span className="curriculum-status">{activeProgram.id === "base" ? "ПОРЯДОК ПОДТВЕРЖДЁН" : "ТЕМАТИЧЕСКИЙ РАЗДЕЛ"}</span><p>{activeProgram.intro}</p></div>
+          <div className="curriculum-grid" role="tabpanel">
+            {activeProgram.modules.map((module, index) => (
+              <article className="curriculum-card" key={module.no}>
+                <div className="curriculum-card-head"><span>{module.no}</span><i>{String(index + 1).padStart(2, "0")} / {String(activeProgram.modules.length).padStart(2, "0")}</i></div>
+                <h3>{module.title}</h3>
+                <p>{module.desc}</p>
+                {module.result && <div className="curriculum-result"><span>↗ РЕЗУЛЬТАТ</span>{module.result}</div>}
+                {module.songs && <div className="curriculum-songs"><span>♪ РЕПЕРТУАР</span>{module.songs}</div>}
+              </article>
+            ))}
+          </div>
+          <div className="curriculum-footnote"><span>i</span><p><b>Без выдуманного порядка.</b> Последовательность базовых семи этапов подтверждена. Для расширенных тем мастер-карта фиксирует содержание и репертуар, но точный порядок некоторых уроков требует сверки с исходными материалами.</p></div>
         </div>
       </section>
 
