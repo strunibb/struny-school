@@ -225,6 +225,87 @@ export default function Home() {
   const [instrument, setInstrument] = useState("Гитара");
   const [programTrack, setProgramTrack] = useState("base");
   const activeProgram = programTracks.find((track) => track.id === programTrack) || programTracks[0];
+  const [storyScene, setStoryScene] = useState(0);
+
+  useEffect(() => {
+    document.documentElement.classList.add("motion-enabled");
+
+    const animated = document.querySelectorAll([
+      ".hero-copy", ".hero-visual", ".problem-grid article", ".curriculum-card",
+      ".format-card", ".real-learning-photo", ".course-strip", ".lesson-feature",
+      ".materials-gallery figure", ".result-cards article", ".about-visual",
+      ".about-copy", ".proof-panel > div", ".student-group", ".accordion article",
+      ".final-cta"
+    ].join(","));
+
+    animated.forEach((element, index) => {
+      element.classList.add("motion-reveal");
+      element.style.setProperty("--motion-index", String(index % 8));
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
+    animated.forEach((element) => revealObserver.observe(element));
+
+    const story = document.querySelector(".music-story");
+    let raf = 0;
+    let lastScene = -1;
+    const updateScroll = () => {
+      raf = 0;
+      if (!story) return;
+      const rect = story.getBoundingClientRect();
+      const travel = Math.max(1, story.offsetHeight - window.innerHeight);
+      const progress = Math.max(0, Math.min(1, -rect.top / travel));
+      story.style.setProperty("--story-progress", (progress * 100) + "%");
+      const nextScene = Math.min(3, Math.floor(progress * 4));
+      if (nextScene !== lastScene) {
+        lastScene = nextScene;
+        setStoryScene(nextScene);
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = window.requestAnimationFrame(updateScroll);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    updateScroll();
+
+    const pointerTargets = document.querySelectorAll("[data-pointer-depth]");
+    const onPointer = (event) => {
+      const target = event.target.closest("[data-pointer-depth]");
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5;
+      const y = (event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5;
+      target.style.setProperty("--pointer-x", String(x * 2));
+      target.style.setProperty("--pointer-y", String(y * 2));
+    };
+    const resetPointer = (event) => {
+      const target = event.target.closest("[data-pointer-depth]");
+      if (!target) return;
+      target.style.setProperty("--pointer-x", "0");
+      target.style.setProperty("--pointer-y", "0");
+    };
+    document.addEventListener("pointermove", onPointer, { passive: true });
+    document.addEventListener("pointerout", resetPointer, { passive: true });
+
+    return () => {
+      document.documentElement.classList.remove("motion-enabled");
+      revealObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      document.removeEventListener("pointermove", onPointer);
+      document.removeEventListener("pointerout", resetPointer);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, []);
+
 
   return (
     <main>
@@ -259,7 +340,7 @@ export default function Home() {
             <p><b>Более 500 учеников</b><br/>прошли обучение с 2019 года</p>
           </div>
         </div>
-        <div className="hero-visual reveal delay">
+        <div className="hero-visual reveal delay" data-pointer-depth>
           <div className="photo-frame">
             <div className="photo-overlay" />
             <div className="photo-placeholder">
@@ -276,6 +357,67 @@ export default function Home() {
       <section className="marquee" aria-label="Направления обучения">
         <div className="marquee-track">
           {Array(2).fill(["АКУСТИЧЕСКАЯ ГИТАРА", "ЭЛЕКТРОГИТАРА", "УКУЛЕЛЕ", "ФОРТЕПИАНО", "РАЗБОР ПЕСЕН"]).flat().map((x, i) => <span key={i}>{x}<b>✦</b></span>)}
+        </div>
+      </section>
+      <section className="music-story" aria-label="Как строится обучение">
+        <div className="music-story-stage" data-scene={storyScene} data-pointer-depth>
+          <div className="story-stage-top"><span>СТРУНЫ БУДУЩЕГО / НА ПРАКТИКЕ</span><b>0{storyScene + 1}<i> / 04</i></b></div>
+          <div className="story-progress"><span /></div>
+          <div className={"story-scene " + (storyScene === 0 ? "active" : "")} aria-hidden={storyScene !== 0}>
+            <div className="story-copy">
+              <small>01 · НАЧАТЬ</small>
+              <h2>Не нужно быть музыкантом, <em>чтобы начать.</em></h2>
+              <p>Нужен понятный первый шаг. Без экзаменов, сложных терминов и ощущения, что ты уже отстал.</p>
+              <button className="story-link" onClick={() => setQuiz(true)}>Найти свой старт <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-portrait">
+              <div className="story-sticker sticker-a">С НУЛЯ<br/>МОЖНО</div>
+              <div className="story-orbit orbit-a" />
+              <div className="story-orbit orbit-b" />
+              <img src="./nikita-hero.webp" alt="Преподаватель с гитарой" loading="lazy" />
+              <div className="story-art-caption">МУЗЫКА / 01</div>
+            </div>
+          </div>
+          <div className={"story-scene " + (storyScene === 1 ? "active" : "")} aria-hidden={storyScene !== 1}>
+            <div className="story-copy">
+              <small>02 · ПЕРВЫЙ ЗВУК</small>
+              <h2>Один аккорд. <em>Уже музыка.</em></h2>
+              <p>Em, Am, C, D. Ставим пальцы, слушаем звучание и связываем аккорды. Маленькие действия, из которых собирается навык.</p>
+              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Посмотреть базовый путь <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-chords">
+              <div className="chord-string string-one" /><div className="chord-string string-two" /><div className="chord-string string-three" />
+              {["Em", "Am", "C", "D"].map((chord, i) => <span key={chord} className={"floating-chord chord-" + i}>{chord}<small>АККОРД</small></span>)}
+              <div className="story-side-note">4 АККОРДА<br/>ПЕРВЫЙ НАБОР</div>
+            </div>
+          </div>
+          <div className={"story-scene " + (storyScene === 2 ? "active" : "")} aria-hidden={storyScene !== 2}>
+            <div className="story-copy">
+              <small>03 · ПОЙМАТЬ РИТМ</small>
+              <h2>Не быстрее. <em>Ровнее.</em></h2>
+              <p>Метроном, рисунки боя и движение правой руки. Темп растёт только тогда, когда движение становится уверенным.</p>
+              <button className="story-link" onClick={() => { setProgramTrack("battles"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть раздел боёв <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-rhythm">
+              <div className="rhythm-dial"><span>60</span><small>BPM</small><i /></div>
+              <div className="rhythm-bars">{Array.from({length: 17}, (_, i) => <span key={i} style={{"--bar": String(15 + Math.abs(Math.sin(i * 1.35)) * 74) + "%", "--delay": (i * 0.045) + "s"}} />)}</div>
+              <div className="rhythm-caption">СЧЁТ · ДВИЖЕНИЕ · ЗВУК</div>
+            </div>
+          </div>
+          <div className={"story-scene " + (storyScene === 3 ? "active" : "")} aria-hidden={storyScene !== 3}>
+            <div className="story-copy">
+              <small>04 · СОБРАТЬ ПЕСНЮ</small>
+              <h2>От упражнений <em>до «сыграл!».</em></h2>
+              <p>Сначала соединяем аккорды и бой, затем собираем первую песню. А после базового курса выбираем следующий маршрут.</p>
+              <button className="story-link" onClick={() => setQuiz(true)}>Подобрать маршрут <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-finish">
+              <img className="story-sheet" src="./material-song.webp" alt="Учебный материал с аккордами и текстом" loading="lazy" />
+              <div className="story-sticker sticker-b">PLAY<br/>YOUR<br/>PART</div>
+              <div className="story-finish-note">ПЕРВАЯ ПЕСНЯ<br/><b>СОБРАНА</b></div>
+            </div>
+          </div>
+          <div className="story-stage-bottom"><span>ЛИСТАЙ ВНИЗ</span><i>↓</i><div className="story-progress-track"><span /></div></div>
         </div>
       </section>
 
