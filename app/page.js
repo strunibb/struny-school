@@ -276,7 +276,6 @@ export default function Home() {
     window.addEventListener("resize", onScroll);
     updateScroll();
 
-    const pointerTargets = document.querySelectorAll("[data-pointer-depth]");
     const onPointer = (event) => {
       const target = event.target.closest("[data-pointer-depth]");
       if (!target) return;
@@ -288,7 +287,7 @@ export default function Home() {
     };
     const resetPointer = (event) => {
       const target = event.target.closest("[data-pointer-depth]");
-      if (!target) return;
+      if (!target || (event.relatedTarget && target.contains(event.relatedTarget))) return;
       target.style.setProperty("--pointer-x", "0");
       target.style.setProperty("--pointer-y", "0");
     };
