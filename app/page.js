@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const tg = "https://t.me/nikguita";
 
@@ -142,6 +142,11 @@ function Quiz({ onClose }) {
     { role: "bot", text: "Привет! Помогу подобрать формат музыкального обучения под твои цели. Это всего три коротких вопроса." },
     { role: "bot", text: questions[0].title }
   ]);
+  const historyRef = useRef(null);
+  useEffect(() => {
+    const history = historyRef.current;
+    if (history) history.scrollTo({ top: history.scrollHeight, behavior: "smooth" });
+  }, [messages, done]);
   const recommendation = useMemo(() => {
     if (answers.pace === "Учиться в своём темпе с проверкой") return { title: "Личное наставничество", text: "Уроки в удобное время, обратная связь по домашним заданиям и поддержка в Telegram." };
     if (answers.pace === "Получать готовые разборы песен") return { title: "Разбор любимых песен", text: "Подготовим материал под твой уровень: аккорды, бой или перебор и видеоразбор." };
@@ -205,7 +210,7 @@ function Quiz({ onClose }) {
         <div className="chat-progress" aria-label={"Вопрос " + (done ? 3 : step + 1) + " из 3"}>
           <span style={{ width: ((done ? 3 : step + (pending ? 1 : 0)) / questions.length * 100) + "%" }} />
         </div>
-        <div className="chat-history" aria-live="polite">
+        <div className="chat-history" ref={historyRef} aria-live="polite">
           <div className="chat-day">СЕГОДНЯ</div>
           {messages.map((message, index) => (
             <div className={"chat-line " + message.role} key={index}>
