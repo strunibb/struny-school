@@ -1011,3 +1011,87 @@ a:focus-visible {
   .curriculum-intro { margin:14px 0 19px; }
 }
 @media(prefers-reduced-motion:reduce) { .curriculum-grid { animation:none; } }
+
+
+/* The full guitar curriculum is one centered section, following the lesson-plan layout reference. */
+.program {
+  display:block !important;
+  width:min(100% - 48px,1240px);
+  max-width:1240px;
+  margin:0 auto;
+  padding:clamp(54px,7vw,88px) clamp(22px,4vw,48px);
+}
+.program-aside {
+  position:static !important;
+  width:100%;
+  max-width:840px;
+  margin:0 auto clamp(30px,4vw,48px);
+  text-align:center;
+}
+.program-aside .eyebrow { margin-left:auto; margin-right:auto; }
+.program-aside h2 {
+  max-width:100%;
+  margin:0;
+  text-align:center;
+  font-size:clamp(34px,4.5vw,52px);
+}
+.program-aside p {
+  max-width:760px;
+  margin:18px auto 0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.8;
+  text-align:center;
+}
+.curriculum { width:100%; min-width:0; }
+.curriculum-topline {
+  width:100%;
+  max-width:1160px;
+  margin:0 auto;
+}
+.curriculum-tabs {
+  justify-content:center;
+  width:100%;
+  max-width:1160px;
+  margin:0 auto;
+  gap:9px;
+}
+.curriculum-intro {
+  width:100%;
+  max-width:1160px;
+  margin:10px auto 22px;
+}
+.curriculum-grid {
+  width:100%;
+  max-width:1160px;
+  margin:0 auto;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;
+  gap:15px;
+}
+.curriculum-card {
+  min-width:0;
+  height:100%;
+}
+.curriculum-footnote {
+  width:100%;
+  max-width:1160px;
+  margin:16px auto 0;
+}
+@media(max-width:760px) {
+  .program {
+    width:calc(100% - 20px);
+    max-width:1240px;
+    padding:42px 15px;
+    margin:8px auto;
+  }
+  .program-aside { margin-bottom:26px; }
+  .program-aside h2 { font-size:clamp(30px,8vw,39px); }
+  .program-aside p { font-size:12px; line-height:1.7; }
+  .curriculum-tabs { justify-content:stretch; grid-template-columns:1fr 1fr; display:grid; }
+  .curriculum-tab { justify-content:space-between; }
+  .curriculum-grid { grid-template-columns:1fr; gap:11px; }
+}
+
+/* No other instruments are promoted: guitar remains the only teaching direction. */
+.marquee-track span { letter-spacing:.11em; }
