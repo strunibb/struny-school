@@ -539,7 +539,7 @@ export default function Home() {
               <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть программу <Icon name="arrow" /></button>
             </div>
             <div className="story-art story-art-portrait story-art-guitar-parts" data-pointer-depth>
-              <img src="./guitar-parts.webp" alt="Строение акустической гитары: колки, гриф, лад, розетка и дека" loading="lazy" />
+              <img src="./guitar-parts.webp" alt="Строение акустической гитары: колки, гриф, лад, розетка и дека" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./hero-guitar.webp"; }} />
               <div className="story-art-caption"><span>01</span><i /> ПОСТАНОВКА РУК И НАСТРОЙКА</div>
             </div>
           </div>
@@ -621,8 +621,8 @@ export default function Home() {
                 <div className="curriculum-card-body">
                   <small className="curriculum-card-label">СОДЕРЖАНИЕ</small>
                   <p>{module.desc}</p>
-                  {module.no === "01" && <figure className="curriculum-visual"><img src="./guitar-posture.webp" alt="Пример правильной посадки с гитарой" loading="lazy" /><figcaption>Посадка и положение корпуса</figcaption></figure>}
-                  {module.no === "02" && <figure className="curriculum-visual"><img src="./guitar-strings.webp" alt="Нумерация шести струн акустической гитары" loading="lazy" /><figcaption>Нумерация струн при разборе упражнений</figcaption></figure>}
+                  {module.no === "01" && <figure className="curriculum-visual"><img src="./guitar-posture.webp" alt="Пример правильной посадки с гитарой" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./lesson-planning.webp"; }} /><figcaption>Посадка и положение корпуса</figcaption></figure>}
+                  {module.no === "02" && <figure className="curriculum-visual"><img src="./guitar-strings.webp" alt="Нумерация шести струн акустической гитары" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./material-rhythm.webp"; }} /><figcaption>Нумерация струн при разборе упражнений</figcaption></figure>}
                   {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ УРОКА</span><p>{module.result}</p></div>}
                   {module.songs && <div className="curriculum-songs"><span>{activeProgram.id === "tools" ? "ЧТО ВНУТРИ" : "МАТЕРИАЛЫ / РЕПЕРТУАР"}</span><p>{module.songs}</p></div>}
                   <button className="curriculum-expand" type="button" aria-expanded={expandedModule === module.no} onClick={() => setExpandedModule(expandedModule === module.no ? "" : module.no)}>
