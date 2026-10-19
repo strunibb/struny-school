@@ -511,10 +511,10 @@ export default function Home() {
                     {expandedModule === module.no ? "Скрыть подробности" : "Содержание урока"}<span>{expandedModule === module.no ? "−" : "+"}</span>
                   </button>
                   {expandedModule === module.no && <div className="curriculum-expanded">
-                    {module.no === "01" && <div className="lesson-image-grid">
-                      <figure><img src="./guitar-parts.webp" alt="Строение акустической гитары" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./hero-guitar.webp"; }} /><figcaption>Строение гитары</figcaption></figure>
-                      <figure><img src="./guitar-strings.webp" alt="Нумерация струн гитары" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./material-rhythm.webp"; }} /><figcaption>Нумерация струн</figcaption></figure>
-                      <figure><img src="./guitar-posture.webp" alt="Правильная посадка при игре на гитаре" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./lesson-planning.webp"; }} /><figcaption>Посадка</figcaption></figure>
+                    {activeProgram.id === "base" && module.no === "01" && <div className="lesson-image-grid">
+                      <figure><img src="./hero-guitar.webp" alt="Акустическая гитара" loading="lazy" /><figcaption>Акустическая гитара</figcaption></figure>
+                      <figure><img src="./material-rhythm.webp" alt="Учебный материал по ритму" loading="lazy" /><figcaption>Ритм и упражнения</figcaption></figure>
+                      <figure><img src="./lesson-planning.webp" alt="Материалы к занятиям по гитаре" loading="lazy" /><figcaption>План занятий</figcaption></figure>
                     </div>}
                     {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ</span><p>{module.result}</p></div>}
                     {module.songs && <div className="curriculum-songs"><span>ПЕСНИ И МАТЕРИАЛЫ</span><p>{module.songs}</p></div>}
