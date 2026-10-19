@@ -70,40 +70,6 @@ const programTracks = [
       { no: "06", title: "Аккорды и бой без слов", desc: "Упражнение «Скакалка»: сначала работаем на одном аккорде, затем соединяем переходы Em–Am, Am–C, C–D и D–Em.", result: "Менять аккорды без остановки движения правой руки." },
       { no: "07", title: "Финал базового старта", desc: "Объединяем аккорды, бой и слова в учебной версии «Пачки сигарет» и отрабатываем исполнение вместе с преподавателем по видео.", result: "Сыграть учебную версию песни целиком." }
     ]
-  },
-  {
-    id: "battles", label: "Бои и песни",
-    intro: "Новый рисунок боя — песни для закрепления. Основные и бонусные композиции разделены так, как указано в интеллект-карте.",
-    modules: [
-      { no: "B1", title: "Четвёрка с глушением", desc: "Закрепляем базовый рисунок на знакомых композициях.", songs: "Основные: Кино — «Звезда по имени Солнце», «Пачка сигарет». Бонус: Сплин — «Орбит без сахара»." },
-      { no: "B2", title: "Шестёрка с глушением", desc: "Разбираем рисунок шестёрки с глушением и переносим его в песни.", songs: "Dabro — «Юность»; Кино — «Закрой за мной дверь»; Агата Кристи — «Как на войне»." },
-      { no: "B3", title: "Шестёрка", desc: "Отрабатываем рисунок боя и закрепляем его на музыкальном материале.", songs: "Король и Шут — «Кукла колдуна»; Кино — «Когда твоя девушка больна»." },
-      { no: "B4", title: "Рок 4 / Рок 5", desc: "Изучаем схемы и применяем рок-бо́й в песне.", songs: "Основная: Звери — «Районы-кварталы». По желанию: Земфира — «Искала»." },
-      { no: "B5", title: "Восьмёрка", desc: "Осваиваем восьмёрку и отрабатываем рисунок на песнях.", songs: "Амега — «Лететь»; Баста — «Сансара». Бонус: Бумбокс — «Вахтёрам»." },
-      { no: "B6", title: "Четвёрка с акцентом", desc: "Разбираем акцентированный рисунок и закрепляем его на примерах из репертуара.", songs: "Кино — «Кукушка», «Группа крови». Бонус: Кино — «Невесёлая песня»." },
-      { no: "B7", title: "Шестёрка с делением", desc: "Учимся распределять один бой между двумя аккордами.", songs: "Виктор Салтыков — «Белая ночь»; Сплин — «Моё сердце»." },
-      { no: "B8", title: "Восьмёрка с делением", desc: "Разбираем восьмёрку с делением. Привязку всех песен к конкретному уроку стоит сверить перед окончательной публикацией.", songs: "Материалы: Ария — «Я свободен»; Женя Трофимов — «Поезда»." },
-      { no: "B9", title: "Песни на выбор", desc: "Для закрепления можно выбрать композицию из каталога разборов и отправить название в личный чат.", songs: "Каталог PDF-разборов и возможность заказать выбранную песню." }
-    ]
-  },
-  {
-    id: "tech", label: "Техники",
-    intro: "Дополнительные технические блоки из авторской карты. Они расширяют базу и библиотеку боёв.",
-    modules: [
-      { no: "T1", title: "Деление боёв", desc: "Шестёрка и восьмёрка с делением между двумя аккордами. Отдельно разбираем, что означает деление рисунка.", result: "Понимать, как распределить движения боя между двумя аккордами." },
-      { no: "T2", title: "Дворовый бой: два варианта", desc: "Сравниваем два варианта дворового боя и применяем подходящий рисунок в песне.", songs: "Братья Грим — «Кустурица»; Звери — «До скорой встречи». Также доступна песня на выбор." },
-      { no: "T3", title: "Первый перебор: «Четвёрка»", desc: "Положение пальцев правой руки, бас, перебираемые струны и одновременное извлечение нот.", songs: "В материалах также есть Жуки — «Батарейка». Точную связь песни с рисунком нужно сверить с исходным уроком." }
-    ]
-  },
-  {
-    id: "tools", label: "Материалы",
-    intro: "Материалы, которые сопровождают занятия и помогают повторять технику самостоятельно.",
-    modules: [
-      { no: "M1", title: "Видеоразборы", desc: "Объяснение, демонстрация крупным планом и исполнение песни. Видео можно замедлять.", result: "Разбирать движения и фрагменты песни в удобном темпе." },
-      { no: "M2", title: "Схемы и PDF", desc: "Аппликатуры, направления ударов, акценты, табулатура и разборы песен.", result: "Иметь визуальную опору во время самостоятельной практики." },
-      { no: "M3", title: "Тренажёры и ссылки", desc: "Метроном, тренажёр аккордов и тренажёр боя для самостоятельной практики.", result: "Отрабатывать конкретный навык отдельно от песни." },
-      { no: "M4", title: "Завершение блока", desc: "В материалах используются поздравления о прохождении раздела.", result: "Отметить завершение учебного блока." }
-    ]
   }
 ];
 
@@ -388,9 +354,9 @@ export default function Home() {
   const [menu, setMenu] = useState(false);
   const [quiz, setQuiz] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
-  const [programTrack, setProgramTrack] = useState("base");
   const [expandedModule, setExpandedModule] = useState("");
-  const activeProgram = programTracks.find((track) => track.id === programTrack) || programTracks[0];
+  const activeProgram = programTracks[0];
+  const [storyScene, setStoryScene] = useState(0);
 
   useEffect(() => {
     document.documentElement.classList.add("motion-enabled");
@@ -416,6 +382,29 @@ export default function Home() {
     }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
     animated.forEach((element) => revealObserver.observe(element));
 
+    const story = document.querySelector(".music-story");
+    let raf = 0;
+    let lastScene = -1;
+    const updateScroll = () => {
+      raf = 0;
+      if (!story) return;
+      const rect = story.getBoundingClientRect();
+      const travel = Math.max(1, story.offsetHeight - window.innerHeight);
+      const progress = Math.max(0, Math.min(1, -rect.top / travel));
+      story.style.setProperty("--story-progress", (progress * 100) + "%");
+      const nextScene = Math.min(3, Math.floor(progress * 4));
+      if (nextScene !== lastScene) {
+        lastScene = nextScene;
+        setStoryScene(nextScene);
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = window.requestAnimationFrame(updateScroll);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    updateScroll();
+
     const onPointer = (event) => {
       const target = event.target.closest("[data-pointer-depth]");
       if (!target) return;
@@ -437,8 +426,11 @@ export default function Home() {
     return () => {
       document.documentElement.classList.remove("motion-enabled");
       revealObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       document.removeEventListener("pointermove", onPointer);
       document.removeEventListener("pointerout", resetPointer);
+      if (raf) window.cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -482,43 +474,92 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section program" id="program">
+      <section className="music-story" aria-label="Этапы обучения">
+        <div className="music-story-stage" data-scene={storyScene} data-pointer-depth>
+          <div className="story-stage-top"><span>ПРОГРАММА КУРСА / ОТ ПЕРВОГО УРОКА ДО ПЕСНИ</span><b>0{storyScene + 1}<i> / 04</i></b></div>
+          <div className="story-progress"><span /></div>
+
+          <div className={"story-scene " + (storyScene === 0 ? "active" : "")} aria-hidden={storyScene !== 0}>
+            <div className="story-copy">
+              <small>ЭТАП 01 / ПОДГОТОВКА</small>
+              <h2>Знакомство<br/>с гитарой</h2>
+              <p>Устройство инструмента, удобная посадка, положение рук, настройка и первое упражнение на открытых струнах.</p>
+              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Открыть программу <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-portrait story-art-guitar-parts" data-pointer-depth>
+              <img src="./hero-guitar.webp" alt="Акустическая гитара" loading="lazy" />
+              <div className="story-art-caption"><span>01</span><i /> ЗНАКОМСТВО С ГИТАРОЙ</div>
+            </div>
+          </div>
+
+          <div className={"story-scene " + (storyScene === 1 ? "active" : "")} aria-hidden={storyScene !== 1}>
+            <div className="story-copy">
+              <small>ЭТАП 02 / АККОРДЫ</small>
+              <h2>Первые аккорды<br/>и переходы</h2>
+              <p>Разбираем аппликатуры Em, Am, C и D. Затем учимся менять их вовремя, не теряя ритм.</p>
+              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Посмотреть уроки и упражнения <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-chords"><ChordTrainer /></div>
+          </div>
+
+          <div className={"story-scene " + (storyScene === 2 ? "active" : "")} aria-hidden={storyScene !== 2}>
+            <div className="story-copy">
+              <small>ЭТАП 03 / РИТМ</small>
+              <h2>Ритм, бой<br/>и координация</h2>
+              <p>Работаем с метрономом, осваиваем бой с глушением, затем соединяем движение правой руки со сменой аккордов.</p>
+              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Посмотреть программу курса <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-rhythm"><MetronomeDemo /></div>
+          </div>
+
+          <div className={"story-scene " + (storyScene === 3 ? "active" : "")} aria-hidden={storyScene !== 3}>
+            <div className="story-copy">
+              <small>ЭТАП 04 / РЕПЕРТУАР</small>
+              <h2>Собираем<br/>песню целиком</h2>
+              <p>На примере учебной версии «Пачки сигарет» соединяем аккорды, бой и текст. Дальше можно переходить к другим песням и играть их целиком.</p>
+              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Вся программа курса <Icon name="arrow" /></button>
+            </div>
+            <div className="story-art story-art-finish">
+              <img className="story-sheet" src="./material-song.webp" alt="Учебные материалы с аккордами и текстом песни" loading="lazy" />
+              <div className="story-sheet-caption"><span>УЧЕБНЫЕ МАТЕРИАЛЫ</span><b>Аккорды · ритм · текст песни</b></div>
+              <span className="story-sheet-index">04 / 07</span>
+            </div>
+          </div>
+
+          <div className="story-stage-bottom"><span>ПРОГРАММА КУРСА</span><i>↓</i><div className="story-progress-track"><span /></div><span>ПРОКРУТИТЕ</span></div>
+        </div>
+      </section>
+
+            <section className="section program" id="program">
         <div className="program-aside">
-          <span className="eyebrow">обучение игре на гитаре</span>
-          <h2>Программа <em>обучения</em></h2>
-          <p>От первых упражнений до исполнения песен. Выберите раздел, чтобы посмотреть темы и результаты уроков.</p>
+          <span className="eyebrow">ПОШАГОВОЕ ОБУЧЕНИЕ</span>
+          <h2>Программа <em>курса</em></h2>
+          <p>Семь последовательных уроков: от знакомства с гитарой до исполнения первой песни целиком.</p>
         </div>
         <div className="curriculum">
-          <div className="curriculum-topline"><span>ПРОГРАММА ПО ГИТАРЕ</span><b>7 базовых этапов + дополнительные темы</b></div>
-          <div className="curriculum-tabs" role="tablist" aria-label="Разделы программы">
-            {programTracks.map((track) => (
-              <button key={track.id} role="tab" aria-selected={programTrack === track.id} className={programTrack === track.id ? "curriculum-tab active" : "curriculum-tab"} onClick={() => { setProgramTrack(track.id); setExpandedModule(""); }}>
-                {track.label}<span>{track.modules.length.toString().padStart(2, "0")}</span>
-              </button>
-            ))}
+          <div className="curriculum-intro">
+            <p>Каждый урок даёт конкретный навык, который сразу применяем на практике.</p>
           </div>
-          <div className="curriculum-intro"><p>{activeProgram.intro}</p></div>
-          <div className="curriculum-grid" role="tabpanel" key={activeProgram.id} aria-label={activeProgram.label}>
+          <div className="curriculum-grid" aria-label="Семь уроков курса по гитаре">
             {activeProgram.modules.map((module, index) => (
               <article className={"curriculum-card " + (expandedModule === module.no ? "expanded" : "")} key={module.no}>
                 <div className="curriculum-card-top">
-                  <div className="curriculum-card-head"><span>{activeProgram.id === "base" ? "УРОК" : activeProgram.id === "tools" ? "МАТЕРИАЛ" : "ТЕМА"} {module.no}</span><i>{String(index + 1).padStart(2, "0")}</i></div>
+                  <div className="curriculum-card-head"><span>УРОК {module.no}</span><i>{String(index + 1).padStart(2, "0")} / 07</i></div>
                   <h3>{module.title}</h3>
                 </div>
                 <div className="curriculum-card-body">
                   <p className="program-card-desc">{module.desc}</p>
                   <button className="curriculum-expand" type="button" aria-expanded={expandedModule === module.no} onClick={() => setExpandedModule(expandedModule === module.no ? "" : module.no)}>
-                    {expandedModule === module.no ? "Скрыть подробности" : "Содержание урока"}<span>{expandedModule === module.no ? "−" : "+"}</span>
+                    {expandedModule === module.no ? "Скрыть подробности" : "Что будет на уроке"}<span>{expandedModule === module.no ? "−" : "+"}</span>
                   </button>
                   {expandedModule === module.no && <div className="curriculum-expanded">
-                    {activeProgram.id === "base" && module.no === "01" && <div className="lesson-image-grid">
-                      <figure><img src="./hero-guitar.webp" alt="Акустическая гитара" loading="lazy" /><figcaption>Акустическая гитара</figcaption></figure>
+                    {module.no === "01" && <div className="lesson-image-grid">
+                      <figure><img src="./hero-guitar.webp" alt="Акустическая гитара" loading="lazy" /><figcaption>Знакомство с инструментом</figcaption></figure>
                       <figure><img src="./material-rhythm.webp" alt="Учебный материал по ритму" loading="lazy" /><figcaption>Ритм и упражнения</figcaption></figure>
                       <figure><img src="./lesson-planning.webp" alt="Материалы к занятиям по гитаре" loading="lazy" /><figcaption>План занятий</figcaption></figure>
                     </div>}
-                    {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ</span><p>{module.result}</p></div>}
-                    {module.songs && <div className="curriculum-songs"><span>ПЕСНИ И МАТЕРИАЛЫ</span><p>{module.songs}</p></div>}
-                    {!module.songs && programDetails[module.no]?.materials && <div className="curriculum-songs"><span>МАТЕРИАЛЫ</span><p>{programDetails[module.no].materials}</p></div>}
+                    {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ УРОКА</span><p>{module.result}</p></div>}
+                    {programDetails[module.no]?.materials && <div className="curriculum-songs"><span>МАТЕРИАЛЫ</span><p>{programDetails[module.no].materials}</p></div>}
                     {programDetails[module.no]?.check && <div className="curriculum-result"><span>ЧТО ДОЛЖНО ПОЛУЧИТЬСЯ</span><p>{programDetails[module.no].check}</p></div>}
                   </div>}
                 </div>
