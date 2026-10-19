@@ -59,7 +59,7 @@ const faq = [
 
 const programTracks = [
   {
-    id: "base", label: "Базовый старт",
+    id: "base", label: "База",
     intro: "Семь последовательных этапов: от знакомства с инструментом до исполнения первой песни целиком.",
     modules: [
       { no: "01", title: "Знакомство с гитарой", desc: "Строение инструмента, посадка, пальцы и струны. Настройка, постановка рук, табулатура и первая практика на открытых струнах.", result: "Настроить гитару и сыграть первое упражнение на открытых струнах." },
@@ -72,7 +72,7 @@ const programTracks = [
     ]
   },
   {
-    id: "battles", label: "Библиотека боёв",
+    id: "battles", label: "Бои и песни",
     intro: "Новый рисунок боя — песни для закрепления. Основные и бонусные композиции разделены так, как указано в интеллект-карте.",
     modules: [
       { no: "B1", title: "Четвёрка с глушением", desc: "Закрепляем базовый рисунок на знакомых композициях.", songs: "Основные: Кино — «Звезда по имени Солнце», «Пачка сигарет». Бонус: Сплин — «Орбит без сахара»." },
@@ -87,7 +87,7 @@ const programTracks = [
     ]
   },
   {
-    id: "tech", label: "Другие приёмы",
+    id: "tech", label: "Техники",
     intro: "Дополнительные технические блоки из авторской карты. Они расширяют базу и библиотеку боёв.",
     modules: [
       { no: "T1", title: "Деление боёв", desc: "Шестёрка и восьмёрка с делением между двумя аккордами. Отдельно разбираем, что означает деление рисунка.", result: "Понимать, как распределить движения боя между двумя аккордами." },
@@ -96,7 +96,7 @@ const programTracks = [
     ]
   },
   {
-    id: "tools", label: "Материалы и инструменты",
+    id: "tools", label: "Материалы",
     intro: "Материалы, которые сопровождают занятия и помогают повторять технику самостоятельно.",
     modules: [
       { no: "M1", title: "Видеоразборы", desc: "Объяснение, демонстрация крупным планом и исполнение песни. Видео можно замедлять.", result: "Разбирать движения и фрагменты песни в удобном темпе." },
@@ -391,7 +391,6 @@ export default function Home() {
   const [programTrack, setProgramTrack] = useState("base");
   const [expandedModule, setExpandedModule] = useState("");
   const activeProgram = programTracks.find((track) => track.id === programTrack) || programTracks[0];
-  const [storyScene, setStoryScene] = useState(0);
 
   useEffect(() => {
     document.documentElement.classList.add("motion-enabled");
@@ -417,31 +416,6 @@ export default function Home() {
     }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
     animated.forEach((element) => revealObserver.observe(element));
 
-    const story = document.querySelector(".music-story");
-    let raf = 0;
-    let lastScene = -1;
-    const updateScroll = () => {
-      raf = 0;
-      if (!story) return;
-      const rect = story.getBoundingClientRect();
-      const travel = Math.max(1, story.offsetHeight - window.innerHeight);
-      const progress = Math.max(0, Math.min(1, -rect.top / travel));
-      story.style.setProperty("--story-progress", (progress * 100) + "%");
-
-      // One active scene at a time: animate the entry, never stack two headings.
-      const nextScene = Math.min(3, Math.floor(progress * 4));
-      if (nextScene !== lastScene) {
-        lastScene = nextScene;
-        setStoryScene(nextScene);
-      }
-    };
-    const onScroll = () => {
-      if (!raf) raf = window.requestAnimationFrame(updateScroll);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    updateScroll();
-
     const onPointer = (event) => {
       const target = event.target.closest("[data-pointer-depth]");
       if (!target) return;
@@ -463,11 +437,8 @@ export default function Home() {
     return () => {
       document.documentElement.classList.remove("motion-enabled");
       revealObserver.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
       document.removeEventListener("pointermove", onPointer);
       document.removeEventListener("pointerout", resetPointer);
-      if (raf) window.cancelAnimationFrame(raf);
     };
   }, []);
 
