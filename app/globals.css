@@ -1788,3 +1788,79 @@ a:focus-visible {
 /* The hero now uses a single proof line, without the removed decorative avatar cluster. */
 .hero-proof { margin-top:24px; gap:0; }
 .hero-proof p { font-size:11px; }
+
+
+/* Follow-up fix: make the curriculum visibly more compact and keep its heading in view when navigated to. */
+#program.program {
+  scroll-margin-top: 28px;
+  padding-top: clamp(82px, 8vw, 108px);
+}
+
+#program .curriculum-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch;
+  gap: 14px !important;
+}
+
+#program .curriculum-card {
+  min-width: 0;
+  border-radius: 14px !important;
+}
+
+#program .curriculum-card-top {
+  min-height: 84px !important;
+  padding: 14px 16px 15px !important;
+}
+
+#program .curriculum-card-top:after {
+  left: 16px;
+  width: 30px;
+}
+
+#program .curriculum-card-top h3 {
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+}
+
+#program .curriculum-card-body {
+  padding: 14px 16px 15px !important;
+}
+
+#program .program-card-desc {
+  font-size: 11px;
+  line-height: 1.6;
+  -webkit-line-clamp: 3;
+}
+
+#program .curriculum-expand {
+  min-height: 34px;
+  padding-top: 9px !important;
+  font-size: 10px !important;
+}
+
+@media (max-width: 980px) {
+  #program .curriculum-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #program.program {
+    padding-top: 64px;
+    scroll-margin-top: 18px;
+  }
+
+  #program .curriculum-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  #program .curriculum-card-top {
+    min-height: 0 !important;
+    padding: 14px 15px !important;
+  }
+
+  #program .curriculum-card-body {
+    padding: 13px 15px 14px !important;
+  }
+}
