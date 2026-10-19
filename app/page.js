@@ -397,11 +397,9 @@ export default function Home() {
     document.documentElement.classList.add("motion-enabled");
 
     const animated = document.querySelectorAll([
-      ".hero-copy", ".hero-visual", ".problem-grid article", ".curriculum-card",
-      ".format-card", ".real-learning-photo", ".course-strip", ".lesson-feature",
-      ".materials-gallery figure", ".result-cards article", ".about-visual",
-      ".about-copy", ".proof-panel > div", ".student-group", ".accordion article",
-      ".final-cta"
+      ".hero-copy", ".hero-visual", ".curriculum-card", ".format-card",
+      ".lesson-feature", ".about-visual", ".about-copy", ".proof-panel > div",
+      ".accordion article"
     ].join(","));
 
     animated.forEach((element, index) => {
@@ -483,11 +481,11 @@ export default function Home() {
           <span><b>СТРУНЫ</b><small>БУДУЩЕГО</small></span>
         </a>
         <nav className={menu ? "nav open" : "nav"}>
-          <a href="#formats" onClick={() => setMenu(false)}>Форматы</a>
-          <a href="#program" onClick={() => setMenu(false)}>Как учимся</a>
-          <a href="#free" onClick={() => setMenu(false)}>Бесплатно</a>
-          <a href="#about" onClick={() => setMenu(false)}>О преподавателе</a>
-          <button className="nav-cta" onClick={() => { setQuiz(true); setMenu(false); }}>Помочь с выбором</button>
+          <a href="#program" onClick={() => setMenu(false)}>Программа</a>
+          <a href="#formats" onClick={() => setMenu(false)}>Стоимость</a>
+          <a href="#free" onClick={() => setMenu(false)}>Бесплатный урок</a>
+          <a href="#reviews" onClick={() => setMenu(false)}>Отзывы</a>
+          <button className="nav-cta" onClick={() => { setQuiz(true); setMenu(false); }}>Записаться</button>
         </nav>
         <button className="menu-button" onClick={() => setMenu(!menu)} aria-label="Открыть меню"><Icon name={menu ? "close" : "menu"} /></button>
       </header>
@@ -495,266 +493,139 @@ export default function Home() {
       <section className="hero" id="top">
         <div className="hero-glow glow-one" /><div className="hero-glow glow-two" />
         <div className="hero-copy reveal">
-          <div className="hero-label"><span className="live-dot" /> Онлайн-школа Никиты Осадчука</div>
+          <div className="hero-label"><span className="live-dot" /> Онлайн-школа гитары · Никита Осадчук</div>
           <h1>Научитесь играть<br/><em>на гитаре</em></h1>
-          <p className="hero-lead">Пошаговое обучение для новичков и продолжающих: постановка рук, аккорды, ритм, любимые песни и личная обратная связь.</p>
+          <p className="hero-lead">Акустическая и электрогитара. Понятная программа, любимые песни и обратная связь от преподавателя.</p>
           <div className="hero-actions">
-            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Получить бесплатную диагностику <Icon name="arrow" /></button>
-            <a className="btn btn-ghost" href="#formats">Посмотреть форматы</a>
+            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Записаться на занятие <Icon name="arrow" /></button>
+            <a className="btn btn-ghost" href="#program">Программа обучения</a>
           </div>
-          <div className="hero-proof">
-            <div className="avatars"><span>🎸</span><span>♪</span><span>↗</span><span>500+</span></div>
-            <p><b>Более 500 учеников</b><br/>прошли обучение с 2019 года</p>
-          </div>
+          <div className="hero-proof"><p><b>500+ учеников</b><span> · </span>с 2019 года</p></div>
         </div>
         <div className="hero-visual reveal delay" data-pointer-depth>
           <div className="photo-frame">
             <div className="photo-overlay" />
-            <div className="photo-placeholder">
-              <img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" />
-            </div>
-            <div className="floating-card fc-top"><span className="mini-icon"><Icon name="music" /></span><div><small>Наставничество</small><b>1–3 песни в неделю</b></div></div>
-            <div className="floating-card fc-bottom"><span className="wave"><i/><i/><i/><i/><i/><i/></span><div><small>Обратная связь</small><b>личная проверка ДЗ</b></div></div>
-            <div className="teacher-tag"><span>Никита Осадчук</span><small>преподаватель гитары · аранжировщик</small></div>
+            <div className="photo-placeholder"><img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" /></div>
+            <div className="teacher-tag"><span>Никита Осадчук</span><small>преподаватель гитары</small></div>
           </div>
-        </div>
-        <div className="scroll-hint"><span /> листайте</div>
-      </section>
-
-      <section className="marquee" aria-label="Направления обучения игре на гитаре">
-        <div className="marquee-track">
-          {Array(2).fill(["АКУСТИЧЕСКАЯ ГИТАРА", "ЭЛЕКТРОГИТАРА", "АККОРДЫ", "ГИТАРНЫЙ БОЙ", "ПЕРЕБОРЫ", "ЛЮБИМЫЕ ПЕСНИ"]).flat().map((x, i) => <span key={i}>{x}<b>✦</b></span>)}
-        </div>
-      </section>
-      <section className="music-story" aria-label="Этапы обучения">
-        <div className="music-story-stage" data-scene={storyScene} data-pointer-depth>
-          <div className="story-stage-top"><span>БАЗОВЫЙ МИНИМУМ / ЭТАПЫ ОБУЧЕНИЯ</span><b>0{storyScene + 1}<i> / 04</i></b></div>
-          <div className="story-progress"><span /></div>
-
-          <div className={"story-scene " + (storyScene === 0 ? "active" : "")} aria-hidden={storyScene !== 0}>
-            <div className="story-copy">
-              <small>ЭТАП 01 / ПОДГОТОВКА</small>
-              <h2>Знакомство<br/>с гитарой</h2>
-              <p>Устройство инструмента, удобная посадка, положение рук, настройка и первое упражнение на открытых струнах.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть программу <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-portrait story-art-guitar-parts" data-pointer-depth>
-              <img src="./guitar-parts.webp" alt="Строение акустической гитары: колки, гриф, лад, розетка и дека" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./hero-guitar.webp"; }} />
-              <div className="story-art-caption"><span>01</span><i /> ПОСТАНОВКА РУК И НАСТРОЙКА</div>
-            </div>
-          </div>
-
-          <div className={"story-scene " + (storyScene === 1 ? "active" : "")} aria-hidden={storyScene !== 1}>
-            <div className="story-copy">
-              <small>ЭТАП 02 / АККОРДЫ</small>
-              <h2>Первые аккорды<br/>и переходы</h2>
-              <p>Разбираем аппликатуры Em, Am, C и D. Затем учимся менять их вовремя, не теряя ритм.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Посмотреть уроки и упражнения <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-chords"><ChordTrainer /></div>
-          </div>
-
-          <div className={"story-scene " + (storyScene === 2 ? "active" : "")} aria-hidden={storyScene !== 2}>
-            <div className="story-copy">
-              <small>ЭТАП 03 / РИТМ</small>
-              <h2>Ритм, бой<br/>и координация</h2>
-              <p>Работаем с метрономом, осваиваем бой с глушением, затем соединяем движение правой руки со сменой аккордов.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("battles"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Открыть раздел с боями <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-rhythm"><MetronomeDemo /></div>
-          </div>
-
-          <div className={"story-scene " + (storyScene === 3 ? "active" : "")} aria-hidden={storyScene !== 3}>
-            <div className="story-copy">
-              <small>ЭТАП 04 / РЕПЕРТУАР</small>
-              <h2>Собираем<br/>песню целиком</h2>
-              <p>На примере учебной версии «Пачки сигарет» соединяем аккорды, бой и текст. Дальше можно переходить к другим песням и техникам.</p>
-              <button className="story-link" onClick={() => { setProgramTrack("base"); document.getElementById("program")?.scrollIntoView({ behavior: "smooth" }); }}>Вся программа курса <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-finish">
-              <img className="story-sheet" src="./material-song.webp" alt="Учебные материалы с аккордами и текстом песни" loading="lazy" />
-              <div className="story-sheet-caption"><span>УЧЕБНЫЕ МАТЕРИАЛЫ</span><b>Аккорды · ритм · текст песни</b></div>
-              <span className="story-sheet-index">04 / 07</span>
-            </div>
-          </div>
-
-          <div className="story-stage-bottom"><span>БАЗОВЫЙ МИНИМУМ</span><i>↓</i><div className="story-progress-track"><span /></div><span>ПРОКРУТИТЕ</span></div>
-        </div>
-      </section>
-
-      <section className="section problem-section">
-        <div className="section-head split-head">
-          <div><span className="eyebrow">кому подойдёт обучение</span><h2>Если хотите играть,<br/>но не знаете, <em>с чего начать</em></h2></div>
-          <p>На занятиях есть понятный порядок: от постановки рук и первых аккордов до песен, которые вы сможете сыграть целиком.</p>
-        </div>
-        <div className="problem-grid">
-          <article><span>01</span><h3>Давно хотите научиться</h3><p>Но каждый раз откладываете начало и не понимаете, какой шаг должен быть первым.</p></article>
-          <article><span>02</span><h3>Пробовали учиться по YouTube</h3><p>Роликов много, объяснения разные, а цельной программы и обратной связи нет.</p></article>
-          <article><span>03</span><h3>Знаете несколько аккордов</h3><p>Но переходы и ритм пока мешают сыграть песню уверенно от начала до конца.</p></article>
         </div>
       </section>
 
       <section className="section program" id="program">
         <div className="program-aside">
-          <span className="eyebrow">программа курса по гитаре</span>
+          <span className="eyebrow">обучение игре на гитаре</span>
           <h2>Программа <em>обучения</em></h2>
-          <p>От знакомства с гитарой и первых упражнений до исполнения песни целиком. Каждый этап включает содержание, ожидаемый результат и материалы для самостоятельной практики.</p>
-          
+          <p>От первых упражнений до исполнения песен. Выберите раздел, чтобы посмотреть темы и результаты уроков.</p>
         </div>
         <div className="curriculum">
-          <div className="curriculum-topline"><span>СТРУКТУРА КУРСА</span><b>7 этапов базового курса и дополнительные техники</b></div>
+          <div className="curriculum-topline"><span>ПРОГРАММА ПО ГИТАРЕ</span><b>7 базовых этапов + дополнительные темы</b></div>
           <div className="curriculum-tabs" role="tablist" aria-label="Разделы программы">
             {programTracks.map((track) => (
-              <button key={track.id} role="tab" aria-selected={programTrack === track.id} className={programTrack === track.id ? "curriculum-tab active" : "curriculum-tab"} onClick={() => setProgramTrack(track.id)}>
+              <button key={track.id} role="tab" aria-selected={programTrack === track.id} className={programTrack === track.id ? "curriculum-tab active" : "curriculum-tab"} onClick={() => { setProgramTrack(track.id); setExpandedModule(""); }}>
                 {track.label}<span>{track.modules.length.toString().padStart(2, "0")}</span>
               </button>
             ))}
           </div>
-          <div className="curriculum-intro"><span className="curriculum-status">{activeProgram.id === "base" ? "ПОРЯДОК ПОДТВЕРЖДЁН" : "ТЕМАТИЧЕСКИЙ РАЗДЕЛ"}</span><p>{activeProgram.intro}</p></div>
+          <div className="curriculum-intro"><p>{activeProgram.intro}</p></div>
           <div className="curriculum-grid" role="tabpanel" key={activeProgram.id} aria-label={activeProgram.label}>
             {activeProgram.modules.map((module, index) => (
               <article className={"curriculum-card " + (expandedModule === module.no ? "expanded" : "")} key={module.no}>
                 <div className="curriculum-card-top">
-                  <div className="curriculum-card-head"><span>{activeProgram.id === "base" ? "ЭТАП" : activeProgram.id === "tools" ? "МАТЕРИАЛ" : "БЛОК"} {module.no}</span><i>{String(index + 1).padStart(2, "0")} / {String(activeProgram.modules.length).padStart(2, "0")}</i></div>
+                  <div className="curriculum-card-head"><span>{activeProgram.id === "base" ? "УРОК" : activeProgram.id === "tools" ? "МАТЕРИАЛ" : "ТЕМА"} {module.no}</span><i>{String(index + 1).padStart(2, "0")}</i></div>
                   <h3>{module.title}</h3>
                 </div>
                 <div className="curriculum-card-body">
-                  <small className="curriculum-card-label">СОДЕРЖАНИЕ</small>
-                  <p>{module.desc}</p>
-                  {module.no === "01" && <figure className="curriculum-visual"><img src="./guitar-posture.webp" alt="Пример правильной посадки с гитарой" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./lesson-planning.webp"; }} /><figcaption>Посадка и положение корпуса</figcaption></figure>}
-                  {module.no === "02" && <figure className="curriculum-visual"><img src="./guitar-strings.webp" alt="Нумерация шести струн акустической гитары" loading="lazy" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "./material-rhythm.webp"; }} /><figcaption>Нумерация струн при разборе упражнений</figcaption></figure>}
-                  {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ УРОКА</span><p>{module.result}</p></div>}
-                  {module.songs && <div className="curriculum-songs"><span>{activeProgram.id === "tools" ? "ЧТО ВНУТРИ" : "МАТЕРИАЛЫ / РЕПЕРТУАР"}</span><p>{module.songs}</p></div>}
+                  <p className="program-card-desc">{module.desc}</p>
                   <button className="curriculum-expand" type="button" aria-expanded={expandedModule === module.no} onClick={() => setExpandedModule(expandedModule === module.no ? "" : module.no)}>
-                    {expandedModule === module.no ? "Свернуть подробности" : "Подробнее и материалы"}<span>{expandedModule === module.no ? "−" : "+"}</span>
+                    {expandedModule === module.no ? "Скрыть подробности" : "Содержание урока"}<span>{expandedModule === module.no ? "−" : "+"}</span>
                   </button>
                   {expandedModule === module.no && <div className="curriculum-expanded">
-                    <b>{programDetails[module.no]?.label || module.title}</b>
-                    <p>{programDetails[module.no]?.content || module.desc}</p>
-                    {!module.songs && <><small>МАТЕРИАЛЫ</small><p>{programDetails[module.no]?.materials || "Дополнительные материалы в карте не указаны."}</p></>}
-                    <small>ПРИМЕЧАНИЕ / КРИТЕРИЙ</small><p>{programDetails[module.no]?.check || "Отдельный критерий прохождения в карте не указан."}</p>
+                    {module.no === "01" && <div className="lesson-image-grid">
+                      <figure><img src="./guitar-parts.webp" alt="Строение акустической гитары" loading="lazy" /><figcaption>Строение гитары</figcaption></figure>
+                      <figure><img src="./guitar-strings.webp" alt="Нумерация струн гитары" loading="lazy" /><figcaption>Нумерация струн</figcaption></figure>
+                      <figure><img src="./guitar-posture.webp" alt="Правильная посадка при игре на гитаре" loading="lazy" /><figcaption>Посадка</figcaption></figure>
+                    </div>}
+                    {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ</span><p>{module.result}</p></div>}
+                    {module.songs && <div className="curriculum-songs"><span>ПЕСНИ И МАТЕРИАЛЫ</span><p>{module.songs}</p></div>}
+                    {!module.songs && programDetails[module.no]?.materials && <div className="curriculum-songs"><span>МАТЕРИАЛЫ</span><p>{programDetails[module.no].materials}</p></div>}
+                    {programDetails[module.no]?.check && <div className="curriculum-result"><span>ЧТО ДОЛЖНО ПОЛУЧИТЬСЯ</span><p>{programDetails[module.no].check}</p></div>}
                   </div>}
                 </div>
               </article>
             ))}
           </div>
-          <div className="curriculum-footnote"><span>i</span><p><b>Без выдуманного порядка.</b> Последовательность базовых семи этапов подтверждена. Для расширенных тем мастер-карта фиксирует содержание и репертуар, но точный порядок некоторых уроков требует сверки с исходными материалами.</p></div>
         </div>
       </section>
 
       <section className="section formats" id="formats">
         <div className="section-head centered">
-          <span className="eyebrow">форматы обучения</span>
-          <h2>Выберите подходящий <em>вариант занятий</em></h2>
-          <p>Личные уроки по расписанию, наставничество в удобном темпе или готовый разбор выбранных песен.</p>
+          <span className="eyebrow">форматы и стоимость</span>
+          <h2>Как будем <em>заниматься</em></h2>
+          <p>Выберите подходящий формат. Если сомневаетесь, поможем определиться на первом разговоре.</p>
         </div>
         <div className="format-grid">
-          {formats.map((f) => <article key={f.title} className={`format-card ${f.accent} ${f.featured ? "featured" : ""}`}>
+          {formats.map((f) => <article key={f.title} className={"format-card " + f.accent + " " + (f.featured ? "featured" : "")}>
             {f.featured && <span className="popular">ПОПУЛЯРНО</span>}
             <span className="card-tag">{f.tag}</span>
             <h3>{f.title}</h3><p>{f.text}</p>
             <ul>{f.points.map(x => <li key={x}><Icon name="check" />{x}</li>)}</ul>
-            <div className="card-bottom"><strong>{f.price}</strong><button aria-label={`Выбрать ${f.title}`} onClick={() => setQuiz(true)}><Icon name="arrow" /></button></div>
+            <div className="card-bottom"><strong>{f.price}</strong><button aria-label={"Выбрать " + f.title} onClick={() => setQuiz(true)}><Icon name="arrow" /></button></div>
           </article>)}
-        </div>
-        <p className="format-note">Не знаете, что выбрать? <button onClick={() => setQuiz(true)}>Ответьте на 3 вопроса</button> — Никита предложит подходящий формат.</p>
-      </section>
-
-      <section className="section real-learning">
-        <div className="real-learning-photo">
-          <img src="./personal-lesson.webp" alt="Индивидуальное занятие Никиты Осадчука с учеником" loading="lazy" />
-          <span>Личная работа с учеником</span>
-        </div>
-        <div className="real-learning-copy">
-          <span className="eyebrow">как проходят занятия</span>
-          <h2>Разбираем именно то, что мешает <em>играть увереннее</em></h2>
-          <p>На личных онлайн-занятиях Никита проверяет посадку, постановку рук, технику, ритм и домашнее задание. Материал подбирается под инструмент, уровень и цель ученика.</p>
-          <ul>
-            <li><Icon name="check" /> Гитара и электрогитара</li>
-            <li><Icon name="check" /> Обратная связь по домашним заданиям</li>
-          </ul>
-          <button className="btn btn-primary" onClick={() => setQuiz(true)}>Подобрать формат <Icon name="arrow" /></button>
-        </div>
-      </section>
-
-      <section className="section course-strip">
-        <div className="course-visual course-photo">
-          <img src="./lesson-planning.webp" alt="Подготовка урока по гитаре" loading="lazy" />
-          <span>Практика · аккорды · ритм · песни</span>
-        </div>
-        <div className="course-copy">
-          <span className="eyebrow">курс «базовый минимум»</span>
-          <h2>С нуля до<br/><em>первой песни</em></h2>
-          <p>Пошагово познакомитесь с гитарой, освоите первые аккорды и простой бой, а затем соедините навыки в учебной версии песни «Пачка сигарет». Так вы поймёте основу игры и сможете дальше разучивать песни самостоятельно.</p>
-          <div className="course-stats"><div><b>4</b><span>недели в плане</span></div><div><b>7</b><span>этапов обучения</span></div><div><b>4</b><span>первых аккорда</span></div></div>
-          <a className="btn btn-light" href={`${tg}?text=${encodeURIComponent("Здравствуйте! Хочу узнать о курсе «Базовый минимум»")}`} target="_blank" rel="noreferrer">Узнать о курсе <Icon name="arrow" /></a>
         </div>
       </section>
 
       <section className="section free" id="free">
-        <div className="section-head split-head">
-          <div><span className="eyebrow">бесплатные материалы</span><h2>Первый урок<br/><em>по гитаре</em></h2></div>
-          <p>Познакомьтесь с инструментом, посадкой и первыми движениями перед началом обучения.</p>
+        <div className="section-head centered">
+          <span className="eyebrow">бесплатно</span>
+          <h2>Первый урок <em>по гитаре</em></h2>
+          <p>Посмотрите, как устроен урок, и попробуйте первые шаги перед началом обучения.</p>
         </div>
         <div className="lesson-feature">
           <div className="lesson-video">
             <img className="lesson-preview-image" src="./material-rhythm.webp" alt="Фрагмент бесплатного видеоурока по гитаре" loading="lazy" />
-            <a className="big-play" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer"><Icon name="play" /></a>
+            <a className="big-play" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer" aria-label="Смотреть бесплатный урок"><Icon name="play" /></a>
           </div>
-          <div className="lesson-info"><span className="card-tag">БЕСПЛАТНЫЙ УРОК · ГИТАРА</span><h3>Знакомство с гитарой</h3><p>Первый урок помогает подготовиться к игре: разобраться с инструментом, удобной посадкой и первыми шагами.</p><ul><li><Icon name="play"/> Видео открывается сразу</li><li><Icon name="music"/> Практический материал</li><li><Icon name="message"/> Можно задать вопрос преподавателю</li></ul><a className="link-arrow" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer">Смотреть бесплатно <Icon name="arrow" /></a></div>
+          <div className="lesson-info">
+            <span className="card-tag">БЕСПЛАТНЫЙ ВИДЕОУРОК</span>
+            <h3>Знакомство с гитарой</h3>
+            <p>Основы посадки, инструмента и первых движений.</p>
+            <a className="btn btn-primary" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer">Смотреть урок <Icon name="arrow" /></a>
+          </div>
         </div>
-        <div className="materials-head">
-          <span className="eyebrow">примеры материалов</span>
-          <h3>Не только видео: схемы и готовые подсказки остаются у ученика</h3>
-        </div>
-        <div className="materials-gallery">
-          <figure><img src="./material-song.webp" alt="Материал с текстом песни и аккордами" loading="lazy" /><figcaption><b>Разбор песни</b><span>Текст, аккорды и последовательность</span></figcaption></figure>
-          <figure><img src="./material-rhythm.webp" alt="Схема гитарного боя в видеоуроке" loading="lazy" /><figcaption><b>Схема ритма</b><span>Движения правой руки по счёту</span></figcaption></figure>
-          <figure><img src="./material-trainer.webp" alt="Тренажёр гитарного боя в видеоуроке" loading="lazy" /><figcaption><b>Тренажёр боя</b><span>Практика под метроном</span></figcaption></figure>
-        </div>
-      </section>
-
-      <section className="section results">
-        <div className="results-copy"><span className="eyebrow">результат базового модуля</span><h2>Что вы освоите<br/>в <em>базовом модуле</em></h2></div>
-        <div className="result-cards"><article><b>01</b><p>Правильно сидеть и держать гитару без лишнего напряжения</p></article><article><b>02</b><p>Ставить первые аккорды и добиваться чистого звучания струн</p></article><article><b>03</b><p>Играть простой бой и менять аккорды без долгих остановок</p></article><article><b>04</b><p>Соединить аккорды, бой и текст в учебной версии «Пачки сигарет»</p></article></div>
       </section>
 
       <section className="section about" id="about">
         <div className="about-visual">
-          <img className="about-portrait" src="./nikita-about.webp" alt="Никита Осадчук играет на акустической гитаре" loading="lazy" />
+          <img className="about-portrait" src="./nikita-about.webp" alt="Никита Осадчук с гитарой" loading="lazy" />
           <div className="experience-badge"><b>500+</b><span>учеников</span></div>
         </div>
         <div className="about-copy">
-          <span className="eyebrow">ваш преподаватель</span><h2>Никита Осадчук</h2>
+          <span className="eyebrow">преподаватель</span><h2>Никита Осадчук</h2>
           <p className="about-lead">Преподаватель гитары и аранжировщик. Руководитель отделения «Музыка» в детском центре «Зебра» в Санкт-Петербурге.</p>
-          <div className="about-points"><div><b>с 2019 года</b><span>преподаёт музыку детям и взрослым</span></div><div><b>более 500 учеников</b><span>от полных новичков до продолжающих музыкантов</span></div><div><b>направление обучения</b><span>акустическая и электрогитара</span></div></div>
+          <div className="about-points">
+            <div><b>С 2019 года</b><span>преподаю детям и взрослым</span></div>
+            <div><b>500+ учеников</b><span>от новичков до продолжающих</span></div>
+            <div><b>Два направления</b><span>акустическая и электрогитара</span></div>
+          </div>
+          <button className="btn btn-primary" onClick={() => setQuiz(true)}>Записаться на занятие <Icon name="arrow" /></button>
         </div>
       </section>
 
-      <section className="section reviews">
-        <div className="section-head split-head"><div><span className="eyebrow">отзывы и результаты</span><h2>Посмотрите работы<br/><em>учеников</em></h2></div><p>Отзывы не переписаны и не придуманы для сайта: они опубликованы в подтверждённом профиле преподавателя на Profi.ru.</p></div>
+      <section className="section reviews" id="reviews">
+        <div className="section-head centered">
+          <span className="eyebrow">отзывы и результаты</span>
+          <h2>Ученики и их <em>результаты</em></h2>
+          <p>Посмотрите отзывы или запросите примеры игры учеников у преподавателя.</p>
+        </div>
         <div className="proof-panel">
-          <div><span className="stars">★★★★★</span><h3>Отзывы учеников</h3><p>Оценки и тексты реальных клиентов находятся в профиле Никиты Осадчука.</p><a className="btn btn-ghost" href="https://profi.ru/profile/OsadchukNA2" target="_blank" rel="noreferrer">Открыть отзывы на Profi.ru <Icon name="arrow" /></a></div>
-          <div><span className="eyebrow">видео</span><h3>Результаты учеников</h3><p>Примеры игры учеников можно запросить у преподавателя вместе с подбором формата.</p><a className="btn btn-ghost" href={`${tg}?text=${encodeURIComponent("Здравствуйте! Хочу посмотреть результаты учеников и подобрать формат обучения.")}`} target="_blank" rel="noreferrer">Запросить примеры <Icon name="arrow" /></a></div>
+          <div><span className="stars">★★★★★</span><h3>Отзывы учеников</h3><p>Реальные оценки и отзывы в профиле на Profi.ru.</p><a className="btn btn-ghost" href="https://profi.ru/profile/OsadchukNA2" target="_blank" rel="noreferrer">Читать отзывы <Icon name="arrow" /></a></div>
+          <div><span className="eyebrow">видео учеников</span><h3>Результаты обучения</h3><p>Попросите примеры игры учеников и подберите свой формат занятий.</p><a className="btn btn-ghost" href={tg + "?text=" + encodeURIComponent("Здравствуйте! Хочу посмотреть видео с результатами учеников и узнать об обучении гитаре.")} target="_blank" rel="noreferrer">Посмотреть результаты <Icon name="arrow" /></a></div>
         </div>
-        <figure className="student-group">
-          <img src="./students-group.webp" alt="Никита Осадчук с группой учеников" loading="lazy" />
-          <figcaption><span>Опыт работы</span><b>Индивидуальные и групповые занятия с детьми и взрослыми</b></figcaption>
-        </figure>
       </section>
 
-      <section className="section faq">
-        <div className="faq-head"><span className="eyebrow">без неудобных вопросов</span><h2>Коротко о главном</h2><p>Если вашего вопроса нет — напишите, отвечу лично.</p><a className="btn btn-ghost" href={tg} target="_blank" rel="noreferrer"><Icon name="message"/> Задать вопрос</a></div>
-        <div className="accordion">{faq.map(([q,a], i) => <article key={q} className={openFaq === i ? "open" : ""}><button onClick={() => setOpenFaq(openFaq === i ? -1 : i)}><span>{q}</span><i>{openFaq === i ? "−" : "+"}</i></button><div className="answer"><p>{a}</p></div></article>)}</div>
-      </section>
-
-      <section className="final-cta">
-        <div className="cta-note">♪</div><div className="cta-note n2">♫</div>
-        <span className="eyebrow">бесплатная диагностика</span>
-        <h2>Подберём формат и план<br/><em>на первые недели</em></h2>
-        <p>Ответьте на три коротких вопроса об опыте, цели и удобном темпе занятий. После этого сможете отправить ответы Никите в Telegram.</p>
-        <button className="btn btn-dark" onClick={() => setQuiz(true)}>Подобрать обучение <Icon name="arrow" /></button>
-        <small>Диагностика занимает около 15 минут</small>
+      <section className="section faq" id="faq">
+        <div className="faq-head"><span className="eyebrow">вопросы и ответы</span><h2>Коротко о главном</h2><p>Не нашли ответ? Напишите напрямую.</p><a className="btn btn-ghost" href={tg} target="_blank" rel="noreferrer"><Icon name="message"/> Написать в Telegram</a></div>
+        <div className="accordion">{faq.slice(0,4).map(([q,a], i) => <article key={q} className={openFaq === i ? "open" : ""}><button onClick={() => setOpenFaq(openFaq === i ? -1 : i)}><span>{q}</span><i>{openFaq === i ? "−" : "+"}</i></button><div className="answer"><p>{a}</p></div></article>)}</div>
       </section>
 
       <footer>
