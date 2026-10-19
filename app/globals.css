@@ -1784,3 +1784,7 @@ a:focus-visible {
   #formats .section-head { margin-bottom:22px; }
   #reviews .proof-panel>div { min-height:0; }
 }
+
+/* The hero now uses a single proof line, without the removed decorative avatar cluster. */
+.hero-proof { margin-top:24px; gap:0; }
+.hero-proof p { font-size:11px; }
