@@ -48,6 +48,16 @@ const formats = [
   }
 ];
 
+
+const learningDirections = [
+  { id: "beginner", title: "Гитара с нуля", tag: "01 / НАЧИНАЮЩИМ", image: "./hero-guitar.webp", summary: "Посадка, настройка гитары, первые аккорды и песни.", result: "Освоите основы и сыграете учебную версию первой песни.", topics: ["Знакомство с гитарой", "Ритм и метроном", "Первые аккорды", "Аккорды, бой и песня"], program: "base" },
+  { id: "rhythm", title: "Аккорды и бой", tag: "02 / РИТМ", image: "./material-rhythm.webp", summary: "Четвёрка, шестёрка, восьмёрка и смена аккордов.", result: "Научитесь применять разные рисунки боя в песнях.", topics: ["Четвёрка с глушением", "Шестёрка и восьмёрка", "Деление боя", "Работа над песнями"], program: "rhythm" },
+  { id: "picking", title: "Переборы", tag: "03 / ТЕХНИКА", image: "./material-trainer.webp", summary: "Правая рука, басовые струны, перебор и координация.", result: "Разберёте основные движения и сможете применить их в песнях.", topics: ["Постановка правой руки", "Перебор «четвёрка»", "Смена баса", "Практика под метроном"], program: "technique" },
+  { id: "fingerstyle", title: "Фингерстайл", tag: "04 / НАПРАВЛЕНИЕ", image: "./personal-lesson.webp", summary: "Мелодия и аккомпанемент на одной гитаре.", result: "Подберём упражнения и композиции с учётом уровня.", topics: ["Мелодия и бас", "Независимость пальцев", "Чтение табулатур", "Разбор композиций"], program: null },
+  { id: "electric", title: "Электрогитара", tag: "05 / ЭЛЕКТРОГИТАРА", image: "./nikita-hero.webp", summary: "Риффы, ритм, постановка рук и техника.", result: "Составим индивидуальную программу под ваш музыкальный стиль.", topics: ["Звукоизвлечение", "Риффы и ритм", "Техника обеих рук", "Любимые композиции"], program: null },
+  { id: "songs", title: "Разбор песен", tag: "06 / ПО ВЫБОРУ", image: "./material-song.webp", summary: "Аккорды, бой, перебор и разбор конкретной песни.", result: "Получите материал под ваш уровень и запрос.", topics: ["Подбор песни", "Аккорды и табулатуры", "Разбор сложных мест", "Практика исполнения"], program: "materials" }
+];
+
 const faq = [
   ["Подойдёт ли обучение полному новичку?", "Да. Начинаем со знакомства с гитарой и постановки рук, затем учимся играть аккорды, держать ритм и исполнять первые песни."],
   ["Что делать, если нет постоянного расписания?", "Можно выбрать наставничество: вы занимаетесь в удобное время, отправляете домашнее задание в Telegram и получаете личные правки."],
@@ -256,6 +266,10 @@ export default function Home(){
   const [advancedIndex,setAdvancedIndex]=useState(0);
   const [advancedOpen,setAdvancedOpen]=useState(null);
   const [openFaq,setOpenFaq]=useState(-1);
+  const [selectedCourse,setSelectedCourse]=useState(null);
+  const [leadName,setLeadName]=useState("");
+  const [leadContact,setLeadContact]=useState("");
+  const [leadDirection,setLeadDirection]=useState("Гитара с нуля");
   const [headerScrolled,setHeaderScrolled]=useState(false);
   const base=programTracks[0].modules;
   const extra=extendedTracks;
@@ -280,15 +294,30 @@ export default function Home(){
   },[chatOpen]);
   const closeMenu=()=>setMenuOpen(false);
   const openChat=()=>{setMenuOpen(false);setChatOpen(true)};
+  const leadMessage=()=>[
+    "Здравствуйте! Хочу записаться на урок в школу «Струны будущего».",
+    "Имя: "+leadName.trim(),
+    "Контакт: "+leadContact.trim(),
+    "Направление: "+leadDirection
+  ].join("\n");
+  const sendLead=(event)=>{
+    event.preventDefault();
+    if(!leadName.trim()||!leadContact.trim())return;
+    window.open(tg+"?text="+encodeURIComponent(leadMessage()),"_blank","noopener,noreferrer");
+  };
+  useEffect(()=>{
+    if(selectedCourse!==null)document.getElementById("course-detail")?.scrollIntoView({behavior:"smooth",block:"nearest"});
+  },[selectedCourse]);
   return <div className="site-shell">
     <header className={"site-header"+(headerScrolled?" scrolled":"")}>
       <div className="wrap header-layout">
         <a href="#top" className="site-logo" aria-label="Струны будущего, на главную"><Logo/></a>
         <nav className={"main-nav"+(menuOpen?" open":"")} aria-label="Навигация">
-          <a onClick={closeMenu} href="#why">Почему мы</a>
+          <a onClick={closeMenu} href="#why">Об академии</a>
+          <a onClick={closeMenu} href="#courses">Наши курсы</a>
           <a onClick={closeMenu} href="#program">Программа</a>
           <a onClick={closeMenu} href="#prices">Стоимость</a>
-          <a onClick={closeMenu} href="#students">Отзывы</a><a onClick={closeMenu} href="#teacher">Обо мне</a>
+          <a onClick={closeMenu} href="#students">Отзывы и кейсы</a>
           <button className="nav-mobile-action" onClick={openChat}>Подобрать занятия <MiniArrow/></button>
         </nav>
         <button className="header-action" onClick={openChat}>Начать обучение <MiniArrow/></button>
@@ -330,14 +359,63 @@ export default function Home(){
       <section className="why-section" id="why">
         <div className="wrap">
           <div className="why-head appear">
-            <div><span className="eyebrow">О ШКОЛЕ</span><h2>ПОЧЕМУ МЫ</h2></div>
-            <p>Индивидуальные занятия, практика на песнях и обратная связь.</p>
+            <div><span className="eyebrow">АКАДЕМИЯ «СТРУНЫ БУДУЩЕГО»</span><h2>ПОЧЕМУ МЫ</h2></div>
+            <p>Обучение акустической и электрогитаре онлайн. Занятия с преподавателем и практика на песнях.</p>
           </div>
           <div className="why-grid">
             <article className="why-card appear"><img src="./nikita-about.webp" loading="lazy" alt="Никита с гитарой"/><div className="why-card-content"><b>ИНДИВИДУАЛЬНЫЕ УРОКИ</b><small>Занятия под ваш уровень и задачи</small></div></article>
             <article className="why-card appear"><img src="./personal-lesson.webp" loading="lazy" alt="Практический урок гитары"/><div className="why-card-content"><b>РАЗБОРЫ ПЕСЕН</b><small>Аккорды, бой, перебор и техника</small></div></article>
             <article className="why-card appear"><div className="why-card-content"><b>ОБУЧЕНИЕ С НУЛЯ</b><small>Пошаговая программа</small></div></article>
             <a href="#students" className="why-card appear"><img src="./students-group.webp" loading="lazy" alt="Ученики музыкальной школы"/><div className="why-card-content"><b>ОТЗЫВЫ УЧЕНИКОВ</b><small>Отзывы и примеры занятий</small></div></a>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="academy-stats" aria-label="Академия в цифрах">
+        <div className="wrap academy-stats-grid">
+          <div><strong>2019</strong><span>Преподаю с 2019 года</span></div>
+          <div><strong>1:1</strong><span>Индивидуальный формат</span></div>
+          <div><strong>7</strong><span>Этапов базового курса</span></div>
+        </div>
+      </section>
+
+      <section className="section directions-section" id="courses">
+        <div className="wrap">
+          <div className="section-heading appear">
+            <div><span className="eyebrow">НАПРАВЛЕНИЯ ОБУЧЕНИЯ</span><h2>НАШИ <em>КУРСЫ</em></h2></div>
+            <p>Выберите направление. Программу и сложность подбираем под ваш уровень.</p>
+          </div>
+          <div className="direction-grid">
+            {learningDirections.map((item,index)=><article key={item.id} className={"direction-card appear"+(selectedCourse===index?" direction-selected":"")}>
+              <div className="direction-photo"><img src={item.image} alt={item.title} loading="lazy"/><span className="direction-tag">{item.tag}</span></div>
+              <div className="direction-content">
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                <span className="direction-learn">Чему вы научитесь:</span>
+                <ul>{item.topics.slice(0,3).map(topic=><li key={topic}>{topic}</li>)}</ul>
+                <button type="button" onClick={()=>setSelectedCourse(v=>v===index?null:index)} aria-expanded={selectedCourse===index} aria-controls="course-detail">Подробнее <MiniArrow/></button>
+              </div>
+            </article>)}
+          </div>
+          <div id="course-detail" className={"direction-detail"+(selectedCourse!==null?" direction-detail-open":"")} aria-live="polite">
+            {selectedCourse!==null&&<div className="direction-detail-body">
+              <div className="direction-detail-copy">
+                <span className="eyebrow">ПОДРОБНЕЕ О НАПРАВЛЕНИИ</span>
+                <h3>{learningDirections[selectedCourse].title}</h3>
+                <p>{learningDirections[selectedCourse].result}</p>
+                <ul>{learningDirections[selectedCourse].topics.map(topic=><li key={topic}><Icon name="check"/>{topic}</li>)}</ul>
+              </div>
+              <div className="direction-detail-actions">
+                {learningDirections[selectedCourse].program&&<a href="#program" className="button button-secondary" onClick={()=>{
+                  const section=learningDirections[selectedCourse].program;
+                  if(section==="base"){setProgramMode("base");setLessonIndex(0)}
+                  else {setProgramMode("more");setAdvancedIndex(section==="rhythm"?0:section==="technique"?1:2);setAdvancedOpen(null)}
+                }}>Посмотреть программу <MiniArrow/></a>}
+                <button className="button button-primary" type="button" onClick={openChat}>Подобрать занятия <MiniArrow/></button>
+                <button className="direction-detail-close" type="button" onClick={()=>setSelectedCourse(null)}>Закрыть</button>
+              </div>
+            </div>}
           </div>
         </div>
       </section>
@@ -420,7 +498,7 @@ export default function Home(){
 
       <section className="section proof-section" id="students">
         <div className="wrap proof-grid">
-          <div className="proof-heading appear"><span className="eyebrow">УЧЕНИКИ</span><h2>ОТЗЫВЫ<br/><em>УЧЕНИКОВ</em></h2><p>Можно посмотреть отзывы на независимой площадке и запросить видео с игрой учеников.</p></div>
+          <div className="proof-heading appear"><span className="eyebrow">РЕЗУЛЬТАТЫ ОБУЧЕНИЯ</span><h2>ОТЗЫВЫ<br/><em>И РЕЗУЛЬТАТЫ</em></h2><p>Можно посмотреть отзывы на независимой площадке и запросить видео с игрой учеников.</p></div>
           <div className="proof-cards">
             <a className="proof-card proof-review appear" href="https://profi.ru/profile/OsadchukNA2/" target="_blank" rel="noreferrer">
               <div className="proof-card-top"><span>01 / ОТЗЫВЫ</span><ExternalArrow/></div>
@@ -435,6 +513,22 @@ export default function Home(){
               <span className="proof-link">Запросить примеры <MiniArrow/></span>
             </button>
           </div>
+        </div>
+      </section>
+
+
+      <section className="section cases-section" id="cases">
+        <div className="wrap">
+          <div className="section-heading appear">
+            <div><span className="eyebrow">ПРИМЕРЫ ИЗ ОБУЧЕНИЯ</span><h2>НАШИ <em>КЕЙСЫ</em></h2></div>
+            <p>Примеры занятий, учебных материалов и работы с учениками.</p>
+          </div>
+          <div className="cases-grid">
+            <article className="case-card appear"><img src="./students-group.webp" loading="lazy" alt="Ученики музыкальной школы"/><div><span>01 / УЧЕНИКИ</span><h3>Работа с учениками</h3></div></article>
+            <article className="case-card appear"><img src="./personal-lesson.webp" loading="lazy" alt="Пример видеоурока"/><div><span>02 / УРОКИ</span><h3>Видеоуроки</h3></div></article>
+            <article className="case-card appear"><img src="./material-song.webp" loading="lazy" alt="Материал по разбору песни"/><div><span>03 / МАТЕРИАЛЫ</span><h3>Разборы песен</h3></div></article>
+          </div>
+          <div className="cases-action"><p>Видео с игрой учеников можно запросить лично.</p><button className="button button-secondary" onClick={openChat}>Запросить примеры <MiniArrow/></button></div>
         </div>
       </section>
 
@@ -468,10 +562,20 @@ export default function Home(){
         </div>
       </section>
 
-      <section className="closing-section">
+      <section className="closing-section" id="contact">
         <div className="wrap closing-layout">
-          <div><span className="eyebrow">НАЧАТЬ ОБУЧЕНИЕ</span><h2>ЗАПИСАТЬСЯ<br/><em>НА УРОК</em></h2></div>
-          <div className="closing-action"><p>Ответьте на три вопроса в чате. Покажем подходящий формат занятий и сможете написать преподавателю напрямую.</p><button className="button button-primary" onClick={openChat}>Подобрать обучение <MiniArrow/></button><a className="closing-direct" href="https://n1313298.yclients.ru" target="_blank" rel="noreferrer">Или записаться сразу <ExternalArrow/></a></div>
+          <div className="closing-copy"><span className="eyebrow">СВЯЗАТЬСЯ С ПРЕПОДАВАТЕЛЕМ</span><h2>ОСТАВИТЬ<br/><em>ЗАЯВКУ</em></h2><p>Оставьте контакт и выберите направление. Откроется Telegram с заполненной заявкой, которую вы отправите самостоятельно.</p><div className="closing-links"><a href="https://n1313298.yclients.ru" target="_blank" rel="noreferrer">Онлайн-запись <ExternalArrow/></a><a href="https://t.me/nikguita" target="_blank" rel="noreferrer">Написать напрямую <ExternalArrow/></a></div></div>
+          <form className="lead-form" onSubmit={sendLead}>
+            <h3>Запись на занятия</h3>
+            <label htmlFor="lead-name">Ваше имя</label>
+            <input id="lead-name" type="text" required autoComplete="name" value={leadName} onChange={e=>setLeadName(e.target.value)} placeholder="Как к вам обращаться?"/>
+            <label htmlFor="lead-contact">Telegram или телефон</label>
+            <input id="lead-contact" type="text" required value={leadContact} onChange={e=>setLeadContact(e.target.value)} placeholder="@username или номер"/>
+            <label htmlFor="lead-direction">Направление</label>
+            <select id="lead-direction" value={leadDirection} onChange={e=>setLeadDirection(e.target.value)}>{learningDirections.map(item=><option key={item.id}>{item.title}</option>)}</select>
+            <button className="button button-primary" type="submit">Отправить заявку <MiniArrow/></button>
+            <small>Сообщение отправляется только после вашего подтверждения в Telegram.</small>
+          </form>
         </div>
       </section>
     </main>
