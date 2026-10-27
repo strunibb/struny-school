@@ -356,6 +356,14 @@ export default function Home(){
       </section>
 
 
+      <section className="academy-stats" aria-label="Академия в цифрах">
+        <div className="wrap academy-stats-grid">
+          <div><strong>2019</strong><span>Преподаю с 2019 года</span></div>
+          <div><strong>1:1</strong><span>Индивидуальный формат</span></div>
+          <div><strong>7</strong><span>Этапов базового курса</span></div>
+        </div>
+      </section>
+
       <section className="why-section" id="why">
         <div className="wrap">
           <div className="why-head appear">
@@ -371,14 +379,6 @@ export default function Home(){
         </div>
       </section>
 
-
-      <section className="academy-stats" aria-label="Академия в цифрах">
-        <div className="wrap academy-stats-grid">
-          <div><strong>2019</strong><span>Преподаю с 2019 года</span></div>
-          <div><strong>1:1</strong><span>Индивидуальный формат</span></div>
-          <div><strong>7</strong><span>Этапов базового курса</span></div>
-        </div>
-      </section>
 
       <section className="section directions-section" id="courses">
         <div className="wrap">
