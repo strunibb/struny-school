@@ -143,7 +143,7 @@ function Quiz({ onClose }) {
         if (step < questions.length - 1) {
           return clean.concat([{ role: "bot", text: "Понял! Ещё один момент." }, { role: "bot", text: questions[step + 1].title }]);
         }
-        return clean.concat([{ role: "bot", text: "Судя по ответам, стоит начать с формата «" + recommendation.title + "». " + recommendation.text }]);
+        return clean.concat([{ role: "bot", text: "По твоим ответам подойдёт формат «" + recommendation.title + "». " + recommendation.text }]);
       });
       if (step < questions.length - 1) setStep(step + 1);
       else setDone(true);
@@ -176,7 +176,7 @@ function Quiz({ onClose }) {
       <div className="modal-card chat-card">
         <div className="chat-header">
           <div className="chat-brand-avatar">С<span>♪</span></div>
-          <div className="chat-person"><b>Струны будущего</b><small><i /> Подбор обучения · обычно 1 минута</small></div>
+          <div className="chat-person"><b>Струны будущего</b><small><i /> Автоматический помощник · 3 вопроса</small></div>
           <button className="modal-close" onClick={onClose} aria-label="Закрыть"><Icon name="close" /></button>
         </div>
         <div className="chat-progress" aria-label={"Вопрос " + (done ? 3 : step + 1) + " из 3"}>
@@ -201,7 +201,7 @@ function Quiz({ onClose }) {
         </div>
         {!done && <div className="chat-replies">
           {pending
-            ? <div className="chat-wait">Подбираем следующий вопрос…</div>
+            ? <div className="chat-wait">Готовлю следующий вопрос…</div>
             : <>
                 <span className="chat-reply-label">ВЫБЕРИ ОТВЕТ</span>
                 {questions[step].options.map((option) => (
@@ -211,7 +211,7 @@ function Quiz({ onClose }) {
                 ))}
               </>}
         </div>}
-        <div className="chat-footer-note"><span>🔒</span> Ответы никуда не отправятся, пока ты сам не нажмёшь кнопку в конце.</div>
+        <div className="chat-footer-note"><span>🔒</span> После выбора откроется Telegram с готовым сообщением. Отправляешь его сам.</div>
       </div>
     </div>
   );
@@ -247,13 +247,14 @@ export default function Home(){
   const advanced=extra[advancedIndex];
   const currentImage=programImages[lessonIndex];
   useEffect(()=>{
+    document.documentElement.classList.add("js-motion");
     const handleScroll=()=>setHeaderScrolled(window.scrollY>24);
     window.addEventListener("scroll",handleScroll,{passive:true});handleScroll();
     const obs=typeof IntersectionObserver==="undefined"?null:new IntersectionObserver(entries=>{
       entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("in-view");obs.unobserve(entry.target)}});
     },{threshold:.08,rootMargin:"0px 0px -25px 0px"});
     document.querySelectorAll(".appear").forEach(el=>obs?obs.observe(el):el.classList.add("in-view"));
-    return ()=>{window.removeEventListener("scroll",handleScroll);obs?.disconnect()};
+    return ()=>{window.removeEventListener("scroll",handleScroll);obs?.disconnect();document.documentElement.classList.remove("js-motion")};
   },[]);
   useEffect(()=>{
     const onKey=(e)=>{if(e.key==="Escape"){setChatOpen(false);setMenuOpen(false)}};
