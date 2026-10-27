@@ -286,13 +286,13 @@ export default function Home(){
         <div className="wrap hero-grid">
           <div className="hero-content appear">
             <div className="eyebrow hero-eyebrow"><span className="status-dot"/> Авторская онлайн-школа гитары</div>
-            <h1>НАУЧИСЬ<br/><span>ИГРАТЬ</span><br/>НА ГИТАРЕ.</h1>
-            <p className="hero-intro">С нуля до любимых песен. Понятная программа, живые уроки и личная обратная связь.</p>
+            <h1>НАУЧИСЬ<br/><span>ИГРАТЬ</span><br/>НА ГИТАРЕ</h1>
+            <p className="hero-intro">Индивидуальные онлайн-уроки для начинающих и тех, кто уже играет.</p>
             <div className="hero-buttons">
               <button className="button button-primary" onClick={openChat}>Подобрать обучение <MiniArrow/></button>
               <a className="button button-secondary" href="#program">Посмотреть программу</a>
             </div>
-            <div className="hero-facts"><span>С 2019 года</span><i/><span>Индивидуальный подход</span><i/><span>Из любой точки мира</span></div>
+            <div className="hero-facts"><span>С 2019 года</span><i/><span>Индивидуальные занятия</span><i/><span>Онлайн</span></div>
           </div>
           <div className="hero-visual appear">
             <div className="hero-image-frame">
@@ -305,51 +305,32 @@ export default function Home(){
               <span><strong>Не знаете, с чего начать?</strong><small>Подберём формат за 3 вопроса</small></span>
               <MiniArrow/>
             </button>
-            <span className="hero-side-label">STRUNY SCHOOL / PLAY YOUR MUSIC</span>
+            <span className="hero-side-label">ОНЛАЙН-ШКОЛА ГИТАРЫ</span>
           </div>
         </div>
       </section>
 
-
-      <div className="marquee" aria-hidden="true"><div className="marquee-inner">{Array.from({length:4}).map((_,i)=><span className="marquee-item" key={i}>ГИТАРА И ТВОЯ МУЗЫКА <span>АККОРДЫ И ФИНГЕРСТАЙЛ</span> <span>УЧИМСЯ НА ПЕСНЯХ</span></span>)}</div></div>
-
-      <section className="stats-band" aria-label="О школе">
-        <div className="wrap stats-grid">
-          <div className="stat"><b>2019</b><p>Год начала преподавания</p></div>
-          <div className="stat"><b>1:1</b><p>Личные онлайн-занятия</p></div>
-          <div className="stat"><b>07</b><p>Этапов базового старта</p></div>
-        </div>
-      </section>
 
       <section className="why-section" id="why">
         <div className="wrap">
           <div className="why-head appear">
-            <div><span className="eyebrow">ПОЧЕМУ «СТРУНЫ БУДУЩЕГО»</span><h2>НЕ ПРОСТО УРОКИ.<br/><em>МУЗЫКА, КОТОРАЯ ТВОЯ.</em></h2></div>
-            <p>Меньше скучных объяснений. Больше игры, любимых песен и понятной практики.</p>
+            <div><span className="eyebrow">О ШКОЛЕ</span><h2>ПОЧЕМУ МЫ</h2></div>
+            <p>Индивидуальные занятия, практика на песнях и обратная связь.</p>
           </div>
           <div className="why-grid">
-            <article className="why-card appear"><img src="./nikita-about.webp" loading="lazy" alt="Никита с гитарой"/><div className="why-card-content"><b>ЛИЧНЫЙ ПРЕПОДАВАТЕЛЬ</b><small>Разбираем ошибки и двигаемся в твоём темпе</small></div></article>
-            <article className="why-card appear"><img src="./personal-lesson.webp" loading="lazy" alt="Практический урок гитары"/><div className="why-card-content"><b>ЛЮБИМЫЕ ПЕСНИ</b><small>Учишь то, что хочется играть</small></div></article>
-            <article className="why-card appear"><div className="why-card-content"><b>ПОНЯТНО С НУЛЯ</b><small>Каждый навык на своём месте</small></div></article>
-            <a href="#students" className="why-card appear"><img src="./students-group.webp" loading="lazy" alt="Ученики музыкальной школы"/><div className="why-card-content"><b>ОТЗЫВЫ И РЕЗУЛЬТАТЫ</b><small>Посмотри, что говорят ученики</small></div></a>
+            <article className="why-card appear"><img src="./nikita-about.webp" loading="lazy" alt="Никита с гитарой"/><div className="why-card-content"><b>ИНДИВИДУАЛЬНЫЕ УРОКИ</b><small>Занятия под ваш уровень и задачи</small></div></article>
+            <article className="why-card appear"><img src="./personal-lesson.webp" loading="lazy" alt="Практический урок гитары"/><div className="why-card-content"><b>РАЗБОРЫ ПЕСЕН</b><small>Аккорды, бой, перебор и техника</small></div></article>
+            <article className="why-card appear"><div className="why-card-content"><b>ОБУЧЕНИЕ С НУЛЯ</b><small>Пошаговая программа</small></div></article>
+            <a href="#students" className="why-card appear"><img src="./students-group.webp" loading="lazy" alt="Ученики музыкальной школы"/><div className="why-card-content"><b>ОТЗЫВЫ УЧЕНИКОВ</b><small>Отзывы и примеры занятий</small></div></a>
           </div>
-        </div>
-      </section>
-
-      <section id="method" className="method-strip">
-        <div className="wrap method-row">
-          <div className="method-intro"><span className="eyebrow">ПРОСТОЙ ПЛАН</span><h2>3 ШАГА<br/>К ТВОЕЙ МУЗЫКЕ</h2></div>
-          <div className="method-step"><span>01</span><strong>Разбираем</strong><p>Показываю движения и объясняю без лишней теории.</p></div>
-          <div className="method-step"><span>02</span><strong>Играете</strong><p>Закрепляете навык в упражнении или песне.</p></div>
-          <div className="method-step"><span>03</span><strong>Исправляем</strong><p>Получаете обратную связь и понятный следующий шаг.</p></div>
         </div>
       </section>
 
       <section className="section program-section" id="program">
         <div className="wrap">
           <div className="section-heading appear">
-            <div><span className="eyebrow">01 / ПРОГРАММА ОБУЧЕНИЯ</span><h2>ОТ ПЕРВЫХ<br/><em>АККОРДОВ ДО ПЕСНИ.</em></h2></div>
-            <p>Сначала базовые навыки и одна песня целиком. Затем новые бои, переборы и свой репертуар.</p>
+            <div><span className="eyebrow">ПРОГРАММА</span><h2>ПРОГРАММА<br/><em>ОБУЧЕНИЯ</em></h2></div>
+            <p>7 этапов: от знакомства с гитарой до исполнения первой песни.</p>
           </div>
           <div className="course-shell appear">
             <div className="course-header">
@@ -410,7 +391,7 @@ export default function Home(){
 
       <section className="section formats-section" id="prices">
         <div className="wrap">
-          <div className="section-heading appear"><div><span className="eyebrow">02 / ФОРМАТЫ И ЦЕНЫ</span><h2>ВЫБИРАЙ<br/><em>СВОЙ РИТМ.</em></h2></div><p>Индивидуальные уроки, наставничество или разбор конкретной песни. Только то, что пригодится именно вам.</p></div>
+          <div className="section-heading appear"><div><span className="eyebrow">ФОРМАТЫ ОБУЧЕНИЯ</span><h2>СТОИМОСТЬ<br/><em>ЗАНЯТИЙ</em></h2></div><p>Индивидуальные уроки, наставничество и разборы песен.</p></div>
           <div className="format-grid">
             {formats.map((item,index)=><article key={item.title} className={"price-card appear price-"+index}>
               <div className="price-top"><span className="price-index">0{index+1} / 03</span><span className="price-ornament" aria-hidden="true">{index===0?"◉":index===1?"♫":"↗"}</span></div>
@@ -423,7 +404,7 @@ export default function Home(){
 
       <section className="section proof-section" id="students">
         <div className="wrap proof-grid">
-          <div className="proof-heading appear"><span className="eyebrow">03 / ОТЗЫВЫ И РЕЗУЛЬТАТЫ</span><h2>НЕ СЛОВА.<br/><em>РЕЗУЛЬТАТЫ.</em></h2><p>Можно посмотреть отзывы на независимой площадке и запросить видео с игрой учеников.</p></div>
+          <div className="proof-heading appear"><span className="eyebrow">УЧЕНИКИ</span><h2>ОТЗЫВЫ<br/><em>УЧЕНИКОВ</em></h2><p>Можно посмотреть отзывы на независимой площадке и запросить видео с игрой учеников.</p></div>
           <div className="proof-cards">
             <a className="proof-card proof-review appear" href="https://profi.ru/profile/OsadchukNA2/" target="_blank" rel="noreferrer">
               <div className="proof-card-top"><span>01 / ОТЗЫВЫ</span><ExternalArrow/></div>
@@ -446,7 +427,7 @@ export default function Home(){
           <div className="teacher-photo appear"><img src="./nikita-about.webp" alt="Никита Осадчук, преподаватель гитары" loading="lazy"/><div className="teacher-photo-label"><span>НИКИТА ОСАДЧУК</span><span>С 2019 ГОДА</span></div></div>
           <div className="teacher-content appear">
             <span className="eyebrow">ТВОЙ ПРЕПОДАВАТЕЛЬ</span>
-            <h2>ПРИВЕТ,<br/>Я <em>НИКИТА.</em></h2>
+            <h2>ОБО<br/><em>МНЕ</em></h2>
             <p>Преподаю гитару с 2019 года. Раньше руководил музыкальным направлением детского центра «Зебра» в Санкт-Петербурге.</p>
             <p>На занятиях соединяем технику с музыкой, которую вам действительно хочется играть.</p>
             <div className="teacher-tags"><span>Акустическая гитара</span><span>Электрогитара</span><span>Онлайн</span></div>
@@ -458,8 +439,8 @@ export default function Home(){
       <section className="section sample-section" id="free">
         <div className="wrap sample-layout">
           <div className="sample-copy appear">
-            <span className="eyebrow">ПОПРОБУЙТЕ БЕСПЛАТНО</span>
-            <h2>НАЧНИ<br/><em>БЕСПЛАТНО.</em></h2>
+            <span className="eyebrow">ПЕРВОЕ ЗНАКОМСТВО</span>
+            <h2>БЕСПЛАТНЫЙ<br/><em>УРОК</em></h2>
             <p>Посмотрите знакомство с гитарой и оцените подачу материала до записи.</p>
             <a className="button button-primary" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer">Смотреть урок <ExternalArrow/></a>
           </div>
@@ -473,7 +454,7 @@ export default function Home(){
 
       <section className="closing-section">
         <div className="wrap closing-layout">
-          <div><span className="eyebrow">ЕСТЬ ВОПРОСЫ?</span><h2>ТВОЯ МУЗЫКА<br/><em>НАЧИНАЕТСЯ ЗДЕСЬ.</em></h2></div>
+          <div><span className="eyebrow">НАЧАТЬ ОБУЧЕНИЕ</span><h2>ЗАПИСАТЬСЯ<br/><em>НА УРОК</em></h2></div>
           <div className="closing-action"><p>Ответьте на три вопроса в чате. Покажем подходящий формат занятий и сможете написать преподавателю напрямую.</p><button className="button button-primary" onClick={openChat}>Подобрать обучение <MiniArrow/></button><a className="closing-direct" href="https://n1313298.yclients.ru" target="_blank" rel="noreferrer">Или записаться сразу <ExternalArrow/></a></div>
         </div>
       </section>
