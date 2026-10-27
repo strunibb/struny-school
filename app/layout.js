@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./revamp.css";
 
 export const metadata = {
   title: "Струны будущего — уроки гитары онлайн с Никитой Осадчуком",
