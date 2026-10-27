@@ -100,139 +100,6 @@ const programDetails = {
 };
 
 
-const chordLibrary = {
-  Em: { fingers: [{string:1,fret:2,finger:2},{string:2,fret:2,finger:3}], frequencies:[82.41,123.47,164.81,196,246.94,329.63], detail:"Два пальца на втором ладу. Остальные струны звучат открытыми." },
-  Am: { fingers:[{string:2,fret:2,finger:2},{string:3,fret:2,finger:3},{string:4,fret:1,finger:1}], frequencies:[null,110,164.81,220,261.63,329.63], detail:"Три прижатые струны и три открытые. Шестую струну не играем." },
-  C: { fingers:[{string:1,fret:3,finger:3},{string:2,fret:2,finger:2},{string:4,fret:1,finger:1}], frequencies:[null,130.81,164.81,196,261.63,329.63], detail:"Три прижатые струны и три открытые. Шестую струну не играем." },
-  D: { fingers:[{string:3,fret:2,finger:1},{string:4,fret:3,finger:3},{string:5,fret:2,finger:2}], frequencies:[null,null,146.83,220,293.66,369.99], detail:"Играем четыре нижние струны. Пальцы образуют треугольник." }
-};
-
-function ChordTrainer() {
-  const [activeChord, setActiveChord] = useState("Em");
-  const [playing, setPlaying] = useState(false);
-  const playChord = async () => {
-    if (playing) return;
-    const Audio = window.AudioContext || window.webkitAudioContext;
-    if (!Audio) return;
-    setPlaying(true);
-    const ctx = new Audio();
-    try {
-      await ctx.resume();
-      chordLibrary[activeChord].frequencies.filter(Boolean).forEach((hz,i) => {
-        const start = ctx.currentTime + i * 0.035;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "triangle";
-        osc.frequency.value = hz;
-        gain.gain.setValueAtTime(0.0001,start);
-        gain.gain.exponentialRampToValueAtTime(0.12,start+0.012);
-        gain.gain.exponentialRampToValueAtTime(0.0001,start+0.8);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(start); osc.stop(start+0.85);
-      });
-    } finally {
-      window.setTimeout(() => { ctx.close().catch(() => {}); setPlaying(false); }, 950);
-    }
-  };
-  const chord = chordLibrary[activeChord];
-  const strings = ["E","A","D","G","B","e"];
-  return (
-    <div className="chord-lab">
-      <div className="chord-lab-top"><span>АППЛИКАТУРЫ · ОТКРЫТАЯ ПОЗИЦИЯ</span><b>01—04</b></div>
-      <div className="chord-picker" role="tablist" aria-label="Выбрать аккорд">
-        {Object.keys(chordLibrary).map(name => <button key={name} role="tab" aria-selected={activeChord===name} className={activeChord===name?"active":""} onClick={() => setActiveChord(name)}>{name}</button>)}
-      </div>
-      <div className="fretboard-wrap">
-        <svg className="fretboard" viewBox="0 0 340 258" role="img" aria-label={"Аппликатура аккорда "+activeChord}>
-          <text x="18" y="18" className="fretboard-label">СТРУНЫ</text>
-          {strings.map((name,i) => {
-            const x = 40 + i*44;
-            const note = chord.frequencies[i];
-            const finger = chord.fingers.find(f => f.string===i);
-            return <g key={name}>
-              <text x={x} y="43" textAnchor="middle" className={"string-mark "+(!note?"muted":!finger?"open":"")}>{!note?"×":!finger?"○":""}</text>
-              <text x={x} y="224" textAnchor="middle" className="string-name">{name}</text>
-              <line x1={x} y1="56" x2={x} y2="211" className="guitar-string" style={{strokeWidth:1+i*.16}} />
-            </g>;
-          })}
-          {[0,1,2,3,4].map(fret => <line key={fret} x1="18" y1={56+fret*38} x2="282" y2={56+fret*38} className={fret===0?"fret-line nut":"fret-line"} />)}
-          {[1,2,3].map(fret => <text key={fret} x="294" y={78+(fret-1)*38} className="fret-number">{fret}</text>)}
-          {chord.fingers.map(({string,fret,finger}) => {
-            const x = 40+string*44;
-            const y = 56+(fret-.5)*38;
-            return <g key={string+"-"+fret}><circle cx={x} cy={y} r="13" className="finger-dot"/><text x={x} y={y+3.8} textAnchor="middle" className="finger-number">{finger}</text></g>;
-          })}
-        </svg>
-        <div className="chord-note"><span>{activeChord}</span><p>{chord.detail}</p></div>
-      </div>
-      <div className="chord-lab-bottom">
-        <span>ЗВУЧАНИЕ — СИНТЕЗИРОВАННОЕ ПРЕВЬЮ</span>
-        <button className="play-chord" disabled={playing} onClick={playChord}><span>{playing?"Ⅱ":"▶"}</span>{playing?"Звучит аккорд…":"Послушать аккорд"}</button>
-      </div>
-    </div>
-  );
-}
-
-function MetronomeDemo() {
-  const [bpm,setBpm] = useState(60);
-  const [running,setRunning] = useState(false);
-  const [beat,setBeat] = useState(0);
-  const audioRef = useRef(null);
-  const ensureAudio = async () => {
-    if (!audioRef.current) {
-      const Audio = window.AudioContext || window.webkitAudioContext;
-      if (Audio) audioRef.current = new Audio();
-    }
-    if (audioRef.current?.state==="suspended") await audioRef.current.resume();
-  };
-  useEffect(() => {
-    if (!running || !audioRef.current) return undefined;
-    const ctx = audioRef.current;
-    let count = 0;
-    const tick = () => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const now = ctx.currentTime;
-      osc.type = "sine";
-      osc.frequency.value = count%4===0 ? 1050 : 720;
-      gain.gain.setValueAtTime(0.0001,now);
-      gain.gain.exponentialRampToValueAtTime(0.17,now+0.006);
-      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.055);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(now); osc.stop(now+0.06);
-      setBeat(count%4);
-      count++;
-    };
-    tick();
-    const timer = window.setInterval(tick,60000/bpm);
-    return () => window.clearInterval(timer);
-  },[running,bpm]);
-  useEffect(() => () => { if(audioRef.current) audioRef.current.close().catch(()=>{}); },[]);
-  const toggle = async () => {
-    if(running){setRunning(false);return;}
-    await ensureAudio();
-    if(audioRef.current)setRunning(true);
-  };
-  return (
-    <div className={"metronome-demo "+(running?"is-running":"")}>
-      <div className="metronome-meta"><span>ТРЕНАЖЁР РИТМА</span><span>4/4</span></div>
-      <div className="metronome-display">
-        <div className="beat-indicators">{[0,1,2,3].map(n=><span key={n} className={running&&beat===n?"active":""}/>)}</div>
-        <div className="tempo-number">{bpm}<small>BPM</small></div>
-        <div className="tempo-caption">{running?"МЕТРОНОМ РАБОТАЕТ":"ВЫБЕРИ УДОБНЫЙ ТЕМП"}</div>
-      </div>
-      <div className="tempo-control">
-        <label htmlFor="tempo-range">Темп <b>{bpm} ударов/мин</b></label>
-        <input id="tempo-range" type="range" min="40" max="120" step="5" value={bpm} onChange={e=>setBpm(Number(e.target.value))}/>
-        <div className="tempo-minmax"><span>40</span><span>120</span></div>
-      </div>
-      <button className="metronome-toggle" onClick={toggle}><span>{running?"Ⅱ":"▶"}</span>{running?"Остановить":"Запустить метроном"}</button>
-      <p className="metronome-note">Сначала находим ровный пульс. Повышаем скорость, только когда получается играть без остановок.</p>
-    </div>
-  );
-}
-
-
 function Quiz({ onClose }) {
   const questions = [
     { key: "experience", title: "Какой у тебя сейчас опыт?", options: ["Начинаю с нуля", "Знаю несколько аккордов", "Уже играю, но упёрся(лась) в потолок"] },
@@ -244,7 +111,7 @@ function Quiz({ onClose }) {
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
   const [messages, setMessages] = useState([
-    { role: "bot", text: "Привет! Помогу подобрать формат музыкального обучения под твои цели. Это всего три коротких вопроса." },
+    { role: "bot", text: "Привет! Помогу подобрать формат обучения гитаре под твои цели. Это всего три коротких вопроса." },
     { role: "bot", text: questions[0].title }
   ]);
   const historyRef = useRef(null);
@@ -259,7 +126,7 @@ function Quiz({ onClose }) {
   }, [answers.pace]);
   const link = useMemo(() => {
     const msg = [
-      "Привет! Я прошёл подбор обучения на сайте «Струны будущего».",
+      "Привет! Я прошёл подбор занятий гитарой на сайте «Струны будущего».",
       "Опыт: " + answers.experience,
       "Цель: " + answers.goal,
       "Формат: " + answers.pace,
@@ -298,7 +165,7 @@ function Quiz({ onClose }) {
     setPending(false);
     setDone(false);
     setMessages([
-      { role: "bot", text: "Привет! Помогу подобрать формат музыкального обучения под твои цели. Это всего три коротких вопроса." },
+      { role: "bot", text: "Привет! Помогу подобрать формат обучения гитаре под твои цели. Это всего три коротких вопроса." },
       { role: "bot", text: questions[0].title }
     ]);
   };
@@ -328,7 +195,7 @@ function Quiz({ onClose }) {
           ))}
           {done && <div className="chat-result-actions">
             <div className="chat-recommendation"><small>ТВОЯ РЕКОМЕНДАЦИЯ</small><b>{recommendation.title}</b><p>{recommendation.text}</p></div>
-            <a className="btn btn-primary chat-send" href={link} target="_blank" rel="noreferrer">Отправить ответы Никите <Icon name="arrow" /></a>
+            <a className="btn btn-primary chat-send" href={link} target="_blank" rel="noreferrer">Открыть Telegram с ответами <Icon name="arrow" /></a>
             <button className="text-button" onClick={restart}>Пройти заново</button>
           </div>}
         </div>
@@ -350,308 +217,247 @@ function Quiz({ onClose }) {
   );
 }
 
-export default function Home() {
-  const [menu, setMenu] = useState(false);
-  const [quiz, setQuiz] = useState(false);
-  const [openFaq, setOpenFaq] = useState(0);
-  const [expandedModule, setExpandedModule] = useState("");
-  const activeProgram = programTracks[0];
-  const [storyScene, setStoryScene] = useState(0);
 
-  useEffect(() => {
-    document.documentElement.classList.add("motion-enabled");
+const programImages = [
+  "./hero-guitar.webp",
+  "./material-trainer.webp",
+  "./material-song.webp",
+  "./material-song.webp",
+  "./material-rhythm.webp",
+  "./material-trainer.webp",
+  "./personal-lesson.webp"
+];
 
-    const animated = document.querySelectorAll([
-      ".hero-copy", ".hero-visual", ".curriculum-card", ".format-card",
-      ".lesson-feature", ".about-visual", ".about-copy", ".proof-panel > div",
-      ".accordion article"
-    ].join(","));
+function MiniArrow(){return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>}
+function ExternalArrow(){return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>}
+function Logo(){return <span className="logo-wrap"><span className="logo-bars" aria-hidden="true"><i/><i/><i/><i/></span><span className="logo-words"><strong>СТРУНЫ</strong><small>БУДУЩЕГО</small></span></span>}
 
-    animated.forEach((element, index) => {
-      element.classList.add("motion-reveal");
-      element.style.setProperty("--motion-index", String(index % 8));
-    });
-
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
-    animated.forEach((element) => revealObserver.observe(element));
-
-    const story = document.querySelector(".music-story");
-    let raf = 0;
-    let lastScene = -1;
-    const updateScroll = () => {
-      raf = 0;
-      if (!story) return;
-      const rect = story.getBoundingClientRect();
-      const travel = Math.max(1, story.offsetHeight - window.innerHeight);
-      const progress = Math.max(0, Math.min(1, -rect.top / travel));
-      story.style.setProperty("--story-progress", (progress * 100) + "%");
-      const nextScene = Math.min(3, Math.floor(progress * 4));
-      if (nextScene !== lastScene) {
-        lastScene = nextScene;
-        setStoryScene(nextScene);
-      }
-    };
-    const onScroll = () => {
-      if (!raf) raf = window.requestAnimationFrame(updateScroll);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    updateScroll();
-
-    const onPointer = (event) => {
-      const target = event.target.closest("[data-pointer-depth]");
-      if (!target) return;
-      const rect = target.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5;
-      const y = (event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5;
-      target.style.setProperty("--pointer-x", String(x * 2));
-      target.style.setProperty("--pointer-y", String(y * 2));
-    };
-    const resetPointer = (event) => {
-      const target = event.target.closest("[data-pointer-depth]");
-      if (!target || (event.relatedTarget && target.contains(event.relatedTarget))) return;
-      target.style.setProperty("--pointer-x", "0");
-      target.style.setProperty("--pointer-y", "0");
-    };
-    document.addEventListener("pointermove", onPointer, { passive: true });
-    document.addEventListener("pointerout", resetPointer, { passive: true });
-
-    return () => {
-      document.documentElement.classList.remove("motion-enabled");
-      revealObserver.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      document.removeEventListener("pointermove", onPointer);
-      document.removeEventListener("pointerout", resetPointer);
-      if (raf) window.cancelAnimationFrame(raf);
-    };
-  }, []);
-
-
-  return (
-    <main>
-      <div className="noise" />
-      <header className="header">
-        <a href="#top" className="brand" aria-label="Струны будущего — на главную">
-          <span className="brand-mark"><span /><span /><span /><span /></span>
-          <span><b>СТРУНЫ</b><small>БУДУЩЕГО</small></span>
-        </a>
-        <nav className={menu ? "nav open" : "nav"}>
-          <a href="#program" onClick={() => setMenu(false)}>Программа</a>
-          <a href="#formats" onClick={() => setMenu(false)}>Стоимость</a>
-          <a href="#free" onClick={() => setMenu(false)}>Бесплатный урок</a>
-          <a href="#reviews" onClick={() => setMenu(false)}>Отзывы</a>
-          <button className="nav-cta" onClick={() => { setQuiz(true); setMenu(false); }}>Записаться</button>
+export default function Home(){
+  const [menuOpen,setMenuOpen]=useState(false);
+  const [chatOpen,setChatOpen]=useState(false);
+  const [programMode,setProgramMode]=useState("base");
+  const [lessonIndex,setLessonIndex]=useState(0);
+  const [advancedIndex,setAdvancedIndex]=useState(0);
+  const [advancedOpen,setAdvancedOpen]=useState(null);
+  const [openFaq,setOpenFaq]=useState(-1);
+  const [headerScrolled,setHeaderScrolled]=useState(false);
+  const base=programTracks[0].modules;
+  const extra=programTracks.slice(1);
+  const module=base[lessonIndex];
+  const advanced=extra[advancedIndex];
+  const currentImage=programImages[lessonIndex];
+  useEffect(()=>{
+    const handleScroll=()=>setHeaderScrolled(window.scrollY>24);
+    window.addEventListener("scroll",handleScroll,{passive:true});handleScroll();
+    const obs=typeof IntersectionObserver==="undefined"?null:new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("in-view");obs.unobserve(entry.target)}});
+    },{threshold:.08,rootMargin:"0px 0px -25px 0px"});
+    document.querySelectorAll(".appear").forEach(el=>obs?obs.observe(el):el.classList.add("in-view"));
+    return ()=>{window.removeEventListener("scroll",handleScroll);obs?.disconnect()};
+  },[]);
+  useEffect(()=>{
+    const onKey=(e)=>{if(e.key==="Escape"){setChatOpen(false);setMenuOpen(false)}};
+    window.addEventListener("keydown",onKey);
+    if(chatOpen){document.body.style.overflow="hidden"}
+    return ()=>{window.removeEventListener("keydown",onKey);document.body.style.overflow=""};
+  },[chatOpen]);
+  const closeMenu=()=>setMenuOpen(false);
+  const openChat=()=>{setMenuOpen(false);setChatOpen(true)};
+  return <div className="site-shell">
+    <header className={"site-header"+(headerScrolled?" scrolled":"")}>
+      <div className="wrap header-layout">
+        <a href="#top" className="site-logo" aria-label="Струны будущего, на главную"><Logo/></a>
+        <nav className={"main-nav"+(menuOpen?" open":"")} aria-label="Навигация">
+          <a onClick={closeMenu} href="#method">Как проходят уроки</a>
+          <a onClick={closeMenu} href="#program">Программа</a>
+          <a onClick={closeMenu} href="#prices">Стоимость</a>
+          <a onClick={closeMenu} href="#students">Отзывы</a>
+          <button className="nav-mobile-action" onClick={openChat}>Подобрать занятия <MiniArrow/></button>
         </nav>
-        <button className="menu-button" onClick={() => setMenu(!menu)} aria-label="Открыть меню"><Icon name={menu ? "close" : "menu"} /></button>
-      </header>
-
-      <section className="hero" id="top">
-        <div className="hero-glow glow-one" /><div className="hero-glow glow-two" />
-        <div className="hero-copy reveal">
-          <div className="hero-label"><span className="live-dot" /> Онлайн-школа гитары · Никита Осадчук</div>
-          <h1>Научитесь играть<br/><em>на гитаре</em></h1>
-          <p className="hero-lead">Акустическая и электрогитара. Понятная программа, любимые песни и обратная связь от преподавателя.</p>
-          <div className="hero-actions">
-            <button className="btn btn-primary" onClick={() => setQuiz(true)}>Записаться на занятие <Icon name="arrow" /></button>
-            <a className="btn btn-ghost" href="#program">Программа обучения</a>
-          </div>
-          <div className="hero-proof"><p><b>500+ учеников</b><span> · </span>с 2019 года</p></div>
-        </div>
-        <div className="hero-visual reveal delay" data-pointer-depth>
-          <div className="photo-frame">
-            <div className="photo-overlay" />
-            <div className="photo-placeholder"><img className="hero-guitar-image" src="./nikita-hero.webp" alt="Никита Осадчук с акустической гитарой" fetchPriority="high" /></div>
-            <div className="teacher-tag"><span>Никита Осадчук</span><small>преподаватель гитары</small></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="music-story" aria-label="Этапы обучения">
-        <div className="music-story-stage" data-scene={storyScene} data-pointer-depth>
-          <div className="story-stage-top"><span>ПРОГРАММА КУРСА / ОТ ПЕРВОГО УРОКА ДО ПЕСНИ</span><b>0{storyScene + 1}<i> / 04</i></b></div>
-          <div className="story-progress"><span /></div>
-
-          <div className={"story-scene " + (storyScene === 0 ? "active" : "")} aria-hidden={storyScene !== 0}>
-            <div className="story-copy">
-              <small>ЭТАП 01 / ПОДГОТОВКА</small>
-              <h2>Знакомство<br/>с гитарой</h2>
-              <p>Устройство инструмента, удобная посадка, положение рук, настройка и первое упражнение на открытых струнах.</p>
-              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Открыть программу <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-portrait story-art-guitar-parts" data-pointer-depth>
-              <img src="./hero-guitar.webp" alt="Акустическая гитара" loading="lazy" />
-              <div className="story-art-caption"><span>01</span><i /> ЗНАКОМСТВО С ГИТАРОЙ</div>
-            </div>
-          </div>
-
-          <div className={"story-scene " + (storyScene === 1 ? "active" : "")} aria-hidden={storyScene !== 1}>
-            <div className="story-copy">
-              <small>ЭТАП 02 / АККОРДЫ</small>
-              <h2>Первые аккорды<br/>и переходы</h2>
-              <p>Разбираем аппликатуры Em, Am, C и D. Затем учимся менять их вовремя, не теряя ритм.</p>
-              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Посмотреть уроки и упражнения <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-chords"><ChordTrainer /></div>
-          </div>
-
-          <div className={"story-scene " + (storyScene === 2 ? "active" : "")} aria-hidden={storyScene !== 2}>
-            <div className="story-copy">
-              <small>ЭТАП 03 / РИТМ</small>
-              <h2>Ритм, бой<br/>и координация</h2>
-              <p>Работаем с метрономом, осваиваем бой с глушением, затем соединяем движение правой руки со сменой аккордов.</p>
-              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Посмотреть программу курса <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-rhythm"><MetronomeDemo /></div>
-          </div>
-
-          <div className={"story-scene " + (storyScene === 3 ? "active" : "")} aria-hidden={storyScene !== 3}>
-            <div className="story-copy">
-              <small>ЭТАП 04 / РЕПЕРТУАР</small>
-              <h2>Собираем<br/>песню целиком</h2>
-              <p>На примере учебной версии «Пачки сигарет» соединяем аккорды, бой и текст. Дальше можно переходить к другим песням и играть их целиком.</p>
-              <button className="story-link" onClick={() => document.getElementById("program")?.scrollIntoView({ behavior: "smooth" })}>Вся программа курса <Icon name="arrow" /></button>
-            </div>
-            <div className="story-art story-art-finish">
-              <img className="story-sheet" src="./material-song.webp" alt="Учебные материалы с аккордами и текстом песни" loading="lazy" />
-              <div className="story-sheet-caption"><span>УЧЕБНЫЕ МАТЕРИАЛЫ</span><b>Аккорды · ритм · текст песни</b></div>
-              <span className="story-sheet-index">04 / 07</span>
-            </div>
-          </div>
-
-          <div className="story-stage-bottom"><span>ПРОГРАММА КУРСА</span><i>↓</i><div className="story-progress-track"><span /></div><span>ПРОКРУТИТЕ</span></div>
-        </div>
-      </section>
-
-            <section className="section program" id="program">
-        <div className="program-aside">
-          <span className="eyebrow">ПОШАГОВОЕ ОБУЧЕНИЕ</span>
-          <h2>Программа <em>курса</em></h2>
-          <p>Семь последовательных уроков: от знакомства с гитарой до исполнения первой песни целиком.</p>
-        </div>
-        <div className="curriculum">
-          <div className="curriculum-intro">
-            <p>Каждый урок даёт конкретный навык, который сразу применяем на практике.</p>
-          </div>
-          <div className="curriculum-grid" aria-label="Семь уроков курса по гитаре">
-            {activeProgram.modules.map((module, index) => (
-              <article className={"curriculum-card " + (expandedModule === module.no ? "expanded" : "")} key={module.no}>
-                <div className="curriculum-card-top">
-                  <div className="curriculum-card-head"><span>УРОК {module.no}</span><i>{String(index + 1).padStart(2, "0")} / 07</i></div>
-                  <h3>{module.title}</h3>
-                </div>
-                <div className="curriculum-card-body">
-                  <p className="program-card-desc">{module.desc}</p>
-                  <button className="curriculum-expand" type="button" aria-expanded={expandedModule === module.no} onClick={() => setExpandedModule(expandedModule === module.no ? "" : module.no)}>
-                    {expandedModule === module.no ? "Скрыть подробности" : "Что будет на уроке"}<span>{expandedModule === module.no ? "−" : "+"}</span>
-                  </button>
-                  {expandedModule === module.no && <div className="curriculum-expanded">
-                    {module.no === "01" && <div className="lesson-image-grid">
-                      <figure><img src="./hero-guitar.webp" alt="Акустическая гитара" loading="lazy" /><figcaption>Знакомство с инструментом</figcaption></figure>
-                      <figure><img src="./material-rhythm.webp" alt="Учебный материал по ритму" loading="lazy" /><figcaption>Ритм и упражнения</figcaption></figure>
-                      <figure><img src="./lesson-planning.webp" alt="Материалы к занятиям по гитаре" loading="lazy" /><figcaption>План занятий</figcaption></figure>
-                    </div>}
-                    {module.result && <div className="curriculum-result"><span>РЕЗУЛЬТАТ УРОКА</span><p>{module.result}</p></div>}
-                    {programDetails[module.no]?.materials && <div className="curriculum-songs"><span>МАТЕРИАЛЫ</span><p>{programDetails[module.no].materials}</p></div>}
-                    {programDetails[module.no]?.check && <div className="curriculum-result"><span>ЧТО ДОЛЖНО ПОЛУЧИТЬСЯ</span><p>{programDetails[module.no].check}</p></div>}
-                  </div>}
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section formats" id="formats">
-        <div className="section-head centered">
-          <span className="eyebrow">форматы и стоимость</span>
-          <h2>Как будем <em>заниматься</em></h2>
-          <p>Выберите подходящий формат. Если сомневаетесь, поможем определиться на первом разговоре.</p>
-        </div>
-        <div className="format-grid">
-          {formats.map((f) => <article key={f.title} className={"format-card " + f.accent + " " + (f.featured ? "featured" : "")}>
-            {f.featured && <span className="popular">ПОПУЛЯРНО</span>}
-            <span className="card-tag">{f.tag}</span>
-            <h3>{f.title}</h3><p>{f.text}</p>
-            <ul>{f.points.map(x => <li key={x}><Icon name="check" />{x}</li>)}</ul>
-            <div className="card-bottom"><strong>{f.price}</strong><button aria-label={"Выбрать " + f.title} onClick={() => setQuiz(true)}><Icon name="arrow" /></button></div>
-          </article>)}
-        </div>
-      </section>
-
-      <section className="section free" id="free">
-        <div className="section-head centered">
-          <span className="eyebrow">бесплатно</span>
-          <h2>Первый урок <em>по гитаре</em></h2>
-          <p>Посмотрите, как устроен урок, и попробуйте первые шаги перед началом обучения.</p>
-        </div>
-        <div className="lesson-feature">
-          <div className="lesson-video">
-            <img className="lesson-preview-image" src="./material-rhythm.webp" alt="Фрагмент бесплатного видеоурока по гитаре" loading="lazy" />
-            <a className="big-play" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer" aria-label="Смотреть бесплатный урок"><Icon name="play" /></a>
-          </div>
-          <div className="lesson-info">
-            <span className="card-tag">БЕСПЛАТНЫЙ ВИДЕОУРОК</span>
-            <h3>Знакомство с гитарой</h3>
-            <p>Основы посадки, инструмента и первых движений.</p>
-            <a className="btn btn-primary" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer">Смотреть урок <Icon name="arrow" /></a>
-          </div>
-        </div>
-      </section>
-
-      <section className="section about" id="about">
-        <div className="about-visual">
-          <img className="about-portrait" src="./nikita-about.webp" alt="Никита Осадчук с гитарой" loading="lazy" />
-          <div className="experience-badge"><b>500+</b><span>учеников</span></div>
-        </div>
-        <div className="about-copy">
-          <span className="eyebrow">преподаватель</span><h2>Никита Осадчук</h2>
-          <p className="about-lead">Преподаватель гитары и аранжировщик. Руководитель отделения «Музыка» в детском центре «Зебра» в Санкт-Петербурге.</p>
-          <div className="about-points">
-            <div><b>С 2019 года</b><span>преподаю детям и взрослым</span></div>
-            <div><b>500+ учеников</b><span>от новичков до продолжающих</span></div>
-            <div><b>Два направления</b><span>акустическая и электрогитара</span></div>
-          </div>
-          <button className="btn btn-primary" onClick={() => setQuiz(true)}>Записаться на занятие <Icon name="arrow" /></button>
-        </div>
-      </section>
-
-      <section className="section reviews" id="reviews">
-        <div className="section-head centered">
-          <span className="eyebrow">отзывы и результаты</span>
-          <h2>Ученики и их <em>результаты</em></h2>
-          <p>Посмотрите отзывы или запросите примеры игры учеников у преподавателя.</p>
-        </div>
-        <div className="proof-panel">
-          <div><span className="stars">★★★★★</span><h3>Отзывы учеников</h3><p>Реальные оценки и отзывы в профиле на Profi.ru.</p><a className="btn btn-ghost" href="https://profi.ru/profile/OsadchukNA2" target="_blank" rel="noreferrer">Читать отзывы <Icon name="arrow" /></a></div>
-          <div><span className="eyebrow">видео учеников</span><h3>Результаты обучения</h3><p>Попросите примеры игры учеников и подберите свой формат занятий.</p><a className="btn btn-ghost" href={tg + "?text=" + encodeURIComponent("Здравствуйте! Хочу посмотреть видео с результатами учеников и узнать об обучении гитаре.")} target="_blank" rel="noreferrer">Посмотреть результаты <Icon name="arrow" /></a></div>
-        </div>
-      </section>
-
-      <section className="section faq" id="faq">
-        <div className="faq-head"><span className="eyebrow">вопросы и ответы</span><h2>Коротко о главном</h2><p>Не нашли ответ? Напишите напрямую.</p><a className="btn btn-ghost" href={tg} target="_blank" rel="noreferrer"><Icon name="message"/> Написать в Telegram</a></div>
-        <div className="accordion">{faq.slice(0,4).map(([q,a], i) => <article key={q} className={openFaq === i ? "open" : ""}><button onClick={() => setOpenFaq(openFaq === i ? -1 : i)}><span>{q}</span><i>{openFaq === i ? "−" : "+"}</i></button><div className="answer"><p>{a}</p></div></article>)}</div>
-      </section>
-
-      <footer>
-        <div className="footer-top"><a href="#top" className="brand"><span className="brand-mark"><span/><span/><span/><span/></span><span><b>СТРУНЫ</b><small>БУДУЩЕГО</small></span></a><p>Онлайн-обучение гитаре с Никитой Осадчуком.<br/>Акустическая и электрогитара.</p><div className="socials"><a href="https://t.me/nikguita" target="_blank" rel="noreferrer">TG</a><a href="https://vk.com/strunib?from=groups" target="_blank" rel="noreferrer">VK</a><a href="https://www.instagram.com/osadchukguitar" target="_blank" rel="noreferrer">IG</a></div></div>
-        <div className="footer-bottom"><span>© 2026 «Струны будущего»</span><div><a href="#formats">Форматы</a><a href="#about">О преподавателе</a><a href={tg}>Контакты</a></div></div>
-      </footer>
-
-      <div className="mobile-sticky-cta">
-        <button type="button" onClick={() => setQuiz(true)} aria-label="Подобрать формат обучения">
-          <span><b>Подобрать обучение</b><small>3 вопроса · бесплатно</small></span>
-          <Icon name="arrow" />
-        </button>
+        <button className="header-action" onClick={openChat}>Начать обучение <MiniArrow/></button>
+        <button className={"menu-toggle"+(menuOpen?" active":"")} type="button" onClick={()=>setMenuOpen(v=>!v)} aria-expanded={menuOpen} aria-label={menuOpen?"Закрыть меню":"Открыть меню"}><span/><span/></button>
       </div>
-      {quiz && <Quiz onClose={() => setQuiz(false)} />}
+    </header>
+
+    <main>
+      <section className="hero" id="top">
+        <div className="hero-haze" aria-hidden="true"/>
+        <div className="wrap hero-grid">
+          <div className="hero-content appear">
+            <div className="eyebrow hero-eyebrow"><span className="status-dot"/> Авторская онлайн-школа гитары</div>
+            <h1>Научитесь играть<br/><span>на гитаре.</span></h1>
+            <p className="hero-intro">С нуля или с опытом. Понятная последовательность, ваши любимые песни и занятия с живой обратной связью.</p>
+            <div className="hero-buttons">
+              <button className="button button-primary" onClick={openChat}>Подобрать обучение <MiniArrow/></button>
+              <a className="button button-secondary" href="#program">Посмотреть программу</a>
+            </div>
+            <div className="hero-facts"><span>С 2019 года</span><i/><span>Онлайн, из любой точки</span><i/><span>Акустика и электрогитара</span></div>
+          </div>
+          <div className="hero-visual appear">
+            <div className="hero-image-frame">
+              <img src="./nikita-hero.webp" alt="Преподаватель Никита Осадчук с гитарой" fetchPriority="high"/>
+              <div className="hero-photo-wash"/>
+              <div className="photo-name"><span className="mini-wave" aria-hidden="true"><i/><i/><i/><i/><i/></span><div><strong>Никита Осадчук</strong><small>преподаватель гитары</small></div></div>
+            </div>
+            <button className="hero-chat-peek" onClick={openChat} aria-label="Открыть чат подбора занятий">
+              <span className="chat-peek-icon">♪</span>
+              <span><strong>Не знаете, с чего начать?</strong><small>Подберём формат за 3 вопроса</small></span>
+              <MiniArrow/>
+            </button>
+            <span className="hero-side-label">ГИТАРА / ОБУЧЕНИЕ / ПРАКТИКА</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="method" className="method-strip">
+        <div className="wrap method-row">
+          <div className="method-intro"><span className="eyebrow">как проходит обучение</span><h2>От первого звука<br/>до любимых песен</h2></div>
+          <div className="method-step"><span>01</span><strong>Разбираем</strong><p>Показываю движения и объясняю без лишней теории.</p></div>
+          <div className="method-step"><span>02</span><strong>Играете</strong><p>Закрепляете навык в упражнении или песне.</p></div>
+          <div className="method-step"><span>03</span><strong>Исправляем</strong><p>Получаете обратную связь и понятный следующий шаг.</p></div>
+        </div>
+      </section>
+
+      <section className="section program-section" id="program">
+        <div className="wrap">
+          <div className="section-heading appear">
+            <div><span className="eyebrow">ПОШАГОВАЯ ПРОГРАММА</span><h2>Учимся играть.<br/><em>А не заучивать теорию.</em></h2></div>
+            <p>Сначала базовые навыки и одна песня целиком. Затем новые бои, переборы и свой репертуар.</p>
+          </div>
+          <div className="course-shell appear">
+            <div className="course-header">
+              <div className="course-tabs" role="tablist" aria-label="Раздел программы">
+                <button type="button" role="tab" aria-selected={programMode==="base"} className={programMode==="base"?"chosen":""} onClick={()=>setProgramMode("base")}>Базовый минимум</button>
+                <button type="button" role="tab" aria-selected={programMode==="more"} className={programMode==="more"?"chosen":""} onClick={()=>setProgramMode("more")}>Что дальше</button>
+              </div>
+              <span className="course-subtitle">{programMode==="base"?"7 последовательных этапов":"Бои · переборы · разборы"}</span>
+            </div>
+            {programMode==="base"?<div className="course-layout">
+              <div className="lesson-list" aria-label="Этапы базовой программы">
+                {base.map((item,index)=><button key={item.no} className={"lesson-item"+(lessonIndex===index?" chosen":"")} type="button" onClick={()=>setLessonIndex(index)} aria-current={lessonIndex===index?"step":undefined}>
+                  <span className="lesson-number">{String(index+1).padStart(2,"0")}</span>
+                  <span className="lesson-list-title">{item.title}</span>
+                  <span className="lesson-indicator"><MiniArrow/></span>
+                </button>)}
+              </div>
+              <div className="lesson-display" key={module.no}>
+                <div className="lesson-photo">
+                  <img src={currentImage} alt={module.title} loading="lazy"/>
+                  <span className="photo-caption">{lessonIndex===0?"Устройство гитары":lessonIndex===1?"Практика под метроном":lessonIndex===2?"Первые аккорды":lessonIndex===6?"Играем песню целиком":"Программа на практике"}</span>
+                </div>
+                <div className="lesson-info">
+                  <span className="lesson-kicker">ЭТАП {String(lessonIndex+1).padStart(2,"0")} / 07</span>
+                  <h3>{module.title}</h3>
+                  <p>{module.desc}</p>
+                  <div className="lesson-outcome"><span><Icon name="check"/></span><div><small>ЧТО В ИТОГЕ</small><p>{module.result}</p></div></div>
+                  <div className="lesson-nav">
+                    <button type="button" onClick={()=>setLessonIndex(i=>(i+6)%7)} aria-label="Предыдущий этап">←</button>
+                    <span>{String(lessonIndex+1).padStart(2,"0")} / 07</span>
+                    <button type="button" onClick={()=>setLessonIndex(i=>(i+1)%7)} aria-label="Следующий этап">→</button>
+                  </div>
+                </div>
+              </div>
+            </div>:<div className="course-layout">
+              <div className="lesson-list" aria-label="Дополнительные темы">
+                {extra.map((item,index)=><button key={item.id} className={"lesson-item"+(advancedIndex===index?" chosen":"")} type="button" onClick={()=>{setAdvancedIndex(index);setAdvancedOpen(null)}}>
+                  <span className="lesson-number">{String(index+1).padStart(2,"0")}</span>
+                  <span className="lesson-list-title">{item.label==="Бои и песни"?"Бои и песни":item.label==="Техники"?"Другие приёмы":"Материалы"}</span>
+                  <span className="lesson-indicator"><MiniArrow/></span>
+                </button>)}
+              </div>
+              <div className="advanced-panel" key={advanced.id}>
+                <span className="lesson-kicker">ПОСЛЕ БАЗОВОГО СТАРТА</span>
+                <h3>{advanced.label}</h3>
+                <p>{advanced.intro}</p>
+                <div className="advanced-list">
+                  {advanced.modules.map(item=><div key={item.no} className={"advanced-entry"+(advancedOpen===item.no?" is-open":"")}>
+                    <button type="button" onClick={()=>setAdvancedOpen(v=>v===item.no?null:item.no)} aria-expanded={advancedOpen===item.no}><span>{item.title}</span><b>{advancedOpen===item.no?"−":"+"}</b></button>
+                    {advancedOpen===item.no&&<div className="advanced-details"><p>{item.desc}</p>{item.songs&&<p>{item.songs}</p>}{item.result&&<p>{item.result}</p>}</div>}
+                  </div>)}
+                </div>
+              </div>
+            </div>}
+          </div>
+        </div>
+      </section>
+
+      <section className="section formats-section" id="prices">
+        <div className="wrap">
+          <div className="section-heading appear"><div><span className="eyebrow">ЗАНЯТИЯ И ФОРМАТЫ</span><h2>Выбирайте<br/><em>свой формат</em></h2></div><p>Индивидуальные уроки, наставничество или разбор конкретной песни. Только то, что пригодится именно вам.</p></div>
+          <div className="format-grid">
+            {formats.map((item,index)=><article key={item.title} className={"price-card appear price-"+index}>
+              <div className="price-top"><span className="price-index">0{index+1} / 03</span><span className="price-ornament" aria-hidden="true">{index===0?"◉":index===1?"♫":"↗"}</span></div>
+              <span className="price-category">{item.tag}</span><h3>{item.title}</h3><p>{item.text}</p>
+              <div className="price-bottom"><strong>{item.price}</strong><span>{item.points[0]}</span><button onClick={openChat} className="price-cta" type="button">Подобрать <MiniArrow/></button></div>
+            </article>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="section proof-section" id="students">
+        <div className="wrap proof-grid">
+          <div className="proof-heading appear"><span className="eyebrow">ОТЗЫВЫ И РЕЗУЛЬТАТЫ</span><h2>Важнее обещаний<br/><em>то, что получается.</em></h2><p>Можно посмотреть отзывы на независимой площадке и запросить видео с игрой учеников.</p></div>
+          <div className="proof-cards">
+            <a className="proof-card proof-review appear" href="https://profi.ru/profile/OsadchukNA2/" target="_blank" rel="noreferrer">
+              <div className="proof-card-top"><span>01 / ОТЗЫВЫ</span><ExternalArrow/></div>
+              <div className="review-stars" aria-label="Отзывы на Профи.ру">★★★★★</div>
+              <h3>Отзывы<br/>на Профи.ру</h3><p>Реальные оценки и впечатления учеников.</p>
+              <span className="proof-link">Читать отзывы <MiniArrow/></span>
+            </a>
+            <button type="button" className="proof-card proof-results appear" onClick={()=>{openChat()}}>
+              <div className="proof-card-top"><span>02 / РЕЗУЛЬТАТЫ</span><MiniArrow/></div>
+              <div className="proof-mini-photo"><img src="./students-group.webp" alt="Преподаватель с группой учеников" loading="lazy"/></div>
+              <h3>Как играют<br/>ученики</h3><p>Примеры выступлений и домашних записей можно запросить лично.</p>
+              <span className="proof-link">Запросить примеры <MiniArrow/></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="section teacher-section" id="teacher">
+        <div className="wrap teacher-layout">
+          <div className="teacher-photo appear"><img src="./nikita-about.webp" alt="Никита Осадчук, преподаватель гитары" loading="lazy"/><div className="teacher-photo-label"><span>НИКИТА ОСАДЧУК</span><span>С 2019 ГОДА</span></div></div>
+          <div className="teacher-content appear">
+            <span className="eyebrow">КТО ПРЕПОДАЁТ</span>
+            <h2>Привет,<br/>я <em>Никита.</em></h2>
+            <p>Преподаю гитару с 2019 года. Раньше руководил музыкальным направлением детского центра «Зебра» в Санкт-Петербурге.</p>
+            <p>На занятиях соединяем технику с музыкой, которую вам действительно хочется играть.</p>
+            <div className="teacher-tags"><span>Акустическая гитара</span><span>Электрогитара</span><span>Онлайн</span></div>
+            <button className="text-link" onClick={openChat}>Обсудить занятия <MiniArrow/></button>
+          </div>
+        </div>
+      </section>
+
+      <section className="section sample-section" id="free">
+        <div className="wrap sample-layout">
+          <div className="sample-copy appear">
+            <span className="eyebrow">ПОПРОБУЙТЕ БЕСПЛАТНО</span>
+            <h2>Начните<br/><em>с первого урока</em></h2>
+            <p>Посмотрите знакомство с гитарой и оцените подачу материала до записи.</p>
+            <a className="button button-primary" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer">Смотреть урок <ExternalArrow/></a>
+          </div>
+          <a className="sample-preview appear" href="https://vkvideo.ru/video_ext.php?oid=-215347372&id=456239048&hd=4" target="_blank" rel="noreferrer" aria-label="Открыть бесплатный видеоурок">
+            <img src="./personal-lesson.webp" alt="Видеоурок по гитаре" loading="lazy"/>
+            <span className="video-play"><Icon name="play"/></span>
+            <span className="sample-video-caption">БЕСПЛАТНЫЙ ВИДЕОУРОК / ГИТАРА</span>
+          </a>
+        </div>
+      </section>
+
+      <section className="closing-section">
+        <div className="wrap closing-layout">
+          <div><span className="eyebrow">ЕСТЬ ВОПРОСЫ?</span><h2>С чего начать?<br/><em>Давайте разберёмся.</em></h2></div>
+          <div className="closing-action"><p>Ответьте на три вопроса в чате. Покажем подходящий формат занятий и сможете написать преподавателю напрямую.</p><button className="button button-primary" onClick={openChat}>Подобрать обучение <MiniArrow/></button><a className="closing-direct" href="https://n1313298.yclients.ru" target="_blank" rel="noreferrer">Или записаться сразу <ExternalArrow/></a></div>
+        </div>
+      </section>
     </main>
-  );
+
+    <footer className="footer"><div className="wrap footer-layout">
+      <a href="#top" className="site-logo" aria-label="Вернуться к началу"><Logo/></a>
+      <p>Онлайн-уроки игры на гитаре<br/>© 2026 «Струны будущего»</p>
+      <div className="footer-links"><a href="https://t.me/nikguita" target="_blank" rel="noreferrer">Telegram</a><a href="https://vk.com/strunib" target="_blank" rel="noreferrer">ВКонтакте</a><a href="https://profi.ru/profile/OsadchukNA2/" target="_blank" rel="noreferrer">Отзывы</a></div>
+    </div></footer>
+    <button className="sticky-mobile-button" onClick={openChat}>Подобрать обучение <MiniArrow/></button>
+    {chatOpen&&<Quiz onClose={()=>setChatOpen(false)}/>}
+  </div>
 }
