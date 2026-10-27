@@ -100,6 +100,22 @@ const programDetails = {
 };
 
 
+const extendedTracks = [
+  { id: "rhythm", label: "Бои и песни", intro: "Новые рисунки боя и песни для закрепления.", keys: ["B1","B2","B3","B4","B5","B6","B7","B8","B9"] },
+  { id: "technique", label: "Техники", intro: "Деление боёв, дворовый бой и переборы.", keys: ["T1","T2","T3"] },
+  { id: "materials", label: "Материалы", intro: "Видеоуроки, схемы, табулатуры и тренажёры.", keys: ["M1","M2","M3","M4"] }
+].map(({ keys, ...track }) => ({
+  ...track,
+  modules: keys.map(no => ({
+    no,
+    title: programDetails[no].label,
+    desc: programDetails[no].content,
+    songs: programDetails[no].materials,
+    result: programDetails[no].check
+  }))
+}));
+
+
 function Quiz({ onClose }) {
   const questions = [
     { key: "experience", title: "Какой у тебя сейчас опыт?", options: ["Начинаю с нуля", "Знаю несколько аккордов", "Уже играю, но упёрся(лась) в потолок"] },
@@ -242,7 +258,7 @@ export default function Home(){
   const [openFaq,setOpenFaq]=useState(-1);
   const [headerScrolled,setHeaderScrolled]=useState(false);
   const base=programTracks[0].modules;
-  const extra=programTracks.slice(1);
+  const extra=extendedTracks;
   const module=base[lessonIndex];
   const advanced=extra[advancedIndex];
   const currentImage=programImages[lessonIndex];
