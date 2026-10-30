@@ -4,13 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vinext dev",
-    "build": "vinext build",
+    "dev": "next dev",
+    "build": "next build",
     "build:pages": "GITHUB_PAGES=true next build",
-    "build:sites": "node scripts/build-sites-worker.mjs",
-    "postbuild": "node scripts/copy-hosting.mjs",
-    "start": "vinext start",
-    "start:worker": "wrangler dev --config dist/server/wrangler.json"
+    "start": "next start"
   },
   "dependencies": {
     "@vinext/cloudflare": "1.0.0-beta.1",
