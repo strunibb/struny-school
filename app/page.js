@@ -1,6 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  Motion,
+  SwitchCTA,
+  InstrumentArt,
+  DirectionCard,
+  Techniques,
+} from "./interactive";
 import { programTracks, extendedTracks } from "./program-data";
 
 const telegram = "https://t.me/nikguita";
@@ -14,7 +21,7 @@ const lessonRequest =
   );
 const nav = [
   ["about", "О школе"],
-  ["program", "Программа"],
+  ["outcomes", "Чему научитесь"],
   ["teacher", "Преподаватель"],
   ["prices", "Стоимость"],
   ["students", "Ученики"],
@@ -302,11 +309,11 @@ function Dialog({ title, onClose, children, wide = false }) {
     </dialog>
   );
 }
-function BookingDialog({ selection, instrument, onClose }) {
+function BookingDialog({ selection, instrument, initialLevel, onClose }) {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [choice, setChoice] = useState(instrument || "Гитара");
-  const [level, setLevel] = useState("С нуля");
+  const [level, setLevel] = useState(initialLevel || "С нуля");
   const message = [
     "Здравствуйте, Никита! Хочу заниматься в школе «Струны будущего».",
     name.trim() ? "Меня зовут " + name.trim() + "." : null,
@@ -408,6 +415,7 @@ function BookingDialog({ selection, instrument, onClose }) {
 }
 export default function Home() {
   const [menu, setMenu] = useState(false),
+    [selectedLevel, setSelectedLevel] = useState("С нуля"),
     [instrument, setInstrument] = useState(0),
     [track, setTrack] = useState("base"),
     [prices, setPrices] = useState("lessons"),
@@ -424,7 +432,12 @@ export default function Home() {
     chosen = instruments[instrument].name,
   ) => {
     setMenu(false);
-    setModal({ type: "booking", selection, instrument: chosen });
+    setModal({
+      type: "booking",
+      selection,
+      instrument: chosen,
+      level: selectedLevel,
+    });
   };
   useEffect(() => {
     if (menu) menuRef.current?.querySelector("a")?.focus();
@@ -439,6 +452,7 @@ export default function Home() {
   }, [menu]);
   return (
     <>
+      <Motion />
       <a className="skip-link" href="#main">
         К содержимому
       </a>
@@ -497,61 +511,74 @@ export default function Home() {
         </div>
       </header>
       <main id="main">
-        <section className="hero outer" id="top">
+        <section className="hero outer reference-hero" id="top">
           <div className="hero-copy">
-            <p className="eyebrow">Онлайн-школа Никиты Осадчука</p>
+            <p className="eyebrow">Струны будущего · школа Никиты Осадчука</p>
             <h1>
-              УЧИТЕСЬ
+              ОНЛАЙН-ШКОЛА
               <br />
-              ИГРАТЬ <span>НА ГИТАРЕ</span>
+              <span>ИГРЫ НА ГИТАРЕ</span>
             </h1>
             <p className="hero-audience">ДЛЯ ДЕТЕЙ И ВЗРОСЛЫХ</p>
             <p className="hero-description">
-              Индивидуальные уроки по видеосвязи.
-              <br />С нуля и с любого уровня.
+              Индивидуальные уроки с Никитой Осадчуком
+              <br />
+              по видеосвязи. С нуля и с любого уровня.
             </p>
-            <div className="hero-cta">
-              <button className="button lime" onClick={() => openBooking()}>
-                Хочу на урок <Icon name="arrow" />
-              </button>
-              <span>
-                <strong>Пробный — 650 ₽</strong>
-                <small>При покупке абонемента — бесплатно</small>
-              </span>
-            </div>
-            <a className="hero-program-link" href="#program">
-              Посмотреть программу <span>↓</span>
+            <SwitchCTA onClick={() => openBooking()} />
+            <p className="hero-price-note">
+              Пробный урок — бесплатно при покупке абонемента
+            </p>
+            <a className="hero-program-link" href="#outcomes">
+              Чему вы научитесь <span>↓</span>
             </a>
           </div>
-          <div className="hero-visual">
-            <span className="decor-note note-one" aria-hidden="true">
-              ♪
-            </span>
-            <div className="portrait-frame">
-              <img
-                src="./nikita-hero.webp"
-                alt="Никита Осадчук с акустической гитарой"
-                fetchPriority="high"
-                width="1100"
-                height="1366"
-              />
-            </div>
-            <span className="name-sticker">
-              Никита Осадчук <span>ваш преподаватель</span>
-            </span>
-            <span className="decor-note note-two" aria-hidden="true">
-              ✳
-            </span>
-            <div className="instrument-stickers">
-              {instruments.map((item, i) => (
-                <a
-                  key={item.name}
-                  href="#directions"
-                  onClick={() => setInstrument(i)}
-                >
-                  {item.name}
-                </a>
-              ))}
+          <div className="hero-instrument" aria-hidden="true">
+            <InstrumentArt kind={0} />
+          </div>
+          <span className="hero-music music-a" aria-hidden="true">
+            ♫
+          </span>
+          <span className="hero-music music-b" aria-hidden="true">
+            ♪
+          </span>
+          <span className="hero-music music-c" aria-hidden="true">
+            ♪
+          </span>
+          <div className="hero-tags">
+            {instruments.map((item, i) => (
+              <a
+                key={item.name}
+                href="#directions"
+                onClick={() => setInstrument(i)}
+              >
+                {item.name}
+              </a>
+            ))}
+          </div>
+        </section>
+        <section className="first-lesson section pale">
+          <div className="wrap">
+            <h2>
+              ЗАПИШИТЕСЬ <span>НА ПЕРВЫЙ УРОК</span>
+            </h2>
+            <div className="first-lesson-layout">
+              <div className="first-lesson-points">
+                <p>✦ Познакомимся лично</p>
+                <p>✦ Попробуем первые упражнения</p>
+                <p>✦ Определим ваши цели</p>
+                <p>✦ Составим план обучения</p>
+              </div>
+              <div>
+                <SwitchCTA
+                  onClick={() => openBooking()}
+                  label="Записаться"
+                  note="20–25 минут"
+                />
+                <p className="first-lesson-note">
+                  650 ₽ · бесплатно при покупке абонемента
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -662,104 +689,156 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section directions" id="directions">
+        <section className="section outcomes" id="outcomes">
           <div className="wrap">
-            <div className="section-title">
-              <h2>
-                ВЫБЕРИТЕ
-                <br />
-                <span>СВОЙ ИНСТРУМЕНТ</span>
-              </h2>
-              <p>
-                Индивидуальная программа
-                <br />
-                для вашего уровня.
-              </p>
-            </div>
-            <div
-              className="instrument-tabs"
-              role="group"
-              aria-label="Инструмент"
-            >
-              {instruments.map((item, i) => (
-                <button
-                  key={item.name}
-                  onClick={() => setInstrument(i)}
-                  aria-pressed={instrument === i}
-                  aria-controls="instrument-panel"
-                  className={instrument === i ? "active" : ""}
-                >
-                  <span>0{i + 1}</span>
-                  {item.name}
-                  <Icon name="external" />
-                </button>
-              ))}
-            </div>
-            <div className="instrument-panel" id="instrument-panel">
-              <div className={"instrument-picture instrument-" + instrument}>
-                {instruments[instrument].image ? (
-                  <img
-                    src={"./" + instruments[instrument].image}
-                    alt={
-                      instrument === 0
-                        ? "Акустическая гитара"
-                        : "Никита Осадчук"
-                    }
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="instrument-art" aria-hidden="true">
-                    {instrument === 2 ? (
-                      <>
-                        <div className="uke-neck" />
-                        <div className="uke-body">
-                          <i />
-                        </div>
-                      </>
-                    ) : (
-                      <div className="piano-keys">
-                        {Array.from({ length: 8 }, (_, i) => (
-                          <i key={i} />
-                        ))}
-                      </div>
-                    )}
+            <h2>
+              ВЫ <span>НАУЧИТЕСЬ</span>
+            </h2>
+            <div className="outcomes-grid">
+              {[
+                [
+                  "Играть любимую музыку",
+                  "Соединять аккорды и ритм в целую песню — без остановок на каждом переходе.",
+                  "♫",
+                ],
+                [
+                  "Читать ноты и табулатуры",
+                  "Разбираться в записи музыки и пользоваться материалами для самостоятельной практики.",
+                  "♬",
+                ],
+                [
+                  "Играть и петь одновременно",
+                  "Удерживать ритм, пока поёте, и подбирать удобный аккомпанемент.",
+                  "♪",
+                ],
+                [
+                  "Владеть инструментом",
+                  "Ставить руки, извлекать чистый звук и постепенно добавлять новые приёмы.",
+                  "✳",
+                ],
+                [
+                  "Слышать и понимать музыку",
+                  "Замечать ритмические рисунки, разбираться в аккордах и устройстве песни.",
+                  "◎",
+                ],
+                [
+                  "Готовиться к выступлениям",
+                  "Доводить произведение до целого исполнения и чувствовать себя увереннее перед слушателями.",
+                  "✦",
+                ],
+              ].map(([title, text, icon]) => (
+                <article className="outcome" key={title}>
+                  <span aria-hidden="true">{icon}</span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
                   </div>
-                )}
-                <span className="picture-label">
-                  {instruments[instrument].name}
-                </span>
-              </div>
-              <div className="instrument-copy" key={instrument}>
-                <span className="label">Направление обучения</span>
-                <h3>{instruments[instrument].note}</h3>
-                <p>{instruments[instrument].text}</p>
-                <ul className="check-list">
-                  {instruments[instrument].topics.map((item) => (
-                    <li key={item}>
-                      <Icon name="check" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <button className="button lime" onClick={() => openBooking()}>
-                  Выбрать направление <Icon name="arrow" />
-                </button>
-              </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
-
-        <div className="technique-ribbon" aria-label="Навыки на занятиях">
-          <span>АККОРДЫ</span>
-          <i>✳</i>
-          <span>ПЕРЕБОРЫ</span>
-          <i>✳</i>
-          <span>РИТМ</span>
-          <i>✳</i>
-          <span>ФИНГЕРСТАЙЛ</span>
-          <i>✳</i>
-          <span>ЛЮБИМЫЕ ПЕСНИ</span>
-        </div>
+        <Techniques />
+        <section className="start-level section outer" id="levels">
+          <div className="wrap">
+            <h2>
+              НАЧНИТЕ ОБУЧЕНИЕ
+              <br />С ЛЮБОГО УРОВНЯ ИГРЫ
+            </h2>
+            <div
+              className="level-cards"
+              role="group"
+              aria-label="Ваш начальный уровень"
+            >
+              {[
+                [
+                  "С нуля",
+                  "Начинающие",
+                  "Знакомимся с инструментом, ставим руки и осваиваем первые аккорды и мелодии.",
+                ],
+                [
+                  "Знаю основы",
+                  "Любители",
+                  "Разбираем то, что пока не получается: ритм, переходы, чистоту звука и сложные места.",
+                ],
+                [
+                  "Уже играю",
+                  "Продолжающие",
+                  "Работаем над деталями исполнения, новыми приёмами и более сложными композициями.",
+                ],
+              ].map(([value, title, text], i) => (
+                <button
+                  key={value}
+                  className={
+                    "level-card" + (selectedLevel === value ? " active" : "")
+                  }
+                  aria-pressed={selectedLevel === value}
+                  onClick={() => setSelectedLevel(value)}
+                >
+                  <span className="level-top">
+                    <span>0{i + 1}</span>
+                    <span className="level-bars" aria-hidden="true">
+                      {[0, 1, 2].map((j) => (
+                        <i key={j} className={j <= i ? "filled" : ""} />
+                      ))}
+                    </span>
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <span className="level-choice">
+                    {selectedLevel === value
+                      ? "Ваш уровень ✓"
+                      : "Это про меня ↗"}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="level-help">
+              Выберите свой уровень — учтём его при записи.
+            </p>
+          </div>
+        </section>
+        <section className="section directions" id="directions">
+          <div className="wrap">
+            <h2>
+              НАПРАВЛЕНИЯ <span>ОБУЧЕНИЯ</span>
+            </h2>
+            <div
+              className="direction-cards"
+              role="group"
+              aria-label="Выберите инструмент"
+            >
+              {instruments.map((item, i) => (
+                <DirectionCard
+                  key={item.name}
+                  item={item}
+                  index={i}
+                  selected={instrument === i}
+                  onSelect={() => setInstrument(i)}
+                />
+              ))}
+            </div>
+            <div
+              className="direction-detail"
+              id="instrument-panel"
+              aria-live="polite"
+            >
+              <div className="direction-detail-copy" key={instrument}>
+                <span className="label">{instruments[instrument].name}</span>
+                <h3>{instruments[instrument].note}</h3>
+                <p>{instruments[instrument].text}</p>
+                <ul className="direction-topics">
+                  {instruments[instrument].topics.map((item) => (
+                    <li key={item}>✓ {item}</li>
+                  ))}
+                </ul>
+              </div>
+              <button className="button lime" onClick={() => openBooking()}>
+                Хочу учиться <Icon name="arrow" />
+              </button>
+            </div>
+          </div>
+        </section>
 
         <section className="section program" id="program">
           <div className="wrap">
@@ -774,20 +853,6 @@ export default function Home() {
                 <br />
                 Темп подбираем индивидуально.
               </p>
-            </div>
-            <div className="levels">
-              <div>
-                <span>С нуля</span>
-                <p>Знакомимся с инструментом и осваиваем первые движения.</p>
-              </div>
-              <div>
-                <span>Знаю основы</span>
-                <p>Убираем паузы, работаем над ритмом и чистотой звука.</p>
-              </div>
-              <div>
-                <span>Уже играю</span>
-                <p>Разбираем новые приёмы и более сложные композиции.</p>
-              </div>
             </div>
             <div className="program-shell">
               <div
@@ -1029,13 +1094,22 @@ export default function Home() {
             </div>
             <div className="student-grid">
               <figure className="student-photo">
-                <img
-                  src="./students-group.webp"
-                  alt="Никита и ученики после выступления"
-                  width="710"
-                  height="532"
-                  loading="lazy"
-                />
+                <button
+                  className="photo-enlarge"
+                  aria-label="Увеличить фото учеников"
+                  onClick={() => setModal({ type: "photo" })}
+                >
+                  <img
+                    src="./students-group.webp"
+                    alt="Никита и ученики после выступления"
+                    width="710"
+                    height="532"
+                    loading="lazy"
+                  />
+                  <span className="photo-zoom" aria-hidden="true">
+                    ↗
+                  </span>
+                </button>
                 <figcaption>Ученики и преподаватель на сцене</figcaption>
               </figure>
               <div className="student-side">
@@ -1281,8 +1355,22 @@ export default function Home() {
         <BookingDialog
           selection={modal.selection}
           instrument={modal.instrument}
+          initialLevel={modal.level}
           onClose={() => setModal(null)}
         />
+      )}
+      {modal?.type === "photo" && (
+        <Dialog
+          title="Ученики и преподаватель на сцене"
+          wide
+          onClose={() => setModal(null)}
+        >
+          <img
+            className="gallery-photo"
+            src="./students-group.webp"
+            alt="Никита с учениками после выступления"
+          />
+        </Dialog>
       )}
       {modal?.type === "video" && (
         <Dialog title="Знакомство с гитарой" onClose={() => setModal(null)}>
