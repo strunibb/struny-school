@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { DirectionCard } from "./interactive";
+import { DirectionCard, Techniques } from "./interactive";
 import { programTracks, extendedTracks } from "./program-data";
 
 const telegram = "https://t.me/nikguitar";
@@ -331,16 +331,12 @@ function BookingDialog({
 export default function Home() {
   const [instrument, setInstrument] = useState(0);
   const [format, setFormat] = useState("course");
-  const [track, setTrack] = useState("base");
+  const [selectedLevel, setSelectedLevel] = useState("С нуля");
   const [modal, setModal] = useState(null);
   const [menu, setMenu] = useState(false);
   const [moreMaterials, setMoreMaterials] = useState(false);
   const menuRef = useRef(null);
   const menuButton = useRef(null);
-  const selectedTrack =
-    track === "base"
-      ? programTracks[0]
-      : extendedTracks.find((item) => item.id === track);
   useEffect(() => {
     const readLocation = () => {
       const params = new URLSearchParams(window.location.search);
@@ -412,6 +408,7 @@ export default function Home() {
       selection,
       instrument: guitarOnly ? "Гитара" : instruments[instrument].name,
       guitarOnly,
+      initialLevel: selectedLevel,
     });
   };
   return (
@@ -762,61 +759,123 @@ export default function Home() {
                 </h2>
                 <p>Сначала база, затем ритм, приёмы и песни для практики.</p>
               </div>
-              <div className="program-shell">
-                <div
-                  className="program-menu"
-                  role="group"
-                  aria-label="Раздел программы"
-                >
-                  {[
-                    ["base", "Первый раздел — база"],
-                    ["rhythm", "Бои и песни"],
-                    ["technique", "Приёмы и переборы"],
-                    ["materials", "Материалы"],
-                  ].map(([id, label]) => (
-                    <button
-                      key={id}
-                      className={track === id ? "active" : ""}
-                      aria-pressed={track === id}
-                      aria-controls="program-lessons"
-                      onClick={() => setTrack(id)}
-                    >
-                      {label}
-                      <Icon name="arrow" />
-                    </button>
-                  ))}
-                </div>
-                <div
-                  className="program-lessons"
-                  id="program-lessons"
-                  key={track}
-                >
-                  <p className="program-intro">{selectedTrack.intro}</p>
-                  {selectedTrack.modules.map((item, i) => (
-                    <details className="lesson" key={item.no} open={i === 0}>
-                      <summary>
-                        <span className="lesson-no">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <h3>{item.title}</h3>
-                        <span className="plus" aria-hidden="true" />
-                      </summary>
-                      <div className="lesson-body">
-                        <p>{item.desc}</p>
-                        {item.result && (
-                          <p className="lesson-result">{item.result}</p>
-                        )}
-                        {item.songs && (
-                          <p className="lesson-songs">{item.songs}</p>
-                        )}
+              <p className="course-included">
+                Все разделы ниже входят в полный курс в обоих тарифах.
+              </p>
+              <div className="course-path">
+                {[
+                  programTracks[0],
+                  ...extendedTracks.filter((item) => item.id !== "materials"),
+                ].map((group, groupIndex) => (
+                  <div className="path-group" key={group.id}>
+                    <div className="path-header">
+                      <span>0{groupIndex + 1}</span>
+                      <div>
+                        <h3>
+                          {
+                            ["Первые шаги", "Бои и песни", "Приёмы и переборы"][
+                              groupIndex
+                            ]
+                          }
+                        </h3>
+                        <p>{group.intro}</p>
                       </div>
-                    </details>
-                  ))}
+                    </div>
+                    <div className="path-lessons">
+                      {group.modules.map((item) => (
+                        <details className="lesson" key={item.no}>
+                          <summary>
+                            <h3>{item.title}</h3>
+                            <span className="plus" aria-hidden="true" />
+                          </summary>
+                          <div className="lesson-body">
+                            <p>{item.desc}</p>
+                            {item.result && (
+                              <p className="lesson-result">{item.result}</p>
+                            )}
+                            {item.songs && (
+                              <p className="lesson-songs">{item.songs}</p>
+                            )}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="course-gift">
+                <span aria-hidden="true">✦</span>
+                <div>
+                  <h3>Подарок к курсу</h3>
+                  <p>Тренажёры и PDF-материалы для практики.</p>
                 </div>
+                <a href="#materials" className="text-button">
+                  Посмотреть тренажёры <Icon name="arrow" />
+                </a>
               </div>
             </div>
           </section>
         )}
+        <Techniques />
+        <section className="section level-explore" id="levels">
+          <div className="wrap">
+            <div className="section-title">
+              <h2>
+                С чего начнём <span>именно вы?</span>
+              </h2>
+              <p>Выберите свой уровень — учтём его при обращении.</p>
+            </div>
+            <div
+              className="level-explore-grid"
+              role="group"
+              aria-label="Ваш уровень игры"
+            >
+              {[
+                [
+                  "С нуля",
+                  "Начинаю с нуля",
+                  "Знакомимся с инструментом и осваиваем первые аккорды.",
+                ],
+                [
+                  "Знаю основы",
+                  "Уже знаю основы",
+                  "Работаем над ритмом, переходами и любимыми песнями.",
+                ],
+                [
+                  "Уже играю",
+                  "Хочу большего",
+                  "Развиваем технику и разбираем сложные композиции.",
+                ],
+              ].map(([value, title, description], i) => (
+                <button
+                  key={value}
+                  className={
+                    "level-explore-card" +
+                    (selectedLevel === value ? " selected" : "")
+                  }
+                  aria-pressed={selectedLevel === value}
+                  onClick={() => setSelectedLevel(value)}
+                >
+                  <span className="level-number">0{i + 1}</span>
+                  <span className="level-art" aria-hidden="true">
+                    {["♪", "♫", "✦"][i]}
+                  </span>
+                  <strong>{title}</strong>
+                  <span>{description}</span>
+                  <em>
+                    {selectedLevel === value ? "Выбрано ✓" : "Это про меня ↗"}
+                  </em>
+                </button>
+              ))}
+            </div>
+            <button
+              className="button primary level-continue"
+              onClick={() => openBooking()}
+            >
+              Обсудить обучение <Icon name="arrow" />
+            </button>
+          </div>
+        </section>
         <section className="section hub-catalog" id="catalog">
           <div className="wrap hub-catalog-inner">
             <img
@@ -1158,6 +1217,7 @@ export default function Home() {
         <BookingDialog
           selection={modal.selection}
           instrument={modal.instrument}
+          initialLevel={modal.initialLevel}
           guitarOnly={modal.guitarOnly}
           onClose={() => setModal(null)}
         />
