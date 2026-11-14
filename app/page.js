@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { DirectionCard, Techniques } from "./interactive";
+import WinterAtmosphere from "./winter";
 import { programTracks, extendedTracks } from "./program-data";
 
 const telegram = "https://t.me/nikguitar";
@@ -413,6 +414,7 @@ export default function Home() {
   };
   return (
     <div className="school-hub">
+      <WinterAtmosphere />
       <a className="skip-link" href="#main">
         К содержимому
       </a>
