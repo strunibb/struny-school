@@ -804,14 +804,53 @@ export default function Home() {
                 ))}
               </div>
               <div className="course-gift">
-                <span aria-hidden="true">✦</span>
-                <div>
+                <div className="gift-story">
+                  <span className="gift-kicker">✦ Бонус к обучению</span>
                   <h3>Подарок к курсу</h3>
-                  <p>Тренажёры и PDF-материалы для практики.</p>
+                  <p>
+                    Тренажёры и PDF-материалы помогают закреплять каждую новую
+                    песню в своём темпе.
+                  </p>
+                  <a href="#materials" className="button primary">
+                    Посмотреть тренажёры <Icon name="arrow" />
+                  </a>
                 </div>
-                <a href="#materials" className="text-button">
-                  Посмотреть тренажёры <Icon name="arrow" />
-                </a>
+                <div className="gift-gallery" aria-label="Подарки к курсу">
+                  <div className="gift-item gift-present">
+                    <span className="gift-art" aria-hidden="true">
+                      <span className="gift-lid" />
+                      <span className="gift-bow" />
+                      <span className="gift-box" />
+                    </span>
+                    <strong>Подарок</strong>
+                    <small>К каждому тарифу</small>
+                  </div>
+                  <div className="gift-item gift-pdf">
+                    <span className="gift-art" aria-hidden="true">
+                      <span className="gift-book">
+                        <span className="gift-book-cover">
+                          PDF
+                          <span className="gift-book-line" />
+                          <span className="gift-book-line short" />
+                        </span>
+                      </span>
+                    </span>
+                    <strong>PDF-блокнот</strong>
+                    <small>Схемы и упражнения</small>
+                  </div>
+                  <div className="gift-item gift-practice">
+                    <span className="gift-art" aria-hidden="true">
+                      <span className="gift-meter">
+                        <span className="meter-dial">
+                          <i />
+                        </span>
+                        <span className="meter-keys">♪ ♫ ♪</span>
+                      </span>
+                    </span>
+                    <strong>Тренажёры</strong>
+                    <small>Ритм и аккорды</small>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
