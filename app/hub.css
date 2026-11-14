@@ -1,0 +1,495 @@
+.school-hub h1,
+.school-hub h2,
+.school-hub h3 {
+  text-transform: none;
+  letter-spacing: -0.035em;
+}
+.school-hub h2 {
+  font-size: clamp(30px, 3.5vw, 48px);
+  line-height: 1.12;
+}
+.school-hub .section {
+  padding: 76px 0;
+}
+.school-hub .section-title {
+  align-items: end;
+  margin-bottom: 30px;
+}
+.school-hub .section-title p {
+  max-width: 370px;
+}
+.school-hub .header {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.96);
+}
+.school-hub .header-inner {
+  max-width: 1320px;
+}
+.school-hub .navigation {
+  gap: 22px;
+}
+.school-hub .navigation a {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.school-hub .header-cta {
+  font-size: 13px;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+.hub-hero {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding-top: 50px;
+  padding-bottom: 64px;
+}
+.hub-hero-copy h1 {
+  font-size: clamp(42px, 4.6vw, 65px);
+  line-height: 1.08;
+  margin: 18px 0 24px;
+}
+.hub-hero-copy h1 span {
+  color: var(--purple-dark);
+}
+.hub-lead {
+  max-width: 510px;
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.hub-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.hub-hero-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 25px;
+  font-size: 14px;
+}
+.hub-hero-links a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.hub-hero-photo {
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  background: var(--lavender);
+  aspect-ratio: 1/1.05;
+}
+.hub-hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hub-photo-caption {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 16px 20px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+}
+.hub-photo-caption span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.school-hub .directions {
+  background: var(--pale);
+}
+.school-hub .direction-card {
+  min-height: 235px;
+  border-radius: 24px;
+}
+.school-hub .direction-cards {
+  gap: 16px;
+}
+.hub-selection {
+  margin: 32px 0 26px;
+  max-width: 760px;
+}
+.hub-selection h3 {
+  font-size: 25px;
+  margin: 0 0 8px;
+}
+.hub-selection p {
+  color: var(--muted);
+  margin: 0;
+}
+.hub-formats {
+  scroll-margin-top: 110px;
+}
+.school-hub .price-switch {
+  margin-bottom: 32px;
+  justify-content: flex-start;
+}
+.school-hub .price-switch button {
+  min-height: 48px;
+}
+.hub-course-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.hub-course-heading h2 {
+  margin: 6px 0 14px;
+}
+.hub-course-heading p {
+  max-width: 660px;
+}
+.hub-course-heading .text-button {
+  white-space: nowrap;
+}
+.hub-course-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.school-hub .price-card {
+  padding: 30px;
+  background: white;
+  border: 1px solid var(--line);
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+.school-hub .price-card.featured {
+  background: #eee5fb;
+  border: 1px solid #c5addf;
+}
+.school-hub .price-card h3 {
+  font-size: 27px;
+  margin: 0 0 18px;
+}
+.school-hub .price-card .price-amount {
+  font-size: 48px;
+}
+.school-hub .price-card .button {
+  margin-top: auto;
+}
+.school-hub .check-list {
+  margin: 20px 0;
+  min-height: 0;
+}
+.hub-plan-note {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 22px;
+  line-height: 1.65;
+}
+.hub-sample {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 20px;
+  font-size: 14px;
+}
+.hub-sample p {
+  margin: 0;
+}
+.hub-service {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  background: white;
+  border-radius: 26px;
+  padding: 36px;
+  border: 1px solid var(--line);
+}
+.hub-service h2 {
+  font-size: 36px;
+  margin: 8px 0 20px;
+}
+.hub-service-price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid var(--line);
+  padding-left: 35px;
+  gap: 12px;
+}
+.hub-service-price h3 {
+  margin: 0;
+  font-size: 23px;
+}
+.hub-service-price p {
+  margin: 0 0 10px;
+}
+.hub-service-price .price-amount {
+  font-size: 48px;
+  white-space: nowrap;
+}
+.hub-service-price .text-button {
+  text-align: center;
+}
+.hub-weeks {
+  padding-left: 22px;
+  margin: 25px 0;
+}
+.hub-weeks li {
+  padding: 6px 0 6px 5px;
+}
+.hub-weeks strong,
+.hub-weeks span {
+  display: block;
+}
+.hub-weeks span {
+  font-size: 14px;
+  color: var(--muted);
+}
+.school-hub .program {
+  background: white;
+}
+.school-hub .program-shell {
+  box-shadow: none;
+}
+.school-hub .program-menu button {
+  font-size: 16px;
+  text-align: left;
+}
+.hub-catalog-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: 55px;
+}
+.hub-catalog-inner img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 26px;
+}
+.hub-catalog-inner h2 {
+  margin: 10px 0 20px;
+}
+.hub-catalog-inner p {
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.school-hub .contact {
+  padding: 55px 25px;
+  text-align: center;
+}
+.school-hub .contact .button {
+  margin: 15px auto 0;
+}
+.hub-mobile-cta {
+  display: none;
+}
+.school-hub #course {
+  scroll-margin-top: 110px;
+}
+@media (min-width: 901px) and (max-width: 1150px) {
+  .school-hub .header-cta {
+    display: none;
+  }
+  .school-hub .navigation {
+    gap: 16px;
+  }
+  .hub-hero {
+    gap: 25px;
+  }
+  .hub-actions .button {
+    font-size: 14px;
+  }
+}
+@media (max-width: 900px) {
+  .hub-hero {
+    gap: 25px;
+  }
+  .hub-hero-copy h1 {
+    font-size: 42px;
+  }
+  .hub-lead {
+    font-size: 16px;
+  }
+  .school-hub .header-cta {
+    display: none;
+  }
+  .hub-service {
+    gap: 24px;
+    padding: 26px;
+  }
+  .hub-service-price {
+    padding-left: 24px;
+  }
+  .hub-course-heading {
+    display: block;
+  }
+  .hub-course-heading .text-button {
+    display: inline-block;
+    margin-top: 8px;
+  }
+}
+@media (max-width: 650px) {
+  .school-hub .section {
+    padding: 44px 0;
+  }
+  .hub-hero {
+    grid-template-columns: 1fr;
+    padding-top: 25px;
+    padding-bottom: 35px;
+    gap: 25px;
+  }
+  .hub-hero-copy h1 {
+    font-size: 39px;
+    margin-top: 12px;
+  }
+  .hub-hero-photo {
+    aspect-ratio: 1.3;
+    max-height: 330px;
+  }
+  .hub-hero-photo img {
+    object-position: center 35%;
+  }
+  .hub-photo-caption {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 10px 14px;
+  }
+  .hub-actions {
+    gap: 8px;
+    margin-top: 22px;
+  }
+  .hub-actions .button {
+    font-size: 13px;
+    padding: 14px 15px;
+    min-height: 48px;
+  }
+  .hub-hero-links {
+    font-size: 12px;
+    gap: 12px;
+  }
+  .hub-course-grid,
+  .hub-service,
+  .hub-catalog-inner {
+    grid-template-columns: 1fr;
+  }
+  .school-hub .section-title {
+    display: block;
+  }
+  .school-hub .section-title p {
+    margin-top: 14px;
+  }
+  .school-hub .direction-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .school-hub .direction-card {
+    min-height: 210px;
+  }
+  .school-hub .direction-card h3 {
+    font-size: 17px;
+  }
+  .hub-selection h3 {
+    font-size: 23px;
+  }
+  .school-hub .price-switch {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    gap: 4px;
+    padding: 5px;
+    justify-content: flex-start;
+  }
+  .school-hub .price-switch button {
+    padding: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .school-hub .price-card {
+    padding: 24px;
+  }
+  .hub-course-grid {
+    gap: 16px;
+  }
+  .hub-sample {
+    display: block;
+  }
+  .hub-sample .text-button {
+    display: inline-block;
+    margin-top: 10px;
+  }
+  .hub-service {
+    padding: 24px;
+  }
+  .hub-service h2 {
+    font-size: 30px;
+  }
+  .hub-service-price {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 22px 0 0;
+  }
+  .hub-catalog-inner {
+    gap: 25px;
+  }
+  .hub-catalog-inner img {
+    height: 220px;
+  }
+  .school-hub .footer {
+    padding-bottom: 90px;
+  }
+  .hub-mobile-cta {
+    position: fixed;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: 16px;
+    right: 16px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ink);
+    color: white;
+    border-radius: 16px;
+    padding: 15px 20px;
+    box-shadow: 0 5px 20px #0002;
+  }
+  .school-hub .dialog {
+    max-height: 90dvh;
+  }
+  .school-hub .hub-course-heading .text-button {
+    white-space: normal;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .school-hub * {
+    transition: none !important;
+  }
+}
+
+.school-hub .inline-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+  flex-shrink: 0;
+}
+.school-hub .hub-course-heading h2 {
+  text-align: left;
+}
+.school-hub .direction-action > span[aria-hidden] {
+  font-family: Arial, sans-serif;
+}
+
+@media (max-width: 980px) {
+  .school-hub .menu-button { margin-left: auto; }
+}

@@ -1,11 +1,14 @@
 import "./globals.css";
 import "./interactive.css";
+import "./hub.css";
 
 export const metadata = {
-  title: "Струны будущего — уроки гитары онлайн с Никитой Осадчуком",
+  title: "Струны будущего — курс гитары и онлайн-уроки музыки",
   description:
-    "Индивидуальные онлайн-уроки гитары, электрогитары, укулеле и фортепиано с Никитой Осадчуком. Программа обучения, стоимость занятий и запись на пробный урок.",
-  metadataBase: new URL("https://strunibb.github.io/struny-school/"),
+    "Полный курс гитары «Базовый минимум», формат 2+2 и индивидуальные занятия с Никитой Осадчуком. Гитара, электрогитара, укулеле, фортепиано и каталог песен.",
+  metadataBase: new URL(
+    process.env.SITE_URL || "https://strunibb.github.io/struny-school/",
+  ),
   openGraph: {
     title: "Струны будущего — школа Никиты Осадчука",
     description:
