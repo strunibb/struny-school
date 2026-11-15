@@ -86,6 +86,8 @@ const coursePlans = [
     note: "Итоговое задание по разделу и одна повторная проверка после исправлений.",
   },
 ];
+// Add supplied review screenshots here, for example "./reviews/student-1.webp".
+const reviewPhotos = [];
 const questions = [
   [
     "Чем отличаются два тарифа курса?",
@@ -350,50 +352,27 @@ function BookingDialog({
 }
 export default function Home() {
   const [instrument, setInstrument] = useState(0);
-  const [format, setFormat] = useState("course");
-  const [selectedLevel, setSelectedLevel] = useState("С нуля");
+  const [selectedLevel] = useState("С нуля");
   const [songIndex, setSongIndex] = useState(0);
+  const [caseIndex, setCaseIndex] = useState(0);
   const [modal, setModal] = useState(null);
   const [menu, setMenu] = useState(false);
-  const [moreMaterials, setMoreMaterials] = useState(false);
+  const [leadName, setLeadName] = useState("");
+  const [leadContact, setLeadContact] = useState("");
+  const [leadFormat, setLeadFormat] = useState("Курс «Базовый минимум»");
+  const [leadGoal, setLeadGoal] = useState("");
   const menuRef = useRef(null);
   const menuButton = useRef(null);
+
   useEffect(() => {
     const readLocation = () => {
       const params = new URLSearchParams(window.location.search);
-      const index = instruments.findIndex(
-        (item) => item.id === params.get("instrument"),
-      );
-      const chosen = index >= 0 ? index : 0;
-      const requested = params.get("format");
-      const courseAnchor = ["#course", "#program"].includes(
-        window.location.hash,
-      );
-      if (courseAnchor) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("instrument", "guitar");
-        url.searchParams.set("format", "course");
-        window.history.replaceState(null, "", url);
-      }
-      setInstrument(courseAnchor ? 0 : chosen);
-      setFormat(
-        courseAnchor
-          ? "course"
-          : chosen === 0 &&
-              ["course", "hybrid", "individual"].includes(requested)
-            ? requested
-            : chosen === 0
-              ? "course"
-              : "individual",
-      );
+      const index = instruments.findIndex((item) => item.id === params.get("instrument"));
+      setInstrument(index >= 0 ? index : 0);
     };
     readLocation();
     window.addEventListener("popstate", readLocation);
-    window.addEventListener("hashchange", readLocation);
-    return () => {
-      window.removeEventListener("popstate", readLocation);
-      window.removeEventListener("hashchange", readLocation);
-    };
+    return () => window.removeEventListener("popstate", readLocation);
   }, []);
   useEffect(() => {
     if (!menu) return;
@@ -407,22 +386,14 @@ export default function Home() {
     window.addEventListener("keydown", escape);
     return () => window.removeEventListener("keydown", escape);
   }, [menu]);
-  const choose = (
-    index,
-    nextFormat = index === 0 ? "course" : "individual",
-  ) => {
+
+  const choose = (index) => {
     setInstrument(index);
-    setFormat(nextFormat);
     const url = new URL(window.location.href);
     url.searchParams.set("instrument", instruments[index].id);
-    url.searchParams.set("format", nextFormat);
-    url.hash = "directions";
     window.history.replaceState(null, "", url);
   };
-  const openBooking = (
-    selection = "Подобрать обучение",
-    guitarOnly = false,
-  ) => {
+  const openBooking = (selection = "Подобрать обучение", guitarOnly = false) => {
     setMenu(false);
     setModal({
       type: "booking",
@@ -432,848 +403,256 @@ export default function Home() {
       initialLevel: selectedLevel,
     });
   };
+  const cases = [
+    {
+      image: "./students-group.webp",
+      alt: "Никита с учениками после выступления",
+      label: "Выступление",
+      title: "Ученики на сцене",
+      description: "Фото с выступления учеников и преподавателя.",
+    },
+    {
+      image: "./material-song.webp",
+      alt: "Никита показывает аккорды и разбор песни",
+      label: "Разбор песни",
+      title: "«Пачка сигарет»",
+      description: "Фрагмент занятия: аккорды, текст и объяснение на видео.",
+    },
+    {
+      image: "./material-trainer.webp",
+      alt: "Никита объясняет бой с помощью тренажёра",
+      label: "Практика",
+      title: "Четвёрка с заглушкой",
+      description: "Видеообъяснение и тренажёр для отработки ритма.",
+    },
+    {
+      image: "./material-rhythm.webp",
+      alt: "Никита показывает ритм на гитаре",
+      label: "Фрагмент урока",
+      title: "Разбор боя по шагам",
+      description: "Ритмическая схема и показ движений на гитаре.",
+    },
+  ];
+  const visibleCases = [0, 1, 2].map((offset) => cases[(caseIndex + offset) % cases.length]);
+  const submitLead = (event) => {
+    event.preventDefault();
+    const message = [
+      "Здравствуйте, Никита! Хочу узнать об обучении в «Струнах будущего».",
+      "Меня зовут " + leadName.trim() + ".",
+      "Интересует: " + leadFormat + ".",
+      leadContact.trim() ? "Связаться со мной: " + leadContact.trim() + "." : null,
+      leadGoal.trim() ? "Хочу научиться: " + leadGoal.trim() : null,
+    ].filter(Boolean).join("\n");
+    window.location.href = telegram + "?text=" + encodeURIComponent(message);
+  };
+
   return (
-    <div className="school-hub">
-      <a className="skip-link" href="#main">
-        К содержимому
-      </a>
+    <div className="school-hub revamped">
+      <a className="skip-link" href="#main">К содержимому</a>
       <header className="header">
         <div className="header-inner">
-          <a href="#top" aria-label="Струны будущего — на главную">
-            <Logo />
-          </a>
-          <nav
-            ref={menuRef}
-            id="navigation"
-            className={menu ? "navigation is-open" : "navigation"}
-            aria-label="Главное меню"
-          >
-            <a href="#directions" onClick={() => setMenu(false)}>
-              Обучение
-            </a>
-            <a
-              href="#course"
-              onClick={() => {
-                choose(0, "course");
-                setMenu(false);
-              }}
-            >
-              Курс гитары
-            </a>
-            <a href={catalog}>
-              Каталог песен <Icon name="external" className="inline-icon" />
-            </a>
-            <a href="#teacher" onClick={() => setMenu(false)}>
-              Преподаватель
-            </a>
-            <a href="#reviews" onClick={() => setMenu(false)}>
-              Отзывы
-            </a>
+          <a href="#top" aria-label="Струны будущего — на главную"><Logo /></a>
+          <nav ref={menuRef} id="navigation" className={menu ? "navigation is-open" : "navigation"} aria-label="Главное меню">
+            <a href="#why" onClick={() => setMenu(false)}>Почему мы</a>
+            <a href="#directions" onClick={() => setMenu(false)}>Инструменты</a>
+            <a href="#learning" onClick={() => setMenu(false)}>Обучение</a>
+            <a href="#teacher" onClick={() => setMenu(false)}>Обо мне</a>
+            <a href="#cases" onClick={() => setMenu(false)}>Кейсы</a>
+            <a href="#reviews" onClick={() => setMenu(false)}>Отзывы</a>
           </nav>
-          <button className="header-cta" onClick={() => openBooking()}>
-            Помочь с выбором <Icon name="arrow" />
-          </button>
-          <button
-            ref={menuButton}
-            className="menu-button"
-            aria-expanded={menu}
-            aria-controls="navigation"
-            aria-label={menu ? "Закрыть меню" : "Открыть меню"}
-            onClick={() => setMenu(!menu)}
-          >
-            {menu ? (
-              <Icon name="close" />
-            ) : (
-              <>
-                <span />
-                <span />
-              </>
-            )}
+          <a className="header-cta" href="#contact">Оставить заявку <Icon name="arrow" /></a>
+          <button ref={menuButton} className="menu-button" aria-expanded={menu} aria-controls="navigation" aria-label={menu ? "Закрыть меню" : "Открыть меню"} onClick={() => setMenu(!menu)}>
+            {menu ? <Icon name="close" /> : <><span /><span /></>}
           </button>
         </div>
       </header>
       <main id="main">
-        <section className="hub-hero wrap" id="top">
-          <div className="hub-hero-copy">
-            <p className="eyebrow">Онлайн-школа Никиты Осадчука</p>
-            <h1>
-              Струны будущего
-              <br />
-              <span>Онлайн-школа музыки</span>
-            </h1>
-            <div className="hub-actions">
-              <a className="button lime" href="#directions">
-                Выбрать обучение <Icon name="arrow" />
-              </a>
+        <section className="rev-hero" id="top">
+          <div className="rev-hero-photo" aria-hidden="true"><img src="./nikita-hero.webp" alt="" fetchPriority="high" width="1000" height="1245" /></div>
+          <div className="rev-hero-shape" aria-hidden="true" />
+          <div className="wrap rev-hero-content">
+            <span className="rev-kicker">СТРУНЫ БУДУЩЕГО · ОНЛАЙН</span>
+            <h1>Онлайн-школа<br />музыки <em>Никиты<br />Осадчука</em></h1>
+            <p>Курс гитары, личные уроки и разборы песен.<br />Выбирайте то, что хочется сыграть.</p>
+            <div className="rev-hero-actions">
+              <a className="button lime" href="#learning">Выбрать обучение <Icon name="arrow" /></a>
+              <a className="rev-text-link" href="#why">Как проходят занятия ↓</a>
             </div>
-          </div>
-          <div className="hub-hero-photo">
-            <img
-              src="./nikita-hero.webp"
-              width="1000"
-              height="1000"
-              alt="Никита Осадчук с гитарой"
-              fetchPriority="high"
-            />
+            <span className="rev-hero-bottom">ГИТАРА · ЭЛЕКТРОГИТАРА · УКУЛЕЛЕ · ФОРТЕПИАНО</span>
           </div>
         </section>
+
+        <section className="section rev-why" id="why">
+          <div className="wrap rev-why-grid">
+            <div>
+              <span className="rev-kicker">01 / ЗНАКОМСТВО</span>
+              <h2>Почему <span>«Струны будущего»?</span></h2>
+              <p className="rev-section-lead">На занятиях сразу работаем с музыкой, которую вам хочется играть.</p>
+              <div className="rev-why-points">
+                <div><strong>01</strong><p>Курс гитары можно проходить по видео в своём темпе или взять проверку заданий.</p></div>
+                <div><strong>02</strong><p>На личных уроках подбираем упражнения и песни под ваш уровень.</p></div>
+                <div><strong>03</strong><p>Тренажёры и PDF помогают заниматься между уроками.</p></div>
+              </div>
+            </div>
+            <div className="rev-video-slot">
+              <img src="./lesson-planning.webp" alt="Никита готовит материалы для урока" loading="lazy" width="1000" height="668" />
+              <div><SectionIcon name="video" /><span>Скоро здесь будет видео<br />о школе и занятиях</span></div>
+            </div>
+          </div>
+        </section>
+
         <section className="section directions" id="directions">
           <div className="wrap">
-            <div className="section-title">
-              <h2>
-                На чём хотите <span>играть?</span>
-              </h2>
-              <p>Выберите инструмент, затем формат обучения.</p>
+            <div className="section-title"><h2>На чём хотите <span>играть?</span></h2><p>Выберите инструмент.</p></div>
+            <div className="direction-cards" role="group" aria-label="Выберите инструмент">
+              {instruments.map((item, i) => <DirectionCard key={item.id} item={item} index={i} selected={instrument === i} onSelect={() => choose(i)} />)}
             </div>
-            <div
-              className="direction-cards"
-              role="group"
-              aria-label="Выберите инструмент"
-            >
-              {instruments.map((item, i) => (
-                <DirectionCard
-                  key={item.id}
-                  item={item}
-                  index={i}
-                  selected={instrument === i}
-                  onSelect={() => choose(i)}
-                />
-              ))}
-            </div>
-            <div
-              className="hub-selection"
-              id="instrument-panel"
-              aria-live="polite"
-            >
-              <h3>{instruments[instrument].note}</h3>
-              <p>{instruments[instrument].text}</p>
-            </div>
-            <div id="prices" className="hub-formats">
-              {instrument === 0 && (
-                <div
-                  className="price-switch"
-                  role="group"
-                  aria-label="Формат обучения"
-                >
-                  {[
-                    ["course", "Полный курс"],
-                    ["hybrid", "2+2"],
-                    ["individual", "Личные занятия"],
-                  ].map(([id, label]) => (
-                    <button
-                      key={id}
-                      aria-pressed={format === id}
-                      className={format === id ? "active" : ""}
-                      onClick={() => choose(instrument, id)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {format === "course" && instrument === 0 ? (
-                <div id="course">
-                  <div className="hub-course-heading">
-                    <div>
-                      <p className="label">Полный видеокурс по гитаре</p>
-                      <h2>Базовый минимум</h2>
-                    </div>
-                    <a href="#program" className="text-button">
-                      Посмотреть программу ↓
-                    </a>
-                  </div>
-                  <div className="hub-course-grid">
-                    {coursePlans.map((plan, i) => (
-                      <article
-                        className={"price-card" + (i === 1 ? " featured" : "")}
-                        key={plan.title}
-                      >
-                        <SectionIcon name={i === 1 ? "reviews" : "course"} className="price-art" />
-                        <h3>{plan.title}</h3>
-                        <div className="price-amount">
-                          {plan.price}
-                          <span> ₽</span>
-                        </div>
-                        <p className="price-unit">Один платёж за полный курс</p>
-                        <ul className="check-list">
-                          {plan.points.map((point) => (
-                            <li key={point}>
-                              <Icon name="check" />
-                              {point}
-                            </li>
-                          ))}
-                        </ul>
-                        <p className="hub-plan-note">{plan.note}</p>
-                        <button
-                          className={
-                            "button full " + (i === 1 ? "lime" : "outline")
-                          }
-                          onClick={() => openBooking(plan.selection, true)}
-                        >
-                          Выбрать курс <Icon name="arrow" />
-                        </button>
-                      </article>
-                    ))}
-                  </div>
-                  <div className="hub-sample">
-                    <a
-                      href={lessonRequest}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-button"
-                    >
-                      Получить пример урока{" "}
-                      <Icon name="external" className="inline-icon" />
-                    </a>
-                  </div>
-                </div>
-              ) : format === "hybrid" && instrument === 0 ? (
-                <article className="hub-service">
-                  <div>
-                    <SectionIcon name="hybrid" className="service-art" />
-                    <p className="label">Гитара · четыре недели</p>
-                    <h2>
-                      Две встречи.
-                      <br />
-                      <span>Две недели по видео.</span>
-                    </h2>
-                    <p>
-                      Учитесь самостоятельно и встречайтесь с Никитой, чтобы
-                      разобрать сложные места.
-                    </p>
-                    <ol className="hub-weeks">
-                      <li>
-                        <strong>Личный урок</strong>
-                        <span>40 минут, цель и упражнения</span>
-                      </li>
-                      <li>
-                        <strong>Неделя по видео</strong>
-                        <span>Готовое задание и проверка записи</span>
-                      </li>
-                      <li>
-                        <strong>Личный урок</strong>
-                        <span>40 минут, исправления и практика</span>
-                      </li>
-                      <li>
-                        <strong>Неделя по видео</strong>
-                        <span>Закрепление и проверка записи</span>
-                      </li>
-                    </ol>
-                    <p className="hub-plan-note">
-                      Порядок недель согласуем с вами. Включены видеозадания по
-                      текущим темам. Годовой доступ к полному курсу
-                      приобретается отдельно.
-                    </p>
-                  </div>
-                  <div className="hub-service-price">
-                    <h3>Абонемент «2+2»</h3>
-                    <div className="price-amount">
-                      2 990<span> ₽</span>
-                    </div>
-                    <p>За четыре недели</p>
-                    <button
-                      className="button lime full"
-                      onClick={() =>
-                        openBooking(
-                          "Гитара — «2+2», 2 990 ₽ за четыре недели",
-                          true,
-                        )
-                      }
-                    >
-                      Выбрать «2+2» <Icon name="arrow" />
-                    </button>
-                  </div>
-                </article>
-              ) : (
-                <article className="hub-service">
-                  <div>
-                    <SectionIcon name="lesson" className="service-art" />
-                    <p className="label">
-                      {instruments[instrument].name} · по видеосвязи
-                    </p>
-                    <h2>
-                      Индивидуально
-                      <br />
-                      <span>с Никитой</span>
-                    </h2>
-                    <p>{instruments[instrument].text}</p>
-                    <ul className="check-list">
-                      <li>
-                        <Icon name="check" />
-                        Четыре занятия по 40 минут
-                      </li>
-                      <li>
-                        <Icon name="check" />
-                        Программа под ваш уровень и цели
-                      </li>
-                      <li>
-                        <Icon name="check" />
-                        Материалы и задания между встречами
-                      </li>
-                    </ul>
-                    <a href="./schedule/" className="text-button">
-                      Посмотреть свободное время{" "}
-                      <Icon name="external" className="inline-icon" />
-                    </a>
-                  </div>
-                  <div className="hub-service-price">
-                    <h3>Четыре занятия</h3>
-                    <div className="price-amount">
-                      3 990<span> ₽</span>
-                    </div>
-                    <p>Абонемент на четыре недели</p>
-                    <button
-                      className="button lime full"
-                      onClick={() =>
-                        openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")
-                      }
-                    >
-                      Записаться <Icon name="arrow" />
-                    </button>
-                    <a
-                      className="text-button"
-                      href={booking}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Выбрать время{" "}
-                      <Icon name="external" className="inline-icon" />
-                    </a>
-                  </div>
-                </article>
-              )}
+            <div className="hub-selection" id="instrument-panel" aria-live="polite">
+              <div><span className="rev-kicker">ВАШ ВЫБОР</span><h3>{instruments[instrument].note}</h3><p>{instruments[instrument].text}</p></div>
+              <a className="button outline" href={instrument === 0 ? "#course" : "#individual"}>Посмотреть обучение <Icon name="arrow" /></a>
             </div>
           </div>
         </section>
-        {instrument === 0 && (
-          <section className="section program pale" id="program">
-            <div className="wrap">
-              <div className="section-title">
-                <h2>
-                  Что ты <span>сыграешь?</span>
-                </h2>
-              </div>
-              <div className="course-showcase">
-                <div className="showcase-card showcase-rhythm">
-                  <SectionIcon name="rhythm" className="showcase-art" />
-                  <span className="showcase-kicker">Ритм</span>
-                  <strong>9 боёв</strong>
-                  <p>
-                    Разбираем девять вариантов боя на песнях из курса.
-                  </p>
-                </div>
-                <div className="showcase-card showcase-song">
-                  <SectionIcon name="catalog" className="showcase-art" />
-                  <span className="showcase-kicker">Репертуар</span>
-                  <strong>Любимые песни</strong>
-                  <p>
-                    Разбираем аккорды и играем песню целиком.
-                  </p>
-                </div>
-                <div className="showcase-card showcase-hands">
-                  <SectionIcon name="chords" className="showcase-art" />
-                  <span className="showcase-kicker">Техника</span>
-                  <strong>Переборы и приёмы</strong>
-                  <p>
-                    Учимся играть перебором и менять ритм без остановок.
-                  </p>
-                </div>
-              </div>
-              <div className="song-picker">
-                <div className="song-picker-copy">
-                  <span className="gift-kicker">Репертуар видеокурса</span>
-                  <h3>Песни из курса</h3>
-                  <div className="song-spotlight" aria-live="polite">
-                    <img
-                      key={courseSongs[songIndex].cover}
-                      className="song-cover"
-                      src={`./song-covers/${courseSongs[songIndex].cover}.webp`}
-                      alt={`Обложка релиза «${courseSongs[songIndex].release}»`}
-                      width="600"
-                      height="600"
-                    />
-                    <div>
-                      <span>{courseSongs[songIndex].artist}</span>
-                      <strong>{courseSongs[songIndex].title}</strong>
-                    </div>
-                  </div>
-                  <button
-                    className="button primary"
-                    onClick={() =>
-                      openBooking(
-                        "Курс «Базовый минимум» — хочу сыграть «" +
-                          courseSongs[songIndex].title +
-                          "»",
-                        true,
-                      )
-                    }
-                  >
-                    Хочу научиться <Icon name="arrow" />
-                  </button>
-                </div>
-                <div
-                  className="song-picker-list"
-                  role="group"
-                  aria-label="Выберите песню из курса"
-                >
-                  {courseSongs.map((song, i) => (
-                    <button
-                      key={song.artist + song.title}
-                      className={
-                        "song-pick" + (songIndex === i ? " active" : "")
-                      }
-                      aria-pressed={songIndex === i}
-                      onClick={() => setSongIndex(i)}
-                    >
-                      <span>{String(i + 1).padStart(2, "0")}</span>
-                      <strong>{song.title}</strong>
-                      <small>{song.artist}</small>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="course-gift">
-                <div className="gift-story">
-                  <span className="gift-kicker">✦ Бонус к обучению</span>
-                  <h3>Подарок к курсу</h3>
-                  <p>
-                    В подарок — тренажёры боя и аккордов, а также PDF со
-                    схемами для занятий.
-                  </p>
-                  <a href="#materials" className="button primary">
-                    Посмотреть тренажёры <Icon name="arrow" />
-                  </a>
-                </div>
-                <div className="gift-gallery" aria-label="Подарки к курсу">
-                  <div className="gift-item gift-present">
-                    <SectionIcon name="gift" className="gift-art" />
-                    <strong>Подарок</strong>
-                    <small>К каждому тарифу</small>
-                  </div>
-                  <div className="gift-item gift-pdf">
-                    <SectionIcon name="pdf" className="gift-art" />
-                    <strong>PDF-блокнот</strong>
-                    <small>Схемы и упражнения</small>
-                  </div>
-                  <div className="gift-item gift-practice">
-                    <SectionIcon name="practice" className="gift-art" />
-                    <strong>Тренажёры</strong>
-                    <small>Ритм и аккорды</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-        <Techniques />
-        <section className="section level-explore" id="levels">
+
+        <section className="section rev-learning" id="learning">
           <div className="wrap">
-            <div className="section-title">
-              <h2>
-                С чего начнём <span>именно вы?</span>
-              </h2>
-              <p>Выберите свой уровень — учтём его при обращении.</p>
-            </div>
-            <div
-              className="level-explore-grid"
-              role="group"
-              aria-label="Ваш уровень игры"
-            >
-              {[
-                [
-                  "С нуля",
-                  "Начинаю с нуля",
-                  "Знакомимся с инструментом и осваиваем первые аккорды.",
-                ],
-                [
-                  "Знаю основы",
-                  "Уже знаю основы",
-                  "Работаем над ритмом, переходами и любимыми песнями.",
-                ],
-                [
-                  "Уже играю",
-                  "Хочу большего",
-                  "Развиваем технику и разбираем сложные композиции.",
-                ],
-              ].map(([value, title, description], i) => (
-                <button
-                  key={value}
-                  className={
-                    "level-explore-card" +
-                    (selectedLevel === value ? " selected" : "")
-                  }
-                  aria-pressed={selectedLevel === value}
-                  onClick={() => setSelectedLevel(value)}
-                >
-                  <span className="level-number">0{i + 1}</span>
-                  <span className="level-art" aria-hidden="true">
-                    <SectionIcon name={["course", "chords", "practice"][i]} />
-                  </span>
-                  <strong>{title}</strong>
-                  <span>{description}</span>
-                  <em>
-                    {selectedLevel === value ? "Выбрано ✓" : "Это про меня ↗"}
-                  </em>
-                </button>
-              ))}
-            </div>
-            <button
-              className="button primary level-continue"
-              onClick={() => openBooking()}
-            >
-              Обсудить обучение <Icon name="arrow" />
-            </button>
+            <div className="section-title rev-learning-title"><div><span className="rev-kicker">02 / ФОРМАТЫ</span><h2>Как можно <span>учиться</span></h2></div><p>Курс, личные уроки и разборы песен — каждый формат можно выбрать отдельно.</p></div>
+            <article className="rev-offer rev-offer-course" id="course">
+              <div className="rev-offer-visual rev-course-visual">
+                <img className="rev-offer-main-img" src="./material-rhythm.webp" loading="lazy" alt="Никита показывает ритмический рисунок на гитаре" width="960" height="540" />
+                <img className="rev-offer-inset-img" src="./material-trainer.webp" loading="lazy" alt="Никита объясняет бой с помощью тренажёра" width="960" height="540" />
+                <SectionIcon name="course" className="rev-offer-icon" />
+              </div>
+              <div className="rev-offer-copy">
+                <span className="rev-offer-label">01 / ПОЛНЫЙ ВИДЕОКУРС ПО ГИТАРЕ</span>
+                <h3>«Базовый минимум»</h3>
+                <p>Начните с первых аккордов, освойте ритм и сыграйте песни из программы целиком. Все разделы курса доступны сразу.</p>
+                <a className="rev-inline" href="#program">Посмотреть песни из курса <Icon name="arrow" /></a>
+              </div>
+              <div className="rev-offer-prices">
+                {coursePlans.map((plan, i) => <div className="rev-mini-price" key={plan.title}>
+                  <div><span>{plan.title}</span><strong>{plan.price} ₽</strong></div>
+                  <p>{i === 0 ? "Полный курс · доступ на год" : "Полный курс · год доступа · 6 месяцев проверки ДЗ"}</p>
+                  <button onClick={() => openBooking(plan.selection, true)}>Выбрать <Icon name="arrow" /></button>
+                </div>)}
+                <a className="rev-sample" href={lessonRequest} target="_blank" rel="noopener noreferrer">Посмотреть пример урока <Icon name="external" /></a>
+              </div>
+            </article>
+            <article className="rev-offer rev-offer-personal" id="individual">
+              <div className="rev-offer-copy">
+                <span className="rev-offer-label">02 / ЛИЧНЫЕ УРОКИ ПО ВИДЕОСВЯЗИ</span>
+                <h3>Индивидуальные онлайн-уроки</h3>
+                <p>{instruments[instrument].name}: разбираем вашу технику и песни, которые вы хотите играть. Четыре встречи по 40 минут.</p>
+                <div className="rev-price-line"><strong>3 990 ₽</strong><span>/ 4 занятия</span></div>
+                <button className="button lime" onClick={() => openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")}>Записаться на уроки <Icon name="arrow" /></button>
+                <a className="rev-inline" href="./schedule/">Посмотреть свободное время <Icon name="external" /></a>
+              </div>
+              <div className="rev-offer-visual rev-personal-visual">
+                <img className="rev-offer-main-img" src="./personal-lesson.webp" loading="lazy" alt="Никита объясняет материал ученику на онлайн-уроке" width="1000" height="667" />
+                <SectionIcon name="lesson" className="rev-offer-icon" />
+              </div>
+              <div className="rev-hybrid-strip">
+                <SectionIcon name="hybrid" />
+                <div><strong>Абонемент «2+2»</strong><p>Два личных урока по 40 минут и две недели работы по видео с проверкой записи.</p></div>
+                <span>2 990 ₽ / 4 недели</span>
+                <button onClick={() => openBooking("Гитара — «2+2», 2 990 ₽ за четыре недели", true)}>Выбрать <Icon name="arrow" /></button>
+              </div>
+            </article>
+            <article className="rev-offer rev-offer-catalog" id="catalog">
+              <div className="rev-offer-visual rev-catalog-visual">
+                <img className="rev-offer-main-img" src="./material-song.webp" loading="lazy" alt="Никита разбирает песню вместе с аккордами и текстом" width="960" height="540" />
+                <SectionIcon name="catalog" className="rev-offer-icon" />
+              </div>
+              <div className="rev-offer-copy">
+                <span className="rev-offer-label">03 / ПЕСНИ ПО ВАШЕМУ ВЫБОРУ</span>
+                <h3>Разборы песен и табы</h3>
+                <p>Откройте каталог, найдите исполнителя и выберите разбор. Цена указана в карточке каждой песни.</p>
+                <a className="button lime" href={catalog}>Открыть каталог <Icon name="arrow" /></a>
+              </div>
+            </article>
           </div>
         </section>
-        <section className="section hub-catalog" id="catalog">
-          <div className="wrap hub-catalog-inner">
-            <div className="catalog-art-stage"><SectionIcon name="catalog" /></div>
-            <div>
-              <p className="label">Готовые разборы</p>
-              <h2>Каталог песен</h2>
-              <a className="button lime" href={catalog}>
-                Открыть каталог песен <Icon name="arrow" />
-              </a>
+
+        <section className="section program pale" id="program">
+          <div className="wrap">
+            <div className="section-title"><div><span className="rev-kicker">03 / КУРС ГИТАРЫ</span><h2>Что ты <span>сыграешь?</span></h2></div><p>Песни и упражнения из курса «Базовый минимум».</p></div>
+            <div className="course-showcase">
+              <div className="showcase-card showcase-rhythm"><SectionIcon name="rhythm" className="showcase-art" /><span className="showcase-kicker">Ритм</span><strong>9 боёв</strong><p>Разбираем девять вариантов боя на песнях из курса.</p></div>
+              <div className="showcase-card showcase-song"><SectionIcon name="catalog" className="showcase-art" /><span className="showcase-kicker">Репертуар</span><strong>Любимые песни</strong><p>Разбираем аккорды и играем песню целиком.</p></div>
+              <div className="showcase-card showcase-hands"><SectionIcon name="chords" className="showcase-art" /><span className="showcase-kicker">Техника</span><strong>Переборы и приёмы</strong><p>Учимся играть перебором и менять ритм без остановок.</p></div>
+            </div>
+            <div className="song-picker">
+              <div className="song-picker-copy">
+                <span className="gift-kicker">Репертуар видеокурса</span><h3>Песни из курса</h3>
+                <div className="song-spotlight" aria-live="polite">
+                  <img key={courseSongs[songIndex].cover} className="song-cover" src={`./song-covers/${courseSongs[songIndex].cover}.webp`} alt={`Обложка релиза «${courseSongs[songIndex].release}»`} width="600" height="600" />
+                  <div><span>{courseSongs[songIndex].artist}</span><strong>{courseSongs[songIndex].title}</strong></div>
+                </div>
+                <button className="button primary" onClick={() => openBooking("Курс «Базовый минимум» — хочу сыграть «" + courseSongs[songIndex].title + "»", true)}>Хочу научиться <Icon name="arrow" /></button>
+              </div>
+              <div className="song-picker-list" role="group" aria-label="Выберите песню из курса">
+                {courseSongs.map((song, i) => <button key={song.artist + song.title} className={"song-pick" + (songIndex === i ? " active" : "")} aria-pressed={songIndex === i} onClick={() => setSongIndex(i)}><span>{String(i + 1).padStart(2, "0")}</span><strong>{song.title}</strong><small>{song.artist}</small></button>)}
+              </div>
             </div>
           </div>
         </section>
+
+        <section className="section rev-gift" id="gift">
+          <div className="wrap course-gift">
+            <div className="gift-story"><span className="gift-kicker">✦ БОНУС К ОБУЧЕНИЮ</span><h2>Подарок к курсу</h2><p>В подарок — тренажёры боя и аккордов, а также PDF со схемами для занятий.</p><div className="rev-gift-links"><a href="https://strunibb.github.io/boi/">Тренажёр боя <Icon name="external" /></a><a href="https://strunibb.github.io/akkordi_guitarpro/">Тренажёр аккордов <Icon name="external" /></a></div></div>
+            <div className="gift-gallery" aria-label="Подарки к курсу">
+              <div className="gift-item gift-present"><SectionIcon name="gift" className="gift-art" /><strong>Подарок</strong><small>К каждому тарифу</small></div>
+              <div className="gift-item gift-pdf"><SectionIcon name="pdf" className="gift-art" /><strong>PDF-блокнот</strong><small>Схемы и упражнения</small></div>
+              <div className="gift-item gift-practice"><SectionIcon name="practice" className="gift-art" /><strong>Тренажёры</strong><small>Ритм и аккорды</small></div>
+            </div>
+          </div>
+        </section>
+
+        <Techniques />
+
         <section className="teacher section pale" id="teacher">
           <div className="wrap teacher-grid">
-            <div className="teacher-image">
-              <img
-                src="./nikita-about.webp"
-                width="1000"
-                height="1000"
-                loading="lazy"
-                alt="Никита Осадчук — преподаватель школы Струны будущего"
-              />
-              <span className="teacher-badge">
-                Знакомимся!{" "}
-                <span>
-                  <Icon name="external" className="inline-icon" />
-                </span>
-              </span>
-            </div>
-            <div className="teacher-copy">
-              <span className="label">Ваш преподаватель</span>
-              <h2>
-                НИКИТА
-                <br />
-                <span>ОСАДЧУК</span>
-              </h2>
-              <p className="teacher-lead">
-                Основатель онлайн-школы
-                <br />
-                «Струны будущего»
-              </p>
-              <p>
-                Преподаю с 2019 года. Раньше руководил музыкальным направлением
-                детского центра «Зебра» в Санкт-Петербурге.
-              </p>
-              <p>
-                На уроках соединяем технику с музыкой, которую вам хочется
-                играть. Разбираем движения спокойно и подробно, пока они не
-                станут понятны.
-              </p>
-              <div className="teacher-facts">
-                <div>
-                  <strong>2019</strong>
-                  <span>начало преподавания</span>
-                </div>
-                <div>
-                  <strong>1:1</strong>
-                  <span>внимание к каждому</span>
-                </div>
-              </div>
-              <button className="button outline" onClick={() => openBooking()}>
-                Познакомиться на уроке <Icon name="arrow" />
-              </button>
-            </div>
+            <div className="teacher-image"><img src="./nikita-about.webp" width="1000" height="1000" loading="lazy" alt="Никита Осадчук с гитарой" /><span className="teacher-badge">Знакомимся! <span><Icon name="external" className="inline-icon" /></span></span></div>
+            <div className="teacher-copy"><span className="label">Ваш преподаватель</span><h2>НИКИТА<br /><span>ОСАДЧУК</span></h2><p className="teacher-lead">Основатель онлайн-школы<br />«Струны будущего»</p><p>Преподаю с 2019 года. Раньше руководил музыкальным направлением детского центра «Зебра» в Санкт-Петербурге.</p><p>На уроках соединяем технику с музыкой, которую вам хочется играть. Разбираем движения спокойно и подробно, пока они не станут понятны.</p><div className="teacher-facts"><div><strong>2019</strong><span>начало преподавания</span></div><div><strong>1:1</strong><span>внимание к каждому</span></div></div><button className="button outline" onClick={() => openBooking()}>Познакомиться на уроке <Icon name="arrow" /></button></div>
           </div>
         </section>
 
-        <section className="section students" id="students">
+        <section className="section rev-cases" id="cases">
           <div className="wrap">
-            <div className="section-title">
-              <h2>
-                УЧЕНИКИ
-                <br />
-                <span>НАШЕЙ ШКОЛЫ</span>
-              </h2>
-              <p>
-                Ученики школы и материалы,
-                <br />с которыми мы занимаемся.
-              </p>
-            </div>
-            <div className="student-grid">
-              <figure className="student-photo">
-                <button
-                  className="photo-enlarge"
-                  aria-label="Увеличить фото учеников"
-                  onClick={() => setModal({ type: "photo" })}
-                >
-                  <img
-                    src="./students-group.webp"
-                    alt="Никита и ученики после выступления"
-                    width="710"
-                    height="532"
-                    loading="lazy"
-                  />
-                  <span className="photo-zoom" aria-hidden="true">
-                    <Icon name="external" className="inline-icon" />
-                  </span>
-                </button>
-                <figcaption>Ученики и преподаватель на сцене</figcaption>
-              </figure>
-              <div className="student-side">
-                <SectionIcon name="students" className="student-art" />
-                <h3>
-                  Занятия
-                  <br />и выступления
-                </h3>
-                <p>
-                  Занимаемся техникой и песнями, учимся играть целиком и готовим
-                  материал для исполнения.
-                </p>
-                <OutLink
-                  className="button outline"
-                  href={
-                    telegram +
-                    "?text=" +
-                    encodeURIComponent(
-                      "Никита, здравствуйте! Хочу посмотреть видео с игрой ваших учеников.",
-                    )
-                  }
-                >
-                  Посмотреть примеры учеников <Icon name="external" />
-                </OutLink>
-                <small>Никита пришлёт видео в Telegram</small>
-              </div>
+            <div className="rev-cases-head"><div><span className="rev-kicker">04 / ИЗ ЗАНЯТИЙ</span><h2>Наши кейсы</h2><p>Фрагменты уроков и фото с выступления учеников.</p></div><div className="rev-case-controls"><button aria-label="Предыдущие кейсы" onClick={() => setCaseIndex((v) => (v - 1 + cases.length) % cases.length)}><Icon name="arrow" /></button><button aria-label="Следующие кейсы" onClick={() => setCaseIndex((v) => (v + 1) % cases.length)}><Icon name="arrow" /></button></div></div>
+            <div className="rev-case-grid" aria-live="polite">
+              {visibleCases.map((item) => <button className="rev-case" key={item.title} onClick={() => setModal({type: "case", item})}><img src={item.image} loading="lazy" alt={item.alt} width="960" height="540" /><span>{item.label}</span><strong>{item.title}</strong><p>{item.description}</p><small>Посмотреть фото ↗</small></button>)}
             </div>
           </div>
         </section>
 
-        <section className="section reviews pale" id="reviews">
-          <div className="wrap reviews-grid">
-            <div>
-              <span className="label">Впечатления об обучении</span>
-              <SectionIcon name="reviews" className="review-art" />
-              <h2>
-                ОТЗЫВЫ
-                <br />
-                <span>УЧЕНИКОВ</span>
-              </h2>
-              <p>
-                Отзывы учеников и родителей
-                <br />в профиле Никиты на Профи.ру.
-              </p>
-            </div>
-            <OutLink className="review-card" href={reviews}>
-              <span className="review-quote" aria-hidden="true">
-                “
-              </span>
-              <div>
-                <span className="review-source">
-                  Профи.ру <Icon name="external" />
-                </span>
-                <h3>
-                  Никита Алексеевич
-                  <br />
-                  Осадчук
-                </h3>
-                <p>
-                  Посмотрите, что ученики рассказывают о занятиях, объяснениях и
-                  своих результатах.
-                </p>
-                <span className="review-link">
-                  Читать отзывы <Icon name="arrow" />
-                </span>
-              </div>
-            </OutLink>
+        <section className="section reviews pale rev-reviews" id="reviews">
+          <div className="wrap rev-reviews-grid">
+            <div><span className="rev-kicker">05 / ОТЗЫВЫ</span><h2>Отзывы <span>учеников</span></h2><p>Отзывы об уроках можно прочитать в моём профиле на Профи.ру. Фотографии отзывов добавим в этот раздел.</p><OutLink className="button outline" href={reviews}>Читать отзывы на Профи.ру <Icon name="external" /></OutLink></div>
+            {reviewPhotos.length ? <div className="rev-review-gallery">{reviewPhotos.map((src, i) => <img key={src} src={src} alt={`Отзыв ученика №${i + 1}`} loading="lazy" />)}</div> : <div className="rev-review-visual"><SectionIcon name="reviews" /><div><span>Отзывы учеников</span><strong>Профи.ру</strong><small>Ссылка на независимый профиль</small></div></div>}
           </div>
         </section>
 
-        <section className="section materials" id="materials">
-          <div className="wrap">
-            <div className="section-title">
-              <SectionIcon name="practice" className="heading-art" />
-              <h2>
-                ПРАКТИКА
-                <br />
-                <span>МЕЖДУ УРОКАМИ</span>
-              </h2>
-              <button
-                className="text-button"
-                aria-expanded={moreMaterials}
-                aria-controls="extra-materials"
-                onClick={() => setMoreMaterials((v) => !v)}
-              >
-                {moreMaterials ? "Свернуть" : "Все материалы"}{" "}
-                <span>{moreMaterials ? "−" : "+"}</span>
-              </button>
-            </div>
-            <div className="materials-grid">
-              <OutLink
-                href="https://strunibb.github.io/struny-songs/"
-                className="material-card"
-              >
-                <div className="material-visual"><img src="./material-song.webp" loading="lazy" alt="Аккорды и разбор песни" /><SectionIcon name="catalog" /></div>
-                <span>
-                  Разборы песен <Icon name="external" />
-                </span>
-                <p>Выберите музыку для практики</p>
-              </OutLink>
-              <OutLink
-                href="https://strunibb.github.io/akkordi_guitarpro/"
-                className="material-card"
-              >
-                <div className="material-visual"><img src="./material-trainer.webp" loading="lazy" alt="Практика игры на гитаре" /><SectionIcon name="chords" /></div>
-                <span>
-                  Тренажёр аккордов <Icon name="external" />
-                </span>
-                <p>Отработайте смену позиций</p>
-              </OutLink>
-              <OutLink
-                href="https://strunibb.github.io/boi/"
-                className="material-card"
-              >
-                <div className="material-visual"><img src="./material-rhythm.webp" loading="lazy" alt="Практика ритма" /><SectionIcon name="rhythm" /></div>
-                <span>
-                  Бои и переборы <Icon name="external" />
-                </span>
-                <p>Тренируйте правую руку и ритм</p>
-              </OutLink>
-            </div>
-            <div
-              id="extra-materials"
-              hidden={!moreMaterials}
-              className="extra-materials"
-            >
-              <button onClick={() => setModal({ type: "video" })}>
-                <SectionIcon name="video" className="extra-art" /> Бесплатный видеоурок <Icon name="play" />
-              </button>
-              <OutLink href="./student-info/">
-                <SectionIcon name="pdf" className="extra-art" /> Памятка ученика <Icon name="external" />
-              </OutLink>
-              <OutLink href="./schedule/">
-                <SectionIcon name="schedule" className="extra-art" /> Свободное расписание <Icon name="external" />
-              </OutLink>
+        <section className="section rev-contact" id="contact">
+          <div className="wrap rev-contact-grid">
+            <div className="rev-contact-photo"><img src="./nikita-hero.webp" alt="Никита Осадчук с гитарой" loading="lazy" width="1000" height="1245" /><span>Напишите, что хотите сыграть. Я отвечу сам.</span></div>
+            <div className="rev-contact-card"><span className="rev-kicker">06 / НАЧНИТЕ ЗДЕСЬ</span><h2>Оставить заявку</h2><p>Расскажите немного о себе — подготовлю сообщение для Telegram.</p>
+              <form onSubmit={submitLead}>
+                <label>Ваше имя<input value={leadName} onChange={(e) => setLeadName(e.target.value)} required maxLength="80" autoComplete="given-name" placeholder="Как к вам обращаться" /></label>
+                <label>Как с вами связаться <small>необязательно</small><input value={leadContact} onChange={(e) => setLeadContact(e.target.value)} maxLength="120" placeholder="@username или телефон" autoComplete="off" /></label>
+                <label>Что интересует<select value={leadFormat} onChange={(e) => setLeadFormat(e.target.value)}><option>Курс «Базовый минимум»</option><option>Курс с проверкой заданий</option><option>Индивидуальные онлайн-уроки</option><option>Абонемент «2+2»</option><option>Разборы песен и табы</option><option>Помогите выбрать</option></select></label>
+                <label>Какая музыка нравится? <small>необязательно</small><textarea value={leadGoal} onChange={(e) => setLeadGoal(e.target.value)} maxLength="300" placeholder="Песня или цель занятий" rows="2" /></label>
+                <button className="button lime full" type="submit">Открыть заявку в Telegram <Icon name="arrow" /></button>
+                <p className="rev-form-note">Откроется готовое сообщение. Отправьте его, чтобы я получил заявку.</p>
+              </form>
             </div>
           </div>
-        </section>
-
-        <section className="section faq" id="faq">
-          <div className="wrap faq-grid">
-            <div>
-              <SectionIcon name="faq" className="faq-art" />
-              <h2>
-                Вопросы
-                <br />
-                <span>об обучении</span>
-              </h2>
-              <a
-                className="text-button"
-                href={telegram}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Написать Никите <Icon name="external" className="inline-icon" />
-              </a>
-            </div>
-            <div>
-              {questions.map(([q, a]) => (
-                <details key={q} className="faq-item">
-                  <summary>
-                    <h3>{q}</h3>
-                    <span className="plus" aria-hidden="true" />
-                  </summary>
-                  <p>{a}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-        <section className="contact outer" id="contact">
-          <SectionIcon name="lesson" className="contact-art" />
-          <p className="label">Поможем выбрать</p>
-          <h2>
-            С чего начнётся
-            <br />
-            <span>ваша музыка?</span>
-          </h2>
-          <p>Расскажите, на чём хотите играть и что уже получается.</p>
-          <button className="button lime" onClick={() => openBooking()}>
-            Обсудить обучение <Icon name="arrow" />
-          </button>
         </section>
       </main>
-      <footer className="footer wrap">
-        <div className="footer-top">
-          <a href="#top" aria-label="Струны будущего — к началу">
-            <Logo />
-          </a>
-          <p>
-            Курс гитары, уроки и разборы песен
-            <br />
-            Никита Осадчук
-          </p>
-          <div className="footer-socials">
-            <OutLink href={channel}>
-              Канал Telegram <Icon name="external" className="inline-icon" />
-            </OutLink>
-            <OutLink href="https://vk.com/strunib">
-              ВКонтакте <Icon name="external" className="inline-icon" />
-            </OutLink>
-            <OutLink href={reviews}>
-              Профи.ру <Icon name="external" className="inline-icon" />
-            </OutLink>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <span>© 2026 «Струны будущего»</span>
-          <a href="./student-info/">Памятка ученика</a>
-          <a href="#top">Наверх ↑</a>
-        </div>
-      </footer>
-
-      <a className="hub-mobile-cta" href="#directions">
-        Выбрать обучение <Icon name="arrow" />
-      </a>
-      {modal?.type === "booking" && (
-        <BookingDialog
-          selection={modal.selection}
-          instrument={modal.instrument}
-          initialLevel={modal.initialLevel}
-          guitarOnly={modal.guitarOnly}
-          onClose={() => setModal(null)}
-        />
-      )}
-      {modal?.type === "photo" && (
-        <Dialog
-          title="Ученики и преподаватель на сцене"
-          wide
-          onClose={() => setModal(null)}
-        >
-          <img
-            className="gallery-photo"
-            src="./students-group.webp"
-            alt="Никита с учениками после выступления"
-          />
-        </Dialog>
-      )}
-      {modal?.type === "video" && (
-        <Dialog title="Пример урока курса" onClose={() => setModal(null)}>
-          <p>Никита пришлёт бесплатный пример объяснения в Telegram.</p>
-          <a
-            href={lessonRequest}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="button lime full"
-          >
-            Получить пример урока <Icon name="arrow" />
-          </a>
-        </Dialog>
-      )}
+      <footer className="footer wrap"><div className="footer-top"><a href="#top" aria-label="Струны будущего — к началу"><Logo /></a><p>Курс гитары, уроки и разборы песен<br />Никита Осадчук</p><div className="footer-socials"><OutLink href={channel}>Канал Telegram <Icon name="external" className="inline-icon" /></OutLink><OutLink href="https://vk.com/strunib">ВКонтакте <Icon name="external" className="inline-icon" /></OutLink><OutLink href={reviews}>Профи.ру <Icon name="external" className="inline-icon" /></OutLink></div></div><div className="footer-bottom"><span>© 2026 «Струны будущего»</span><a href="./student-info/">Памятка ученика</a><a href="#top">Наверх ↑</a></div></footer>
+      <a className="hub-mobile-cta" href="#contact">Оставить заявку <Icon name="arrow" /></a>
+      {modal?.type === "booking" && <BookingDialog selection={modal.selection} instrument={modal.instrument} initialLevel={modal.initialLevel} guitarOnly={modal.guitarOnly} onClose={() => setModal(null)} />}
+      {modal?.type === "case" && <Dialog title={modal.item.title} wide onClose={() => setModal(null)}><img className="gallery-photo" src={modal.item.image} alt={modal.item.alt} /><p className="rev-case-caption">{modal.item.description}</p></Dialog>}
     </div>
   );
 }

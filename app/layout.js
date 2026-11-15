@@ -2,6 +2,7 @@ import "./globals.css";
 import "./interactive.css";
 import "./hub.css";
 import "./winter.css";
+import "./revamp.css";
 
 export const metadata = {
   title: "Струны будущего — курс гитары и онлайн-уроки музыки",
