@@ -656,9 +656,7 @@ export default function Home() {
           <div className="wrap">
             <div className="rev-cases-head">
               <div>
-                <span className="rev-kicker">04 / ИСТОРИИ УЧЕНИКОВ</span>
                 <h2>НАШИ КЕЙСЫ</h2>
-                <p>Пять мест для видео учеников. Листайте карточки в сторону.</p>
               </div>
               <div className="rev-case-controls" aria-label="Управление каруселью">
                 <button type="button" aria-label="Предыдущий кейс" disabled={!caseNav.back} onClick={() => scrollCases(-1)}><Icon name="arrow" /></button>
