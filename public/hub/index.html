@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f6f2">
+  <meta name="description" content="Личная панель проектов Струны будущего: школа, гитарные тренажёры, каталог разборов, CRM и инструменты.">
+  <title>Панель проектов · Струны будущего</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body data-theme="paper">
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Основная навигация">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M11 6v20m7-17v19m7-23v21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="11" cy="28" r="3.2" fill="currentColor"/><circle cx="18" cy="29" r="3.2" fill="currentColor"/><circle cx="25" cy="27" r="3.2" fill="currentColor"/></svg></div>
+      <div class="brand-name"><strong>Струны будущего</strong><span>PROJECT SPACE</span></div>
+      <button class="icon-button close-mobile" id="closeMenu" aria-label="Закрыть меню">×</button>
+    </div>
+    <div class="sidebar-caption">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+    <nav class="nav" id="nav">
+      <button class="nav-button selected" data-section="all"><span class="nav-icon" data-icon="grid"></span><span>Обзор</span><span class="nav-count" data-count="all"></span></button>
+      <button class="nav-button" data-section="sites"><span class="nav-icon" data-icon="globe"></span><span>Сайты и школа</span><span class="nav-count" data-count="sites"></span></button>
+      <button class="nav-button" data-section="trainers"><span class="nav-icon" data-icon="sliders"></span><span>Тренажёры</span><span class="nav-count" data-count="trainers"></span></button>
+      <button class="nav-button" data-section="admin"><span class="nav-icon" data-icon="shield"></span><span>CRM и управление</span><span class="nav-count" data-count="admin"></span></button>
+      <button class="nav-button" data-section="development"><span class="nav-icon" data-icon="code"></span><span>Разработка</span><span class="nav-count" data-count="development"></span></button>
+      <button class="nav-button" data-section="social"><span class="nav-icon" data-icon="users"></span><span>Соцсети и связь</span><span class="nav-count" data-count="social"></span></button>
+      <div class="nav-separator"></div>
+      <button class="nav-button" data-section="favorites"><span class="nav-icon" data-icon="star"></span><span>Избранное</span><span class="nav-count" data-count="favorites"></span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-note"><span class="dot"></span><strong>Все ссылки в одном месте</strong><p>Избранное и свои проекты сохраняются в этом браузере.</p></div>
+      <a href="https://github.com/strunibb" target="_blank" rel="noopener noreferrer" class="github-link"><span data-icon="github"></span> Мой GitHub <span data-icon="arrow-up-right"></span></a>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <main class="main" id="main">
+    <header class="topbar">
+      <button class="icon-button mobile-menu" id="openMenu" aria-label="Открыть меню"><span data-icon="menu"></span></button>
+      <div class="breadcrumb">Личное пространство <span>/</span> <strong id="breadcrumb">Обзор</strong></div>
+      <div class="topbar-right">
+        <label class="searchbox" for="search"><span data-icon="search"></span><input id="search" type="search" placeholder="Найти проект, сервис, ссылку..." autocomplete="off" aria-label="Поиск по проектам"><kbd>⌘ K</kbd></label>
+        <select id="themeSelect" aria-label="Тема оформления" title="Выбрать оформление"><option value="paper">Светлая</option><option value="night">Тёмная</option><option value="sage">Шалфей</option></select>
+        <button class="button button-dark top-add" id="addTop"><span data-icon="plus"></span><span>Добавить ссылку</span></button>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="hero" id="hero">
+        <div class="hero-content"><div class="eyebrow"><span class="live-indicator"></span> ЕДИНЫЙ ЦЕНТР УПРАВЛЕНИЯ</div>
+          <h1>Все твои проекты.<br><em>Один адрес.</em></h1>
+          <p>Сайты, уроки, музыкальные тренажёры, CRM и разработки. Всё под рукой, без десятков потерянных вкладок.</p>
+          <div class="hero-actions"><button class="button button-dark" id="addHero"><span data-icon="plus"></span> Добавить проект</button><button class="button button-ghost" id="favoritesHero"><span data-icon="star"></span> Избранное</button></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-spark spark-one">✳</div><div class="art-spark spark-two">✴</div>
+          <div class="art-card art-card-one"><span class="mini-icon purple" data-icon="music"></span><div><b>Гитарные тренажёры</b><small>Practice space</small></div><span data-icon="arrow-up-right"></span></div>
+          <div class="art-card art-card-two"><span class="mini-icon orange" data-icon="folder"></span><div><b>Мои проекты</b><small>Everything connected</small></div><span class="art-check" data-icon="check"></span></div>
+          <div class="art-card art-card-three"><span class="mini-icon teal" data-icon="layout"></span><div><b>Управление</b><small>Все сервисы рядом</small></div><span data-icon="arrow-up-right"></span></div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Сводка проектов">
+        <div class="metric"><span class="metric-symbol lilac" data-icon="layers"></span><div><b id="statAll">0</b><span>Всего ссылок</span></div></div>
+        <div class="metric"><span class="metric-symbol blue" data-icon="globe"></span><div><b id="statSites">0</b><span>Сайты и школа</span></div></div>
+        <div class="metric"><span class="metric-symbol amber" data-icon="music"></span><div><b id="statTrainers">0</b><span>Тренажёры</span></div></div>
+        <div class="metric"><span class="metric-symbol green" data-icon="star"></span><div><b id="statFav">0</b><span>В избранном</span></div></div>
+      </section>
+
+      <section class="quick-section" id="quickSection">
+        <div class="section-title-row"><div><div class="tiny-overline">НАЧНИ ЗДЕСЬ</div><h2>Быстрый доступ <span class="small-star">✳</span></h2></div><span class="section-subtle">Главное для работы каждый день</span></div>
+        <div class="quick-grid" id="quickGrid"></div>
+      </section>
+
+      <section class="catalog" id="catalog">
+        <div class="section-title-row catalog-heading"><div><div class="tiny-overline">ТВОЯ ЭКОСИСТЕМА</div><h2 id="catalogTitle">Все проекты</h2><p class="catalog-subtitle" id="catalogSubtitle">Выбери нужный инструмент и переходи к работе.</p></div>
+          <div class="catalog-controls"><span class="result-label" id="resultCount">0 ссылок</span><select id="sortSelect" aria-label="Сортировка"><option value="default">По разделам</option><option value="alphabet">По алфавиту</option><option value="favorites">Сначала избранное</option></select></div>
+        </div>
+        <div class="filter-pills" id="filterPills">
+          <button class="filter-pill active" data-filter="all">Все</button><button class="filter-pill" data-filter="sites">Сайты</button><button class="filter-pill" data-filter="trainers">Тренажёры</button><button class="filter-pill" data-filter="admin">Управление</button><button class="filter-pill" data-filter="development">Исходники</button><button class="filter-pill" data-filter="social">Связь</button>
+        </div>
+        <div class="project-grid" id="cards"></div>
+        <div class="empty" id="empty" hidden><div class="empty-icon" data-icon="search"></div><h3>Ничего не нашлось</h3><p>Попробуй другое слово или добавь нужный проект.</p><button class="button button-dark" id="emptyAdd">Добавить ссылку</button></div>
+      </section>
+
+      <footer class="footer"><span>© <span id="year">2026</span> Струны будущего · Рабочая панель проектов</span><div><button id="exportButton" class="footer-link"><span data-icon="download"></span> Экспорт настроек</button><button id="importButton" class="footer-link"><span data-icon="upload"></span> Импорт</button></div></footer>
+      <div class="security-note"><span data-icon="shield"></span><span>Панель открыта по ссылке. Не размещай здесь пароли, токены и личные данные учеников. CRM открывается отдельно с собственной авторизацией.</span></div>
+    </div>
+  </main>
+</div>
+
+<dialog class="dialog" id="projectDialog" aria-labelledby="dialogTitle">
+  <form id="projectForm" method="dialog" novalidate>
+    <div class="dialog-head"><div><div class="tiny-overline">НАСТРОЙКА ПРОСТРАНСТВА</div><h2 id="dialogTitle">Новая ссылка</h2></div><button type="button" class="icon-button" id="closeDialog" aria-label="Закрыть">×</button></div>
+    <p class="dialog-desc">Добавляй свои сайты и сервисы. Они сохраняются только в текущем браузере.</p>
+    <input type="hidden" id="editId">
+    <label class="field">Название проекта<input id="projectName" name="name" required maxlength="90" placeholder="Например, тренажёр аккордов"></label>
+    <label class="field">Адрес сайта<input id="projectUrl" name="url" type="url" required maxlength="2000" placeholder="https://..."></label>
+    <label class="field">Описание<textarea id="projectDescription" name="description" rows="2" maxlength="220" placeholder="Что находится по этой ссылке"></textarea></label>
+    <label class="field">Раздел<select id="projectCategory" name="category"><option value="sites">Сайты и школа</option><option value="trainers">Тренажёры</option><option value="admin">CRM и управление</option><option value="development">Разработка</option><option value="social">Соцсети и связь</option></select></label>
+    <label class="check-field"><input type="checkbox" id="projectFavorite"> Сразу добавить в избранное</label>
+    <p class="form-error" id="formError" role="alert" hidden></p>
+    <div class="dialog-actions"><button type="button" class="button button-ghost" id="cancelDialog">Отмена</button><button type="submit" class="button button-dark"><span data-icon="check"></span> Сохранить ссылку</button></div>
+  </form>
+</dialog>
+
+<dialog class="dialog import-dialog" id="importDialog" aria-labelledby="importTitle">
+  <div class="dialog-head"><div><div class="tiny-overline">РЕЗЕРВНАЯ КОПИЯ</div><h2 id="importTitle">Импорт настроек</h2></div><button type="button" class="icon-button" id="closeImport" aria-label="Закрыть">×</button></div>
+  <p class="dialog-desc">Выбери JSON-файл, ранее выгруженный из этой панели. Свои ссылки и избранное будут заменены данными из файла.</p>
+  <label class="field">Файл резервной копии<input type="file" id="importFile" accept=".json,application/json"></label>
+  <p class="form-error" id="importError" role="alert" hidden></p>
+  <div class="dialog-actions"><button type="button" class="button button-ghost" id="cancelImport">Отмена</button><button type="button" class="button button-dark" id="confirmImport">Импортировать</button></div>
+</dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
