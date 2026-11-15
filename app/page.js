@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { DirectionCard, Techniques } from "./interactive";
-import WinterAtmosphere from "./winter";
-import { programTracks, extendedTracks } from "./program-data";
 
 const telegram = "https://t.me/nikguitar";
 const channel = "https://t.me/nikguita";
@@ -39,6 +37,40 @@ const instruments = [
     name: "Фортепиано",
     note: "Мелодия, аккомпанемент и две руки",
     text: "Индивидуальные занятия с Никитой. Ноты, координация рук, ритм и произведения с учётом вашего опыта.",
+  },
+];
+const courseSongs = [
+  {
+    artist: "Кино",
+    title: "Пачка сигарет",
+    note: "Первые аккорды и цельная песня",
+  },
+  {
+    artist: "Кино",
+    title: "Звезда по имени Солнце",
+    note: "Уверенный ритм и смена аккордов",
+  },
+  {
+    artist: "Король и Шут",
+    title: "Кукла колдуна",
+    note: "Энергия и выразительная игра",
+  },
+  { artist: "Dabro", title: "Юность", note: "Современный аккомпанемент" },
+  { artist: "Баста", title: "Сансара", note: "Ритм и настроение" },
+  {
+    artist: "Кино",
+    title: "Группа крови",
+    note: "Новый рисунок для знакомого хита",
+  },
+  {
+    artist: "Звери",
+    title: "Районы-кварталы",
+    note: "Игра с роковым характером",
+  },
+  {
+    artist: "Сплин",
+    title: "Моё сердце",
+    note: "Смена аккордов без остановок",
   },
 ];
 const coursePlans = [
@@ -333,6 +365,7 @@ export default function Home() {
   const [instrument, setInstrument] = useState(0);
   const [format, setFormat] = useState("course");
   const [selectedLevel, setSelectedLevel] = useState("С нуля");
+  const [songIndex, setSongIndex] = useState(0);
   const [modal, setModal] = useState(null);
   const [menu, setMenu] = useState(false);
   const [moreMaterials, setMoreMaterials] = useState(false);
@@ -414,7 +447,6 @@ export default function Home() {
   };
   return (
     <div className="school-hub">
-      <WinterAtmosphere />
       <a className="skip-link" href="#main">
         К содержимому
       </a>
@@ -757,53 +789,108 @@ export default function Home() {
             <div className="wrap">
               <div className="section-title">
                 <h2>
-                  Что внутри <span>курса</span>
+                  Что ты <span>сыграешь?</span>
                 </h2>
-                <p>Сначала база, затем ритм, приёмы и песни для практики.</p>
+                <p>
+                  Научишься играть песни целиком: от первых аккордов до
+                  уверенного ритма.
+                </p>
               </div>
-              <p className="course-included">
-                Все разделы ниже входят в полный курс в обоих тарифах.
-              </p>
-              <div className="course-path">
-                {[
-                  programTracks[0],
-                  ...extendedTracks.filter((item) => item.id !== "materials"),
-                ].map((group, groupIndex) => (
-                  <div className="path-group" key={group.id}>
-                    <div className="path-header">
-                      <span>0{groupIndex + 1}</span>
-                      <div>
-                        <h3>
-                          {
-                            ["Первые шаги", "Бои и песни", "Приёмы и переборы"][
-                              groupIndex
-                            ]
-                          }
-                        </h3>
-                        <p>{group.intro}</p>
-                      </div>
-                    </div>
-                    <div className="path-lessons">
-                      {group.modules.map((item) => (
-                        <details className="lesson" key={item.no}>
-                          <summary>
-                            <h3>{item.title}</h3>
-                            <span className="plus" aria-hidden="true" />
-                          </summary>
-                          <div className="lesson-body">
-                            <p>{item.desc}</p>
-                            {item.result && (
-                              <p className="lesson-result">{item.result}</p>
-                            )}
-                            {item.songs && (
-                              <p className="lesson-songs">{item.songs}</p>
-                            )}
-                          </div>
-                        </details>
-                      ))}
+              <div className="course-showcase">
+                <div className="showcase-card showcase-rhythm">
+                  <span
+                    className="showcase-art showcase-drum"
+                    aria-hidden="true"
+                  >
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <span className="showcase-kicker">Ритм</span>
+                  <strong>9 боёв</strong>
+                  <p>
+                    Освоишь разные рисунки на примерах известных песен — от
+                    спокойных до роковых.
+                  </p>
+                </div>
+                <div className="showcase-card showcase-song">
+                  <span
+                    className="showcase-art showcase-record"
+                    aria-hidden="true"
+                  >
+                    <i />
+                  </span>
+                  <span className="showcase-kicker">Репертуар</span>
+                  <strong>Любимые песни</strong>
+                  <p>
+                    Будешь соединять аккорды, ритм и исполнение в одну цельную
+                    песню.
+                  </p>
+                </div>
+                <div className="showcase-card showcase-hands">
+                  <span
+                    className="showcase-art showcase-notes"
+                    aria-hidden="true"
+                  >
+                    ♫
+                  </span>
+                  <span className="showcase-kicker">Техника</span>
+                  <strong>Переборы и приёмы</strong>
+                  <p>
+                    Добавишь новые способы игры, чтобы музыка звучала
+                    разнообразнее.
+                  </p>
+                </div>
+              </div>
+              <div className="song-picker">
+                <div className="song-picker-copy">
+                  <span className="gift-kicker">Примеры из курса</span>
+                  <h3>Песни, которые разберём</h3>
+                  <p>Выбери ту, с которой тебе хочется начать.</p>
+                  <div className="song-spotlight" aria-live="polite">
+                    <span className="song-vinyl" aria-hidden="true">
+                      <i />
+                    </span>
+                    <div>
+                      <span>{courseSongs[songIndex].artist}</span>
+                      <strong>{courseSongs[songIndex].title}</strong>
+                      <small>{courseSongs[songIndex].note}</small>
                     </div>
                   </div>
-                ))}
+                  <button
+                    className="button primary"
+                    onClick={() =>
+                      openBooking(
+                        "Курс «Базовый минимум» — хочу сыграть «" +
+                          courseSongs[songIndex].title +
+                          "»",
+                        true,
+                      )
+                    }
+                  >
+                    Хочу научиться <Icon name="arrow" />
+                  </button>
+                </div>
+                <div
+                  className="song-picker-list"
+                  role="group"
+                  aria-label="Выберите песню из курса"
+                >
+                  {courseSongs.map((song, i) => (
+                    <button
+                      key={song.artist + song.title}
+                      className={
+                        "song-pick" + (songIndex === i ? " active" : "")
+                      }
+                      aria-pressed={songIndex === i}
+                      onClick={() => setSongIndex(i)}
+                    >
+                      <span>{String(i + 1).padStart(2, "0")}</span>
+                      <strong>{song.title}</strong>
+                      <small>{song.artist}</small>
+                    </button>
+                  ))}
+                </div>
               </div>
               <div className="course-gift">
                 <div className="gift-story">
