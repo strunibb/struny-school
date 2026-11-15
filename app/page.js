@@ -17,8 +17,8 @@ const instruments = [
   {
     id: "guitar",
     name: "Гитара",
-    note: "От первых аккордов до любимых песен",
-    text: "Гитара с нуля: полный видеокурс, чередование видео и личных уроков «2+2» или четыре личных урока в месяц.",
+    note: "Гитара",
+    text: "Курс «Базовый минимум», формат «2+2» или личные уроки.",
   },
   {
     id: "electric",
@@ -496,33 +496,13 @@ export default function Home() {
           <div className="hub-hero-copy">
             <p className="eyebrow">Онлайн-школа Никиты Осадчука</p>
             <h1>
-              Учись играть песни,
+              Струны будущего
               <br />
-              <span>которые знаешь.</span>
+              <span>Онлайн-школа музыки</span>
             </h1>
-            <p className="hub-lead">
-              Курс гитары, личные занятия и разборы песен. Начни с видеокурса
-              или занимайся со мной онлайн.
-            </p>
             <div className="hub-actions">
               <a className="button lime" href="#directions">
                 Выбрать обучение <Icon name="arrow" />
-              </a>
-              <a className="button outline" href={catalog}>
-                Найти песню <Icon name="music" />
-              </a>
-            </div>
-            <div className="hub-hero-links">
-              <a href="#course" onClick={() => choose(0, "course")}>
-                Видеокурс от 5 990 ₽{" "}
-                <Icon name="external" className="inline-icon" />
-              </a>
-              <a
-                href="#prices"
-                onClick={() => choose(instrument, "individual")}
-              >
-                Личные уроки от 3 990 ₽ за 4 занятия{" "}
-                <Icon name="external" className="inline-icon" />
               </a>
             </div>
           </div>
@@ -534,10 +514,6 @@ export default function Home() {
               alt="Никита Осадчук с гитарой"
               fetchPriority="high"
             />
-            <div className="hub-photo-caption">
-              <strong>Никита Осадчук</strong>
-              <span>Преподаю с 2019 года</span>
-            </div>
           </div>
         </section>
         <section className="section directions" id="directions">
@@ -600,10 +576,6 @@ export default function Home() {
                     <div>
                       <p className="label">Полный видеокурс по гитаре</p>
                       <h2>Базовый минимум</h2>
-                      <p>
-                        Аккорды, 9 боёв, переборы и песни. Оба тарифа дают
-                        доступ к одному и тому же курсу.
-                      </p>
                     </div>
                     <a href="#program" className="text-button">
                       Посмотреть программу ↓
@@ -642,7 +614,6 @@ export default function Home() {
                     ))}
                   </div>
                   <div className="hub-sample">
-                    <p>Пришлю фрагмент урока, чтобы ты увидел формат видео.</p>
                     <a
                       href={lessonRequest}
                       target="_blank"
@@ -777,10 +748,6 @@ export default function Home() {
                 <h2>
                   Что ты <span>сыграешь?</span>
                 </h2>
-                <p>
-                  Вот песни из курса. Список приёмов и порядок уроков остаются
-                  внутри обучения.
-                </p>
               </div>
               <div className="course-showcase">
                 <div className="showcase-card showcase-rhythm">
@@ -829,7 +796,6 @@ export default function Home() {
                 <div className="song-picker-copy">
                   <span className="gift-kicker">Репертуар видеокурса</span>
                   <h3>Песни из курса</h3>
-                  <p>Нажми на название, чтобы посмотреть исполнителя.</p>
                   <div className="song-spotlight" aria-live="polite">
                     <span className="song-vinyl" aria-hidden="true">
                       <i />
@@ -997,14 +963,7 @@ export default function Home() {
             />
             <div>
               <p className="label">Готовые разборы</p>
-              <h2>
-                Разборы песен<br />
-                <span>в отдельном каталоге.</span>
-              </h2>
-              <p>
-                В каталоге — отдельные разборы. У каждой песни указаны состав
-                материалов и цена.
-              </p>
+              <h2>Каталог песен</h2>
               <a className="button lime" href={catalog}>
                 Открыть каталог песен <Icon name="arrow" />
               </a>
