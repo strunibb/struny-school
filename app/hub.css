@@ -211,7 +211,6 @@
 .faq-art { width: 150px; height: 150px; margin-bottom: 10px; }
 .level-explore-card .level-art { top: 4px; right: 12px; transform: none; }
 .level-explore-card .level-art .section-icon { width: 145px; height: 145px; }
-.song-vinyl-art.section-icon { width: 105px; height: 105px; }
 .material-visual { position: relative; }
 .material-visual .section-icon {
   position: absolute;
@@ -1195,12 +1194,27 @@
 .song-spotlight {
   display: flex;
   align-items: center;
-  gap: 20px;
-  min-height: 145px;
-  padding: 19px;
+  gap: 24px;
+  min-height: 190px;
+  padding: 18px;
   margin-bottom: 20px;
   background: linear-gradient(120deg, #e8d9f7, #eaf4f3);
   border-radius: 22px;
+}
+.song-cover {
+  display: block;
+  width: 150px;
+  height: 150px;
+  flex: none;
+  object-fit: cover;
+  border: 3px solid #ffffffb3;
+  border-radius: 16px;
+  box-shadow: 0 12px 26px #1d244532;
+  animation: song-cover-enter 260ms ease-out both;
+}
+@keyframes song-cover-enter {
+  from { opacity: 0.35; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 .song-spotlight > div {
   display: flex;
@@ -1218,26 +1232,6 @@
   font-size: 13px;
   color: #6d4590;
   font-weight: 800;
-}
-.song-vinyl {
-  width: 100px;
-  height: 100px;
-  flex: none;
-  border-radius: 50%;
-  background: repeating-radial-gradient(circle, #272234 0 4px, #3f384c 5px 6px);
-  border: 5px solid #292334;
-  box-shadow: 7px 9px 0 #5d507155;
-  display: grid;
-  place-items: center;
-  animation: record-spin 18s linear infinite;
-}
-.song-vinyl i {
-  display: block;
-  width: 31px;
-  height: 31px;
-  border-radius: 50%;
-  background: #c9e980;
-  border: 7px solid #a7c568;
 }
 .song-picker-list {
   display: grid;
@@ -1317,15 +1311,18 @@
     font-size: 12px;
   }
   .song-spotlight {
-    gap: 13px;
+    gap: 14px;
+    min-height: 132px;
+    padding: 12px;
   }
-  .song-vinyl {
-    width: 73px;
-    height: 73px;
+  .song-cover {
+    width: 106px;
+    height: 106px;
+    border-radius: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .song-vinyl {
+  .song-cover {
     animation: none;
   }
   .gift-art.section-icon { animation: none; }

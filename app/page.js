@@ -41,24 +41,24 @@ const instruments = [
   },
 ];
 const courseSongs = [
-  { artist: "Кино", title: "Пачка сигарет" },
-  { artist: "Кино", title: "Звезда по имени Солнце" },
-  { artist: "Кино", title: "Закрой за мной дверь" },
-  { artist: "Кино", title: "Когда твоя девушка больна" },
-  { artist: "Кино", title: "Кукушка" },
-  { artist: "Кино", title: "Группа крови" },
-  { artist: "Dabro", title: "Юность" },
-  { artist: "Агата Кристи", title: "Как на войне" },
-  { artist: "Король и Шут", title: "Кукла колдуна" },
-  { artist: "Звери", title: "Районы-кварталы" },
-  { artist: "Амега", title: "Лететь" },
-  { artist: "Баста", title: "Сансара" },
-  { artist: "Виктор Салтыков", title: "Белая ночь" },
-  { artist: "Сплин", title: "Моё сердце" },
-  { artist: "Ария", title: "Я свободен" },
-  { artist: "Женя Трофимов", title: "Поезда" },
-  { artist: "Братья Грим", title: "Кустурица" },
-  { artist: "Звери", title: "До скорой встречи" },
+  { artist: "Кино", title: "Пачка сигарет", cover: "zvezda", release: "Звезда по имени Солнце" },
+  { artist: "Кино", title: "Звезда по имени Солнце", cover: "zvezda", release: "Звезда по имени Солнце" },
+  { artist: "Кино", title: "Закрой за мной дверь", cover: "noch", release: "Ночь" },
+  { artist: "Кино", title: "Когда твоя девушка больна", cover: "chernyy", release: "Чёрный альбом" },
+  { artist: "Кино", title: "Кукушка", cover: "chernyy", release: "Чёрный альбом" },
+  { artist: "Кино", title: "Группа крови", cover: "gruppa", release: "Группа крови" },
+  { artist: "Dabro", title: "Юность", cover: "yunost", release: "Юность" },
+  { artist: "Агата Кристи", title: "Как на войне", cover: "pozornaya", release: "Позорная звезда" },
+  { artist: "Король и Шут", title: "Кукла колдуна", cover: "akusticheskiy", release: "Акустический альбом" },
+  { artist: "Звери", title: "Районы-кварталы", cover: "rayony", release: "Районы-кварталы" },
+  { artist: "А-Мега", title: "Лететь", cover: "vverh", release: "Вверх, Ч. 1" },
+  { artist: "Баста", title: "Сансара", cover: "sansara", release: "Сансара" },
+  { artist: "Форум · Виктор Салтыков", title: "Белая ночь", cover: "belaya", release: "Белая ночь" },
+  { artist: "Сплин", title: "Моё сердце", cover: "25-kadr", release: "25-й кадр" },
+  { artist: "Кипелов и Сергей Маврин", title: "Я свободен", cover: "smutnoe", release: "Смутное время" },
+  { artist: "Женя Трофимов и Комната культуры", title: "Поезда", cover: "poezda", release: "Поезда" },
+  { artist: "Братья Грим", title: "Кустурица", cover: "bratya", release: "Братья Гримм" },
+  { artist: "Звери", title: "До скорой встречи", cover: "do-skoroy", release: "Когда мы вместе, никто не круче" },
 ];
 const coursePlans = [
   {
@@ -784,7 +784,14 @@ export default function Home() {
                   <span className="gift-kicker">Репертуар видеокурса</span>
                   <h3>Песни из курса</h3>
                   <div className="song-spotlight" aria-live="polite">
-                    <SectionIcon name="catalog" className="song-vinyl-art" />
+                    <img
+                      key={courseSongs[songIndex].cover}
+                      className="song-cover"
+                      src={`./song-covers/${courseSongs[songIndex].cover}.webp`}
+                      alt={`Обложка релиза «${courseSongs[songIndex].release}»`}
+                      width="600"
+                      height="600"
+                    />
                     <div>
                       <span>{courseSongs[songIndex].artist}</span>
                       <strong>{courseSongs[songIndex].title}</strong>
