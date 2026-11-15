@@ -755,14 +755,7 @@ export default function Home() {
               </div>
               <div className="course-showcase">
                 <div className="showcase-card showcase-rhythm">
-                  <span
-                    className="showcase-art showcase-drum"
-                    aria-hidden="true"
-                  >
-                    <i />
-                    <i />
-                    <i />
-                  </span>
+                  <SectionIcon name="rhythm" className="showcase-art" />
                   <span className="showcase-kicker">Ритм</span>
                   <strong>9 боёв</strong>
                   <p>
@@ -770,12 +763,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="showcase-card showcase-song">
-                  <span
-                    className="showcase-art showcase-record"
-                    aria-hidden="true"
-                  >
-                    <i />
-                  </span>
+                  <SectionIcon name="catalog" className="showcase-art" />
                   <span className="showcase-kicker">Репертуар</span>
                   <strong>Любимые песни</strong>
                   <p>
@@ -783,12 +771,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="showcase-card showcase-hands">
-                  <span
-                    className="showcase-art showcase-notes"
-                    aria-hidden="true"
-                  >
-                    ♫
-                  </span>
+                  <SectionIcon name="chords" className="showcase-art" />
                   <span className="showcase-kicker">Техника</span>
                   <strong>Переборы и приёмы</strong>
                   <p>
@@ -858,36 +841,17 @@ export default function Home() {
                 </div>
                 <div className="gift-gallery" aria-label="Подарки к курсу">
                   <div className="gift-item gift-present">
-                    <span className="gift-art" aria-hidden="true">
-                      <span className="gift-lid" />
-                      <span className="gift-bow" />
-                      <span className="gift-box" />
-                    </span>
+                    <SectionIcon name="gift" className="gift-art" />
                     <strong>Подарок</strong>
                     <small>К каждому тарифу</small>
                   </div>
                   <div className="gift-item gift-pdf">
-                    <span className="gift-art" aria-hidden="true">
-                      <span className="gift-book">
-                        <span className="gift-book-cover">
-                          PDF
-                          <span className="gift-book-line" />
-                          <span className="gift-book-line short" />
-                        </span>
-                      </span>
-                    </span>
+                    <SectionIcon name="pdf" className="gift-art" />
                     <strong>PDF-блокнот</strong>
                     <small>Схемы и упражнения</small>
                   </div>
                   <div className="gift-item gift-practice">
-                    <span className="gift-art" aria-hidden="true">
-                      <span className="gift-meter">
-                        <span className="meter-dial">
-                          <i />
-                        </span>
-                        <span className="meter-keys">♪ ♫ ♪</span>
-                      </span>
-                    </span>
+                    <SectionIcon name="practice" className="gift-art" />
                     <strong>Тренажёры</strong>
                     <small>Ритм и аккорды</small>
                   </div>
@@ -938,7 +902,7 @@ export default function Home() {
                 >
                   <span className="level-number">0{i + 1}</span>
                   <span className="level-art" aria-hidden="true">
-                    <SectionIcon name={["course", "practice", "students"][i]} />
+                    <SectionIcon name={["course", "chords", "practice"][i]} />
                   </span>
                   <strong>{title}</strong>
                   <span>{description}</span>
@@ -1158,7 +1122,7 @@ export default function Home() {
                 href="https://strunibb.github.io/akkordi_guitarpro/"
                 className="material-card"
               >
-                <div className="material-visual"><img src="./material-trainer.webp" loading="lazy" alt="Практика игры на гитаре" /><SectionIcon name="course" /></div>
+                <div className="material-visual"><img src="./material-trainer.webp" loading="lazy" alt="Практика игры на гитаре" /><SectionIcon name="chords" /></div>
                 <span>
                   Тренажёр аккордов <Icon name="external" />
                 </span>
@@ -1168,7 +1132,7 @@ export default function Home() {
                 href="https://strunibb.github.io/boi/"
                 className="material-card"
               >
-                <div className="material-visual"><img src="./material-rhythm.webp" loading="lazy" alt="Практика ритма" /><SectionIcon name="practice" /></div>
+                <div className="material-visual"><img src="./material-rhythm.webp" loading="lazy" alt="Практика ритма" /><SectionIcon name="rhythm" /></div>
                 <span>
                   Бои и переборы <Icon name="external" />
                 </span>
@@ -1181,13 +1145,13 @@ export default function Home() {
               className="extra-materials"
             >
               <button onClick={() => setModal({ type: "video" })}>
-                Бесплатный видеоурок <Icon name="play" />
+                <SectionIcon name="video" className="extra-art" /> Бесплатный видеоурок <Icon name="play" />
               </button>
               <OutLink href="./student-info/">
-                Памятка ученика <Icon name="external" />
+                <SectionIcon name="pdf" className="extra-art" /> Памятка ученика <Icon name="external" />
               </OutLink>
               <OutLink href="./schedule/">
-                Свободное расписание <Icon name="external" />
+                <SectionIcon name="schedule" className="extra-art" /> Свободное расписание <Icon name="external" />
               </OutLink>
             </div>
           </div>
@@ -1225,6 +1189,7 @@ export default function Home() {
           </div>
         </section>
         <section className="contact outer" id="contact">
+          <SectionIcon name="lesson" className="contact-art" />
           <p className="label">Поможем выбрать</p>
           <h2>
             С чего начнётся
