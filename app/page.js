@@ -784,9 +784,7 @@ export default function Home() {
                   <span className="gift-kicker">Репертуар видеокурса</span>
                   <h3>Песни из курса</h3>
                   <div className="song-spotlight" aria-live="polite">
-                    <span className="song-vinyl" aria-hidden="true">
-                      <i />
-                    </span>
+                    <SectionIcon name="catalog" className="song-vinyl-art" />
                     <div>
                       <span>{courseSongs[songIndex].artist}</span>
                       <strong>{courseSongs[songIndex].title}</strong>

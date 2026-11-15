@@ -210,7 +210,8 @@
 .heading-art { float: right; width: 135px; height: 135px; margin: -10px 20px 0; }
 .faq-art { width: 150px; height: 150px; margin-bottom: 10px; }
 .level-explore-card .level-art { top: 4px; right: 12px; transform: none; }
-.level-explore-card .level-art .section-icon { width: 100px; height: 100px; }
+.level-explore-card .level-art .section-icon { width: 145px; height: 145px; }
+.song-vinyl-art.section-icon { width: 105px; height: 105px; }
 .material-visual { position: relative; }
 .material-visual .section-icon {
   position: absolute;
@@ -1331,6 +1332,7 @@
 }
 @media (max-width: 650px) {
   .showcase-art.section-icon { width: 160px; height: 160px; top: 0; }
+  .level-explore-card .level-art .section-icon { width: 120px; height: 120px; }
 }
 @media (max-width: 580px) {
   .gift-art.section-icon { width: 110px; height: 115px; top: 12px; }
