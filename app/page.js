@@ -350,11 +350,56 @@ function BookingDialog({
     </Dialog>
   );
 }
+
+function StudentVideoCase({ item, onOpen }) {
+  const [videoReady, setVideoReady] = useState(false);
+  return (
+    <article className="case-story-card" aria-label={"Кейс " + item.id + " из пяти"}>
+      <header className="case-story-brand">
+        <span>СТРУНЫ БУДУЩЕГО</span>
+        <span>ИСТОРИИ УЧЕНИКОВ</span>
+      </header>
+      <div className="case-story-body">
+        <div className="case-story-copy">
+          <span className="case-story-number">{String(item.id).padStart(2, "0")} / 05</span>
+          <h3>{"КЕЙС " + String(item.id).padStart(2, "0")}</h3>
+          <strong>ВИДЕО УЧЕНИКА</strong>
+          <p>{videoReady ? "Нажмите, чтобы посмотреть видео ученика." : "Место для видео ученика. Запись появится после загрузки."}</p>
+        </div>
+        <div className="case-story-visual">
+          <span className="case-story-abstract case-story-abstract-one" aria-hidden="true" />
+          <span className="case-story-abstract case-story-abstract-two" aria-hidden="true" />
+          <span className="case-story-note" aria-hidden="true">♫</span>
+          <video
+            src={item.video}
+            className={videoReady ? "case-story-thumb is-visible" : "case-story-thumb"}
+            preload="metadata"
+            playsInline
+            muted
+            onLoadedMetadata={() => setVideoReady(true)}
+            onError={() => setVideoReady(false)}
+            aria-hidden="true"
+            tabIndex={-1}
+          />
+          {videoReady
+            ? <button className="case-story-play" type="button" onClick={() => onOpen(item)} aria-label={"Смотреть видео, кейс " + item.id}><Icon name="play" /></button>
+            : <span className="case-story-play is-placeholder" aria-hidden="true"><Icon name="play" /></span>}
+        </div>
+      </div>
+      <footer className="case-story-footer">
+        <span>{videoReady ? "ВИДЕО ДОСТУПНО" : "ВИДЕО СКОРО ПОЯВИТСЯ"}</span>
+        <span>{String(item.id).padStart(2, "0")}</span>
+      </footer>
+    </article>
+  );
+}
+
 export default function Home() {
   const [instrument, setInstrument] = useState(0);
   const [selectedLevel] = useState("С нуля");
   const [songIndex, setSongIndex] = useState(0);
-  const [caseIndex, setCaseIndex] = useState(0);
+  const caseTrackRef = useRef(null);
+  const [caseNav, setCaseNav] = useState({ back: false, forward: true });
   const [modal, setModal] = useState(null);
   const [menu, setMenu] = useState(false);
   const [leadName, setLeadName] = useState("");
@@ -403,37 +448,40 @@ export default function Home() {
       initialLevel: selectedLevel,
     });
   };
-  const cases = [
-    {
-      image: "./students-group.webp",
-      alt: "Никита с учениками после выступления",
-      label: "Выступление",
-      title: "Ученики на сцене",
-      description: "Фото с выступления учеников и преподавателя.",
-    },
-    {
-      image: "./material-song.webp",
-      alt: "Никита показывает аккорды и разбор песни",
-      label: "Разбор песни",
-      title: "«Пачка сигарет»",
-      description: "Фрагмент занятия: аккорды, текст и объяснение на видео.",
-    },
-    {
-      image: "./material-trainer.webp",
-      alt: "Никита объясняет бой с помощью тренажёра",
-      label: "Практика",
-      title: "Четвёрка с заглушкой",
-      description: "Видеообъяснение и тренажёр для отработки ритма.",
-    },
-    {
-      image: "./material-rhythm.webp",
-      alt: "Никита показывает ритм на гитаре",
-      label: "Фрагмент урока",
-      title: "Разбор боя по шагам",
-      description: "Ритмическая схема и показ движений на гитаре.",
-    },
-  ];
-  const visibleCases = [0, 1, 2].map((offset) => cases[(caseIndex + offset) % cases.length]);
+  const cases = [1, 2, 3, 4, 5].map((id) => ({
+    id,
+    video: "./cases/student-" + String(id).padStart(2, "0") + ".mp4",
+  }));
+  const updateCaseNav = () => {
+    const track = caseTrackRef.current;
+    if (!track) return;
+    setCaseNav({
+      back: track.scrollLeft > 4,
+      forward: track.scrollLeft + track.clientWidth < track.scrollWidth - 4,
+    });
+  };
+  const scrollCases = (direction) => {
+    const track = caseTrackRef.current;
+    if (!track) return;
+    const first = track.firstElementChild;
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 18;
+    const width = first ? first.getBoundingClientRect().width : 400;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    track.scrollBy({ left: direction * (width + gap), behavior: reduceMotion ? "auto" : "smooth" });
+  };
+  useEffect(() => {
+    const track = caseTrackRef.current;
+    if (!track) return;
+    const sync = () => {
+      setCaseNav({
+        back: track.scrollLeft > 4,
+        forward: track.scrollLeft + track.clientWidth < track.scrollWidth - 4,
+      });
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
   const submitLead = (event) => {
     event.preventDefault();
     const message = [
@@ -471,9 +519,7 @@ export default function Home() {
           <div className="rev-hero-photo" aria-hidden="true"><img src="./nikita-hero.webp" alt="" fetchPriority="high" width="1000" height="1245" /></div>
           <div className="rev-hero-shape" aria-hidden="true" />
           <div className="wrap rev-hero-content">
-            <span className="rev-kicker">СТРУНЫ БУДУЩЕГО · ОНЛАЙН</span>
             <h1>Онлайн-школа<br />музыки <em>Никиты<br />Осадчука</em></h1>
-            <p>Курс гитары, личные уроки и разборы песен.<br />Выбирайте то, что хочется сыграть.</p>
             <div className="rev-hero-actions">
               <a className="button lime" href="#learning">Выбрать обучение <Icon name="arrow" /></a>
               <a className="rev-text-link" href="#why">Как проходят занятия ↓</a>
@@ -487,12 +533,6 @@ export default function Home() {
             <div>
               <span className="rev-kicker">01 / ЗНАКОМСТВО</span>
               <h2>Почему <span>«Струны будущего»?</span></h2>
-              <p className="rev-section-lead">На занятиях сразу работаем с музыкой, которую вам хочется играть.</p>
-              <div className="rev-why-points">
-                <div><strong>01</strong><p>Курс гитары можно проходить по видео в своём темпе или взять проверку заданий.</p></div>
-                <div><strong>02</strong><p>На личных уроках подбираем упражнения и песни под ваш уровень.</p></div>
-                <div><strong>03</strong><p>Тренажёры и PDF помогают заниматься между уроками.</p></div>
-              </div>
             </div>
             <div className="rev-video-slot">
               <img src="./lesson-planning.webp" alt="Никита готовит материалы для урока" loading="lazy" width="1000" height="668" />
@@ -507,16 +547,12 @@ export default function Home() {
             <div className="direction-cards" role="group" aria-label="Выберите инструмент">
               {instruments.map((item, i) => <DirectionCard key={item.id} item={item} index={i} selected={instrument === i} onSelect={() => choose(i)} />)}
             </div>
-            <div className="hub-selection" id="instrument-panel" aria-live="polite">
-              <div><span className="rev-kicker">ВАШ ВЫБОР</span><h3>{instruments[instrument].note}</h3><p>{instruments[instrument].text}</p></div>
-              <a className="button outline" href={instrument === 0 ? "#course" : "#individual"}>Посмотреть обучение <Icon name="arrow" /></a>
-            </div>
           </div>
         </section>
 
         <section className="section rev-learning" id="learning">
           <div className="wrap">
-            <div className="section-title rev-learning-title"><div><span className="rev-kicker">02 / ФОРМАТЫ</span><h2>Как можно <span>учиться</span></h2></div><p>Курс, личные уроки и разборы песен — каждый формат можно выбрать отдельно.</p></div>
+            <div className="section-title rev-learning-title"><div><span className="rev-kicker">02 / ФОРМАТЫ</span><h2>Как можно <span>учиться</span></h2></div></div>
             <article className="rev-offer rev-offer-course" id="course">
               <div className="rev-offer-visual rev-course-visual">
                 <img className="rev-offer-main-img" src="./material-rhythm.webp" loading="lazy" alt="Никита показывает ритмический рисунок на гитаре" width="960" height="540" />
@@ -540,12 +576,10 @@ export default function Home() {
             </article>
             <article className="rev-offer rev-offer-personal" id="individual">
               <div className="rev-offer-copy">
-                <span className="rev-offer-label">02 / ЛИЧНЫЕ УРОКИ ПО ВИДЕОСВЯЗИ</span>
                 <h3>Индивидуальные онлайн-уроки</h3>
                 <p>{instruments[instrument].name}: разбираем вашу технику и песни, которые вы хотите играть. Четыре встречи по 40 минут.</p>
                 <div className="rev-price-line"><strong>3 990 ₽</strong><span>/ 4 занятия</span></div>
                 <button className="button lime" onClick={() => openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")}>Записаться на уроки <Icon name="arrow" /></button>
-                <a className="rev-inline" href="./schedule/">Посмотреть свободное время <Icon name="external" /></a>
               </div>
               <div className="rev-offer-visual rev-personal-visual">
                 <img className="rev-offer-main-img" src="./personal-lesson.webp" loading="lazy" alt="Никита объясняет материал ученику на онлайн-уроке" width="1000" height="667" />
@@ -575,7 +609,7 @@ export default function Home() {
 
         <section className="section program pale" id="program">
           <div className="wrap">
-            <div className="section-title"><div><span className="rev-kicker">03 / КУРС ГИТАРЫ</span><h2>Что ты <span>сыграешь?</span></h2></div><p>Песни и упражнения из курса «Базовый минимум».</p></div>
+            <div className="section-title"><div><span className="rev-kicker">03 / КУРС ГИТАРЫ</span><h2>Что ты <span>сыграешь?</span></h2></div></div>
             <div className="course-showcase">
               <div className="showcase-card showcase-rhythm"><SectionIcon name="rhythm" className="showcase-art" /><span className="showcase-kicker">Ритм</span><strong>9 боёв</strong><p>Разбираем девять вариантов боя на песнях из курса.</p></div>
               <div className="showcase-card showcase-song"><SectionIcon name="catalog" className="showcase-art" /><span className="showcase-kicker">Репертуар</span><strong>Любимые песни</strong><p>Разбираем аккорды и играем песню целиком.</p></div>
@@ -617,12 +651,24 @@ export default function Home() {
           </div>
         </section>
 
+
         <section className="section rev-cases" id="cases">
           <div className="wrap">
-            <div className="rev-cases-head"><div><span className="rev-kicker">04 / ИЗ ЗАНЯТИЙ</span><h2>Наши кейсы</h2><p>Фрагменты уроков и фото с выступления учеников.</p></div><div className="rev-case-controls"><button aria-label="Предыдущие кейсы" onClick={() => setCaseIndex((v) => (v - 1 + cases.length) % cases.length)}><Icon name="arrow" /></button><button aria-label="Следующие кейсы" onClick={() => setCaseIndex((v) => (v + 1) % cases.length)}><Icon name="arrow" /></button></div></div>
-            <div className="rev-case-grid" aria-live="polite">
-              {visibleCases.map((item) => <button className="rev-case" key={item.title} onClick={() => setModal({type: "case", item})}><img src={item.image} loading="lazy" alt={item.alt} width="960" height="540" /><span>{item.label}</span><strong>{item.title}</strong><p>{item.description}</p><small>Посмотреть фото ↗</small></button>)}
+            <div className="rev-cases-head">
+              <div>
+                <span className="rev-kicker">04 / ИСТОРИИ УЧЕНИКОВ</span>
+                <h2>НАШИ КЕЙСЫ</h2>
+                <p>Пять мест для видео учеников. Листайте карточки в сторону.</p>
+              </div>
+              <div className="rev-case-controls" aria-label="Управление каруселью">
+                <button type="button" aria-label="Предыдущий кейс" disabled={!caseNav.back} onClick={() => scrollCases(-1)}><Icon name="arrow" /></button>
+                <button type="button" aria-label="Следующий кейс" disabled={!caseNav.forward} onClick={() => scrollCases(1)}><Icon name="arrow" /></button>
+              </div>
             </div>
+            <div className="case-story-track" ref={caseTrackRef} onScroll={updateCaseNav} role="region" aria-roledescription="карусель" aria-label="Пять видео-кейсов учеников" tabIndex={0}>
+              {cases.map((item) => <StudentVideoCase key={item.id} item={item} onOpen={(selected) => setModal({ type: "case", item: selected })} />)}
+            </div>
+            <div className="case-story-hint" aria-hidden="true">ЛИСТАЙТЕ <span>↔</span> 01 — 05</div>
           </div>
         </section>
 
@@ -652,7 +698,7 @@ export default function Home() {
       <footer className="footer wrap"><div className="footer-top"><a href="#top" aria-label="Струны будущего — к началу"><Logo /></a><p>Курс гитары, уроки и разборы песен<br />Никита Осадчук</p><div className="footer-socials"><OutLink href={channel}>Канал Telegram <Icon name="external" className="inline-icon" /></OutLink><OutLink href="https://vk.com/strunib">ВКонтакте <Icon name="external" className="inline-icon" /></OutLink><OutLink href={reviews}>Профи.ру <Icon name="external" className="inline-icon" /></OutLink></div></div><div className="footer-bottom"><span>© 2026 «Струны будущего»</span><a href="./student-info/">Памятка ученика</a><a href="#top">Наверх ↑</a></div></footer>
       <a className="hub-mobile-cta" href="#contact">Оставить заявку <Icon name="arrow" /></a>
       {modal?.type === "booking" && <BookingDialog selection={modal.selection} instrument={modal.instrument} initialLevel={modal.initialLevel} guitarOnly={modal.guitarOnly} onClose={() => setModal(null)} />}
-      {modal?.type === "case" && <Dialog title={modal.item.title} wide onClose={() => setModal(null)}><img className="gallery-photo" src={modal.item.image} alt={modal.item.alt} /><p className="rev-case-caption">{modal.item.description}</p></Dialog>}
+      {modal?.type === "case" && <Dialog title={"Кейс " + modal.item.id} wide onClose={() => setModal(null)}><video className="case-story-player" src={modal.item.video} controls autoPlay playsInline preload="auto">Ваш браузер не поддерживает воспроизведение видео.</video></Dialog>}
     </div>
   );
 }
