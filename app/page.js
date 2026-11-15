@@ -18,7 +18,7 @@ const instruments = [
     id: "guitar",
     name: "Гитара",
     note: "От первых аккордов до любимых песен",
-    text: "Полный видеокурс, обучение «2+2» или индивидуальные занятия. Осваивайте аккорды, бой и переборы в своём темпе.",
+    text: "Гитара с нуля: полный видеокурс, чередование видео и личных уроков «2+2» или четыре личных урока в месяц.",
   },
   {
     id: "electric",
@@ -40,38 +40,24 @@ const instruments = [
   },
 ];
 const courseSongs = [
-  {
-    artist: "Кино",
-    title: "Пачка сигарет",
-    note: "Первые аккорды и цельная песня",
-  },
-  {
-    artist: "Кино",
-    title: "Звезда по имени Солнце",
-    note: "Уверенный ритм и смена аккордов",
-  },
-  {
-    artist: "Король и Шут",
-    title: "Кукла колдуна",
-    note: "Энергия и выразительная игра",
-  },
-  { artist: "Dabro", title: "Юность", note: "Современный аккомпанемент" },
-  { artist: "Баста", title: "Сансара", note: "Ритм и настроение" },
-  {
-    artist: "Кино",
-    title: "Группа крови",
-    note: "Новый рисунок для знакомого хита",
-  },
-  {
-    artist: "Звери",
-    title: "Районы-кварталы",
-    note: "Игра с роковым характером",
-  },
-  {
-    artist: "Сплин",
-    title: "Моё сердце",
-    note: "Смена аккордов без остановок",
-  },
+  { artist: "Кино", title: "Пачка сигарет" },
+  { artist: "Кино", title: "Звезда по имени Солнце" },
+  { artist: "Кино", title: "Закрой за мной дверь" },
+  { artist: "Кино", title: "Когда твоя девушка больна" },
+  { artist: "Кино", title: "Кукушка" },
+  { artist: "Кино", title: "Группа крови" },
+  { artist: "Dabro", title: "Юность" },
+  { artist: "Агата Кристи", title: "Как на войне" },
+  { artist: "Король и Шут", title: "Кукла колдуна" },
+  { artist: "Звери", title: "Районы-кварталы" },
+  { artist: "Амега", title: "Лететь" },
+  { artist: "Баста", title: "Сансара" },
+  { artist: "Виктор Салтыков", title: "Белая ночь" },
+  { artist: "Сплин", title: "Моё сердце" },
+  { artist: "Ария", title: "Я свободен" },
+  { artist: "Женя Трофимов", title: "Поезда" },
+  { artist: "Братья Грим", title: "Кустурица" },
+  { artist: "Звери", title: "До скорой встречи" },
 ];
 const coursePlans = [
   {
@@ -510,13 +496,13 @@ export default function Home() {
           <div className="hub-hero-copy">
             <p className="eyebrow">Онлайн-школа Никиты Осадчука</p>
             <h1>
-              Играй музыку,
+              Учись играть песни,
               <br />
-              <span>которая нравится.</span>
+              <span>которые знаешь.</span>
             </h1>
             <p className="hub-lead">
-              Курс гитары, личные занятия и готовые разборы песен. Выберите
-              инструмент и учитесь в своём темпе.
+              Курс гитары, личные занятия и разборы песен. Начни с видеокурса
+              или занимайся со мной онлайн.
             </p>
             <div className="hub-actions">
               <a className="button lime" href="#directions">
@@ -615,8 +601,8 @@ export default function Home() {
                       <p className="label">Полный видеокурс по гитаре</p>
                       <h2>Базовый минимум</h2>
                       <p>
-                        От знакомства с инструментом до боёв, переборов и
-                        исполнения песен. Одна программа в обоих тарифах.
+                        Аккорды, 9 боёв, переборы и песни. Оба тарифа дают
+                        доступ к одному и тому же курсу.
                       </p>
                     </div>
                     <a href="#program" className="text-button">
@@ -656,7 +642,7 @@ export default function Home() {
                     ))}
                   </div>
                   <div className="hub-sample">
-                    <p>Посмотрите пример объяснения перед покупкой.</p>
+                    <p>Пришлю фрагмент урока, чтобы ты увидел формат видео.</p>
                     <a
                       href={lessonRequest}
                       target="_blank"
@@ -792,8 +778,8 @@ export default function Home() {
                   Что ты <span>сыграешь?</span>
                 </h2>
                 <p>
-                  Научишься играть песни целиком: от первых аккордов до
-                  уверенного ритма.
+                  Вот песни из курса. Список приёмов и порядок уроков остаются
+                  внутри обучения.
                 </p>
               </div>
               <div className="course-showcase">
@@ -809,8 +795,7 @@ export default function Home() {
                   <span className="showcase-kicker">Ритм</span>
                   <strong>9 боёв</strong>
                   <p>
-                    Освоишь разные рисунки на примерах известных песен — от
-                    спокойных до роковых.
+                    Разбираем девять вариантов боя на песнях из курса.
                   </p>
                 </div>
                 <div className="showcase-card showcase-song">
@@ -823,8 +808,7 @@ export default function Home() {
                   <span className="showcase-kicker">Репертуар</span>
                   <strong>Любимые песни</strong>
                   <p>
-                    Будешь соединять аккорды, ритм и исполнение в одну цельную
-                    песню.
+                    Разбираем аккорды и играем песню целиком.
                   </p>
                 </div>
                 <div className="showcase-card showcase-hands">
@@ -837,16 +821,15 @@ export default function Home() {
                   <span className="showcase-kicker">Техника</span>
                   <strong>Переборы и приёмы</strong>
                   <p>
-                    Добавишь новые способы игры, чтобы музыка звучала
-                    разнообразнее.
+                    Учимся играть перебором и менять ритм без остановок.
                   </p>
                 </div>
               </div>
               <div className="song-picker">
                 <div className="song-picker-copy">
-                  <span className="gift-kicker">Примеры из курса</span>
-                  <h3>Песни, которые разберём</h3>
-                  <p>Выбери ту, с которой тебе хочется начать.</p>
+                  <span className="gift-kicker">Репертуар видеокурса</span>
+                  <h3>Песни из курса</h3>
+                  <p>Нажми на название, чтобы посмотреть исполнителя.</p>
                   <div className="song-spotlight" aria-live="polite">
                     <span className="song-vinyl" aria-hidden="true">
                       <i />
@@ -854,7 +837,6 @@ export default function Home() {
                     <div>
                       <span>{courseSongs[songIndex].artist}</span>
                       <strong>{courseSongs[songIndex].title}</strong>
-                      <small>{courseSongs[songIndex].note}</small>
                     </div>
                   </div>
                   <button
@@ -897,8 +879,8 @@ export default function Home() {
                   <span className="gift-kicker">✦ Бонус к обучению</span>
                   <h3>Подарок к курсу</h3>
                   <p>
-                    Тренажёры и PDF-материалы помогают закреплять каждую новую
-                    песню в своём темпе.
+                    В подарок — тренажёры боя и аккордов, а также PDF со
+                    схемами для занятий.
                   </p>
                   <a href="#materials" className="button primary">
                     Посмотреть тренажёры <Icon name="arrow" />
@@ -1016,12 +998,12 @@ export default function Home() {
             <div>
               <p className="label">Готовые разборы</p>
               <h2>
-                Следующая песня —<br />
-                <span>на ваш выбор.</span>
+                Разборы песен<br />
+                <span>в отдельном каталоге.</span>
               </h2>
               <p>
-                Найдите исполнителя, выберите уровень и посмотрите состав
-                разбора. Стоимость указана у каждой песни.
+                В каталоге — отдельные разборы. У каждой песни указаны состав
+                материалов и цена.
               </p>
               <a className="button lime" href={catalog}>
                 Открыть каталог песен <Icon name="arrow" />
