@@ -118,7 +118,8 @@
   $("#scrim").addEventListener("click",()=>showMenu(false));
   function setSection(v) {
     section=v; filter="all";
-    $$(".nav-button").forEach(btn=>btn.classList.toggle("selected",btn.dataset.section===v));
+    $(".filter-pill").forEach(x=>x.classList.toggle("active",x.dataset.filter==="all"));
+    $(".nav-button").forEach(btn=>btn.classList.toggle("selected",btn.dataset.section===v));
     $("#breadcrumb").textContent= titleFor(v);
     $("#catalogTitle").textContent=titleFor(v);
     $("#catalogSubtitle").textContent=v==="favorites"?"Твои сохранённые проекты в одном месте.":v==="all"?"Выбери нужный инструмент и переходи к работе.":"Проекты и сервисы выбранного раздела.";
