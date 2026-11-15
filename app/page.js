@@ -938,7 +938,7 @@ export default function Home() {
                 >
                   <span className="level-number">0{i + 1}</span>
                   <span className="level-art" aria-hidden="true">
-                    {["♪", "♫", "✦"][i]}
+                    <SectionIcon name={["course", "practice", "students"][i]} />
                   </span>
                   <strong>{title}</strong>
                   <span>{description}</span>
@@ -1148,11 +1148,7 @@ export default function Home() {
                 href="https://strunibb.github.io/struny-songs/"
                 className="material-card"
               >
-                <img
-                  src="./material-song.webp"
-                  loading="lazy"
-                  alt="Аккорды и разбор песни"
-                />
+                <div className="material-visual"><img src="./material-song.webp" loading="lazy" alt="Аккорды и разбор песни" /><SectionIcon name="catalog" /></div>
                 <span>
                   Разборы песен <Icon name="external" />
                 </span>
@@ -1162,11 +1158,7 @@ export default function Home() {
                 href="https://strunibb.github.io/akkordi_guitarpro/"
                 className="material-card"
               >
-                <img
-                  src="./material-trainer.webp"
-                  loading="lazy"
-                  alt="Практика игры на гитаре"
-                />
+                <div className="material-visual"><img src="./material-trainer.webp" loading="lazy" alt="Практика игры на гитаре" /><SectionIcon name="course" /></div>
                 <span>
                   Тренажёр аккордов <Icon name="external" />
                 </span>
@@ -1176,11 +1168,7 @@ export default function Home() {
                 href="https://strunibb.github.io/boi/"
                 className="material-card"
               >
-                <img
-                  src="./material-rhythm.webp"
-                  loading="lazy"
-                  alt="Практика ритма"
-                />
+                <div className="material-visual"><img src="./material-rhythm.webp" loading="lazy" alt="Практика ритма" /><SectionIcon name="practice" /></div>
                 <span>
                   Бои и переборы <Icon name="external" />
                 </span>

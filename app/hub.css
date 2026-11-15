@@ -193,7 +193,8 @@
 .hub-service:hover .section-icon,
 .review-card:hover .section-icon,
 .material-card:hover .section-icon { transform: translateY(-7px) rotate(-5deg); }
-.price-art { position: absolute; right: 18px; top: 13px; width: 82px; height: 82px; }
+.price-art { position: absolute; right: 18px; top: 8px; width: 104px; height: 104px; }
+.school-hub .price-card h3 { padding-right: 100px; }
 .service-art { float: right; width: 118px; height: 118px; margin: -14px 0 4px 15px; }
 .catalog-art-stage {
   display: grid;
@@ -208,6 +209,18 @@
 .review-art { width: 108px; height: 108px; display: block; margin: 10px 0 5px; }
 .heading-art { float: right; width: 104px; height: 104px; margin: -10px 20px 0; }
 .faq-art { width: 120px; height: 120px; margin-bottom: 10px; }
+.level-explore-card .level-art { top: 4px; right: 12px; transform: none; }
+.level-explore-card .level-art .section-icon { width: 100px; height: 100px; }
+.material-visual { position: relative; }
+.material-visual .section-icon {
+  position: absolute;
+  right: 12px;
+  bottom: -15px;
+  width: 92px;
+  height: 92px;
+  border-radius: 20px;
+  background: #f9f2ffed;
+}
 @keyframes icon-hover { 50% { translate: 0 -5px; } }
 @media (max-width: 600px) {
   .price-art { width: 70px; height: 70px; right: 12px; top: 10px; }
@@ -215,6 +228,7 @@
   .service-art { width: 88px; height: 88px; }
   .catalog-art-stage { min-height: 220px; }
   .heading-art { width: 75px; height: 75px; margin: 0; }
+  .material-visual .section-icon { width: 72px; height: 72px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .section-icon { animation: none; transition: none; }
