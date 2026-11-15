@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { DirectionCard, Techniques } from "./interactive";
+import SectionIcon from "./section-icons";
 
 const telegram = "https://t.me/nikguitar";
 const channel = "https://t.me/nikguita";
@@ -587,6 +588,7 @@ export default function Home() {
                         className={"price-card" + (i === 1 ? " featured" : "")}
                         key={plan.title}
                       >
+                        <SectionIcon name={i === 1 ? "reviews" : "course"} className="price-art" />
                         <h3>{plan.title}</h3>
                         <div className="price-amount">
                           {plan.price}
@@ -628,6 +630,7 @@ export default function Home() {
               ) : format === "hybrid" && instrument === 0 ? (
                 <article className="hub-service">
                   <div>
+                    <SectionIcon name="hybrid" className="service-art" />
                     <p className="label">Гитара · четыре недели</p>
                     <h2>
                       Две встречи.
@@ -684,6 +687,7 @@ export default function Home() {
               ) : (
                 <article className="hub-service">
                   <div>
+                    <SectionIcon name="lesson" className="service-art" />
                     <p className="label">
                       {instruments[instrument].name} · по видеосвязи
                     </p>
@@ -954,13 +958,7 @@ export default function Home() {
         </section>
         <section className="section hub-catalog" id="catalog">
           <div className="wrap hub-catalog-inner">
-            <img
-              src="./material-song.webp"
-              width="600"
-              height="450"
-              loading="lazy"
-              alt="Материалы для изучения песен на гитаре"
-            />
+            <div className="catalog-art-stage"><SectionIcon name="catalog" /></div>
             <div>
               <p className="label">Готовые разборы</p>
               <h2>Каталог песен</h2>
@@ -1059,9 +1057,7 @@ export default function Home() {
                 <figcaption>Ученики и преподаватель на сцене</figcaption>
               </figure>
               <div className="student-side">
-                <span className="oversized-star" aria-hidden="true">
-                  ✳
-                </span>
+                <SectionIcon name="students" className="student-art" />
                 <h3>
                   Занятия
                   <br />и выступления
@@ -1092,6 +1088,7 @@ export default function Home() {
           <div className="wrap reviews-grid">
             <div>
               <span className="label">Впечатления об обучении</span>
+              <SectionIcon name="reviews" className="review-art" />
               <h2>
                 ОТЗЫВЫ
                 <br />
@@ -1130,6 +1127,7 @@ export default function Home() {
         <section className="section materials" id="materials">
           <div className="wrap">
             <div className="section-title">
+              <SectionIcon name="practice" className="heading-art" />
               <h2>
                 ПРАКТИКА
                 <br />
@@ -1210,6 +1208,7 @@ export default function Home() {
         <section className="section faq" id="faq">
           <div className="wrap faq-grid">
             <div>
+              <SectionIcon name="faq" className="faq-art" />
               <h2>
                 Вопросы
                 <br />

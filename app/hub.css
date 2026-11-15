@@ -159,6 +159,7 @@
   gap: 22px;
 }
 .school-hub .price-card {
+  position: relative;
   padding: 30px;
   background: white;
   border: 1px solid var(--line);
@@ -173,6 +174,50 @@
 .school-hub .price-card h3 {
   font-size: 27px;
   margin: 0 0 18px;
+  padding-right: 78px;
+}
+
+.section-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  flex: none;
+  pointer-events: none;
+  filter: drop-shadow(9px 12px 8px #51416b31);
+  animation: icon-hover 5s ease-in-out infinite;
+  transition: transform .3s ease, filter .3s ease;
+}
+.section-icon svg { width: 100%; height: 100%; overflow: visible; }
+.price-card:hover .section-icon,
+.hub-service:hover .section-icon,
+.review-card:hover .section-icon,
+.material-card:hover .section-icon { transform: translateY(-7px) rotate(-5deg); }
+.price-art { position: absolute; right: 18px; top: 13px; width: 82px; height: 82px; }
+.service-art { float: right; width: 118px; height: 118px; margin: -14px 0 4px 15px; }
+.catalog-art-stage {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  border-radius: 28px;
+  background: radial-gradient(circle at 50% 30%, #fff9ec 0, #e9d9f5 48%, #d0e7f4 100%);
+  border: 1px solid #e0d4ec;
+}
+.catalog-art-stage .section-icon { width: min(66%, 235px); height: auto; aspect-ratio: 1; }
+.student-art { width: 125px; height: 125px; }
+.review-art { width: 108px; height: 108px; display: block; margin: 10px 0 5px; }
+.heading-art { float: right; width: 104px; height: 104px; margin: -10px 20px 0; }
+.faq-art { width: 120px; height: 120px; margin-bottom: 10px; }
+@keyframes icon-hover { 50% { translate: 0 -5px; } }
+@media (max-width: 600px) {
+  .price-art { width: 70px; height: 70px; right: 12px; top: 10px; }
+  .school-hub .price-card h3 { padding-right: 62px; }
+  .service-art { width: 88px; height: 88px; }
+  .catalog-art-stage { min-height: 220px; }
+  .heading-art { width: 75px; height: 75px; margin: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-icon { animation: none; transition: none; }
 }
 .school-hub .price-card .price-amount {
   font-size: 48px;
