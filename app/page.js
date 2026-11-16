@@ -563,7 +563,7 @@ export default function Home() {
               <div className="rev-offer-copy">
                 <span className="rev-offer-label">01 / ПОЛНЫЙ ВИДЕОКУРС ПО ГИТАРЕ</span>
                 <h3>«Базовый минимум»</h3>
-                <p>Вы освоите 10 самых популярных боёв на примерах 18 песен, научитесь аккордам и всему, что нужно для старта игры на гитаре и даже для выступлений.</p>
+                <p>Вы освоите 10 самых популярных боёв на примерах 17 песен, научитесь аккордам и всему, что нужно для старта игры на гитаре и даже для выступлений.</p>
               </div>
               <div className="rev-offer-prices">
                 {coursePlans.map((plan, i) => <div className="rev-mini-price" key={plan.title}>
@@ -641,6 +641,7 @@ export default function Home() {
                     <button className="button lime" onClick={() => openBooking("Индивидуальные уроки — подобрать абонемент")}>Выбрать абонемент <Icon name="arrow" /></button>
                   </div>
                 </div>
+                <Techniques />
               </div>}
             </article>
             <article className="rev-offer rev-offer-catalog" id="catalog">
@@ -659,8 +660,6 @@ export default function Home() {
             </article>
           </div>
         </section>
-
-        <Techniques />
 
         <section className="teacher section pale" id="teacher">
           <div className="wrap teacher-grid">

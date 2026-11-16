@@ -509,3 +509,8 @@ button.case-story-play:hover { background: #ed461e; transform: translate(-50%, -
 .rev-catalog-visual .rev-offer-main-img { object-fit:cover; object-position:center top; }
 @media(max-width:900px) { .rev-personal-detail-grid { grid-template-columns:1fr; } .rev-personal-detail-grid > img { max-width:620px; margin:auto; } }
 @media(max-width:650px) { .rev-detail-panel { padding:18px 12px; } .rev-detail-top { flex-direction:column; } .rev-offer .rev-primary-actions .button { width:100%; justify-content:center; margin-top:0; } .rev-primary-actions { margin-top:22px; } .rev-hybrid-strip .rev-price-actions { width:100%; } .rev-program-detail .song-picker { margin-top:14px; } .revamped .rev-gift-detail .course-gift { padding:20px 14px; } }
+
+/* Keep the techniques block contained within individual lesson details. */
+.rev-personal-detail .techniques { margin-top:32px; padding:28px 0 12px; border-top:1px solid #d7dce8; }
+.rev-personal-detail .techniques .wrap { width:100%; max-width:none; }
+.rev-personal-detail .techniques h2 { font-size:clamp(26px,3vw,42px); }
