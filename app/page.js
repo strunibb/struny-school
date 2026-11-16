@@ -398,6 +398,7 @@ export default function Home() {
   const [instrument, setInstrument] = useState(0);
   const [selectedLevel] = useState("С нуля");
   const [songIndex, setSongIndex] = useState(0);
+  const [detailView, setDetailView] = useState(null);
   const caseTrackRef = useRef(null);
   const [caseNav, setCaseNav] = useState({ back: false, forward: true });
   const [modal, setModal] = useState(null);
@@ -562,56 +563,24 @@ export default function Home() {
               <div className="rev-offer-copy">
                 <span className="rev-offer-label">01 / ПОЛНЫЙ ВИДЕОКУРС ПО ГИТАРЕ</span>
                 <h3>«Базовый минимум»</h3>
-                <p>Начните с первых аккордов, освойте ритм и сыграйте песни из программы целиком. Все разделы курса доступны сразу.</p>
-                <a className="rev-inline" href="#program">Посмотреть песни из курса <Icon name="arrow" /></a>
+                <p>Вы освоите 10 самых популярных боёв на примерах 18 песен, научитесь аккордам и всему, что нужно для старта игры на гитаре и даже для выступлений.</p>
               </div>
               <div className="rev-offer-prices">
                 {coursePlans.map((plan, i) => <div className="rev-mini-price" key={plan.title}>
                   <div><span>{plan.title}</span><strong>{plan.price} ₽</strong></div>
                   <p>{i === 0 ? "Полный курс · доступ на год" : "Полный курс · год доступа · 6 месяцев проверки ДЗ"}</p>
-                  <button onClick={() => openBooking(plan.selection, true)}>Выбрать <Icon name="arrow" /></button>
+                  <div className="rev-price-actions"><button onClick={() => openBooking(plan.selection, true)}>Выбрать <Icon name="arrow" /></button><button type="button" aria-expanded={detailView === "course"} aria-controls="course-details" onClick={() => setDetailView(detailView === "course" ? null : "course")}>Подробнее <Icon name="arrow" /></button></div>
                 </div>)}
                 <a className="rev-sample" href={lessonRequest} target="_blank" rel="noopener noreferrer">Посмотреть пример урока <Icon name="external" /></a>
               </div>
-            </article>
-            <article className="rev-offer rev-offer-personal" id="individual">
-              <div className="rev-offer-copy">
-                <h3>Индивидуальные онлайн-уроки</h3>
-                <p>{instruments[instrument].name}: разбираем вашу технику и песни, которые вы хотите играть. Четыре встречи по 40 минут.</p>
-                <div className="rev-price-line"><strong>3 990 ₽</strong><span>/ 4 занятия</span></div>
-                <button className="button lime" onClick={() => openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")}>Записаться на уроки <Icon name="arrow" /></button>
-              </div>
-              <div className="rev-offer-visual rev-personal-visual">
-                <img className="rev-offer-main-img" src="./personal-lesson.webp" loading="lazy" alt="Никита объясняет материал ученику на онлайн-уроке" width="1000" height="667" />
-                <SectionIcon name="lesson" className="rev-offer-icon" />
-              </div>
-              <div className="rev-hybrid-strip">
-                <SectionIcon name="hybrid" />
-                <div><strong>Абонемент «2+2»</strong><p>Два личных урока по 40 минут и две недели работы по видео с проверкой записи.</p></div>
-                <span>2 990 ₽ / 4 недели</span>
-                <button onClick={() => openBooking("Гитара — «2+2», 2 990 ₽ за четыре недели", true)}>Выбрать <Icon name="arrow" /></button>
-              </div>
-            </article>
-            <article className="rev-offer rev-offer-catalog" id="catalog">
-              <div className="rev-offer-visual rev-catalog-visual">
-                <img className="rev-offer-main-img" src="./material-song.webp" loading="lazy" alt="Никита разбирает песню вместе с аккордами и текстом" width="960" height="540" />
-                <SectionIcon name="catalog" className="rev-offer-icon" />
-              </div>
-              <div className="rev-offer-copy">
-                <span className="rev-offer-label">03 / ПЕСНИ ПО ВАШЕМУ ВЫБОРУ</span>
-                <h3>Разборы песен и табы</h3>
-                <p>Откройте каталог, найдите исполнителя и выберите разбор. Цена указана в карточке каждой песни.</p>
-                <a className="button lime" href={catalog}>Открыть каталог <Icon name="arrow" /></a>
-              </div>
-            </article>
-          </div>
-        </section>
 
-        <section className="section program pale" id="program">
-          <div className="wrap">
+              {detailView === "course" && <div className="rev-detail-panel" id="course-details">
+                <div className="rev-detail-top"><div><span className="rev-kicker">ПОДРОБНЕЕ О КУРСЕ</span><h3>«Базовый минимум»</h3><p>Полная программа в обоих тарифах. Самостоятельный доступ на год; в тарифе с проверкой я проверяю задания в течение шести месяцев.</p></div><button type="button" onClick={() => setDetailView(null)} aria-label="Закрыть подробности курса">Закрыть ×</button></div>
+        <div className="program pale rev-program-detail" id="program">
+          <div className="rev-detail-inner">
             <div className="section-title"><div><span className="rev-kicker">03 / КУРС ГИТАРЫ</span><h2>Что ты <span>сыграешь?</span></h2></div></div>
             <div className="course-showcase">
-              <div className="showcase-card showcase-rhythm"><SectionIcon name="rhythm" className="showcase-art" /><span className="showcase-kicker">Ритм</span><strong>9 боёв</strong><p>Разбираем девять вариантов боя на песнях из курса.</p></div>
+              <div className="showcase-card showcase-rhythm"><SectionIcon name="rhythm" className="showcase-art" /><span className="showcase-kicker">Ритм</span><strong>10 боёв</strong><p>Разбираем десять вариантов боя на песнях из курса.</p></div>
               <div className="showcase-card showcase-song"><SectionIcon name="catalog" className="showcase-art" /><span className="showcase-kicker">Репертуар</span><strong>Любимые песни</strong><p>Разбираем аккорды и играем песню целиком.</p></div>
               <div className="showcase-card showcase-hands"><SectionIcon name="chords" className="showcase-art" /><span className="showcase-kicker">Техника</span><strong>Переборы и приёмы</strong><p>Учимся играть перебором и менять ритм без остановок.</p></div>
             </div>
@@ -629,16 +598,65 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
-
-        <section className="section rev-gift" id="gift">
-          <div className="wrap course-gift">
+        </div>
+        <div className="rev-gift rev-gift-detail" id="gift">
+          <div className="course-gift">
             <div className="gift-story"><span className="gift-kicker">✦ БОНУС К ОБУЧЕНИЮ</span><h2>Подарок к курсу</h2><p>В подарок — тренажёры боя и аккордов, а также PDF со схемами для занятий.</p><div className="rev-gift-links"><a href="https://strunibb.github.io/boi/">Тренажёр боя <Icon name="external" /></a><a href="https://strunibb.github.io/akkordi_guitarpro/">Тренажёр аккордов <Icon name="external" /></a></div></div>
             <div className="gift-gallery" aria-label="Подарки к курсу">
               <div className="gift-item gift-present"><SectionIcon name="gift" className="gift-art" /><strong>Подарок</strong><small>К каждому тарифу</small></div>
               <div className="gift-item gift-pdf"><SectionIcon name="pdf" className="gift-art" /><strong>PDF-блокнот</strong><small>Схемы и упражнения</small></div>
               <div className="gift-item gift-practice"><SectionIcon name="practice" className="gift-art" /><strong>Тренажёры</strong><small>Ритм и аккорды</small></div>
             </div>
+          </div>
+        </div>
+              </div>}
+            </article>
+            <article className="rev-offer rev-offer-personal" id="individual">
+              <div className="rev-offer-copy">
+                <h3>Индивидуальные онлайн-уроки</h3>
+                <p>На личных уроках мы разбираем все «подвохи», учимся тому, что вам действительно нравится, и пропускаем лишнюю теорию.</p>
+                <div className="rev-price-line"><strong>3 990 ₽</strong><span>/ 4 занятия</span></div>
+                <div className="rev-primary-actions"><button className="button lime" onClick={() => openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")}>Записаться на уроки <Icon name="arrow" /></button><button className="button outline" type="button" aria-expanded={detailView === "personal"} aria-controls="personal-details" onClick={() => setDetailView(detailView === "personal" ? null : "personal")}>Подробнее <Icon name="arrow" /></button></div>
+              </div>
+              <div className="rev-offer-visual rev-personal-visual">
+                <img className="rev-offer-main-img" src="./personal-lesson.webp" loading="lazy" alt="Никита объясняет материал ученику на онлайн-уроке" width="1000" height="667" />
+                <SectionIcon name="lesson" className="rev-offer-icon" />
+              </div>
+              <div className="rev-hybrid-strip">
+                <SectionIcon name="hybrid" />
+                <div><strong>Абонемент «2+2»</strong><p>Два личных урока по 40 минут и две недели работы по видео с проверкой записи.</p></div>
+                <span>2 990 ₽ / 4 недели</span>
+                <div className="rev-price-actions"><button onClick={() => openBooking("Гитара — «2+2», 2 990 ₽ за четыре недели", true)}>Выбрать <Icon name="arrow" /></button><button type="button" aria-expanded={detailView === "personal"} aria-controls="personal-details" onClick={() => setDetailView(detailView === "personal" ? null : "personal")}>Подробнее <Icon name="arrow" /></button></div>
+              </div>
+
+              {detailView === "personal" && <div className="rev-detail-panel rev-personal-detail" id="personal-details">
+                <div className="rev-detail-top"><div><span className="rev-kicker">ФОРМАТЫ И ЦЕНЫ</span><h3>Личные уроки и «2+2»</h3><p>Выберите удобный ритм занятий. Каждый личный урок длится 40 минут.</p></div><button type="button" onClick={() => setDetailView(null)} aria-label="Закрыть подробности уроков">Закрыть ×</button></div>
+                <div className="rev-personal-detail-grid">
+                  <img src="./winter-tariffs.png" alt="Зимние тарифы: разовое занятие 1 150 ₽; четыре урока 3 990 ₽ в месяц или 7 490 ₽ за два месяца; абонемент «2+2» 2 990 ₽ в месяц; восемь уроков 7 490 ₽" loading="lazy" width="1200" height="1344" />
+                  <div className="rev-detail-plans">
+                    <div><strong>Разовое занятие — 1 150 ₽</strong><p>Один онлайн-урок на 40 минут: разберём конкретный вопрос или песню.</p></div>
+                    <div><strong>4 занятия — 3 990 ₽ / месяц</strong><p>Личный урок раз в неделю. Абонемент на два месяца — 7 490 ₽ за 8 занятий.</p></div>
+                    <div><strong>«2+2» — 2 990 ₽ / месяц</strong><p>В течение четырёх недель чередуются видеоуроки и личные онлайн-встречи: два урока по видеосвязи и две недели по видеоматериалам.</p></div>
+                    <div><strong>8 занятий — 7 490 ₽ / месяц</strong><p>Два личных урока в неделю по 40 минут.</p></div>
+                    <button className="button lime" onClick={() => openBooking("Индивидуальные уроки — подобрать абонемент")}>Выбрать абонемент <Icon name="arrow" /></button>
+                  </div>
+                </div>
+              </div>}
+            </article>
+            <article className="rev-offer rev-offer-catalog" id="catalog">
+              <div className="rev-offer-visual rev-catalog-visual">
+                <img className="rev-offer-main-img" src="./catalog-preview.png" loading="lazy" alt="Пример каталога песен с обложками исполнителей и ценами PDF-разборов" width="1363" height="1152" />
+                <SectionIcon name="catalog" className="rev-offer-icon" />
+              </div>
+              <div className="rev-offer-copy">
+                <span className="rev-offer-label">03 / ПЕСНИ ПО ВАШЕМУ ВЫБОРУ</span>
+                <h3>Разборы песен и табы</h3>
+                <p>А если вы уже умеете играть и хотите понятных и интерактивных разборов, то вам сюда!</p>
+                <div className="rev-primary-actions"><a className="button lime" href={catalog}>Открыть каталог <Icon name="arrow" /></a><button type="button" className="button outline" aria-expanded={detailView === "catalog"} aria-controls="catalog-details" onClick={() => setDetailView(detailView === "catalog" ? null : "catalog")}>Подробнее <Icon name="arrow" /></button></div>
+              </div>
+
+              {detailView === "catalog" && <div className="rev-detail-panel" id="catalog-details"><div className="rev-detail-top"><div><span className="rev-kicker">КАТАЛОГ ПЕСЕН</span><h3>Выберите разбор под себя</h3><p>В каталоге есть разборы песен и табы. На странице каждой песни указан состав материалов и цена.</p></div><button type="button" onClick={() => setDetailView(null)} aria-label="Закрыть подробности каталога">Закрыть ×</button></div><a className="button lime" href={catalog}>Перейти к песням <Icon name="arrow" /></a></div>}
+            </article>
           </div>
         </section>
 

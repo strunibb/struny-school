@@ -478,3 +478,34 @@ button.case-story-play:hover { background: #ed461e; transform: translate(-50%, -
   .case-story-play, .case-story-thumb, .rev-case-controls button { transition: none; }
   .case-story-track { scroll-behavior: auto; }
 }
+
+/* Product details stay inside their respective offer cards. */
+.rev-price-actions,.rev-primary-actions { display:flex; align-items:center; flex-wrap:wrap; gap:14px 20px; }
+.rev-mini-price .rev-price-actions { margin-top:auto; justify-content:flex-start; }
+.rev-mini-price .rev-price-actions button { margin-top:0; }
+.rev-mini-price .rev-price-actions button:nth-child(2),
+.rev-hybrid-strip .rev-price-actions button:nth-child(2) { color:#6c4e92; text-decoration:underline; text-underline-offset:4px; }
+.rev-primary-actions .button { margin-top:24px; }
+.rev-offer .rev-primary-actions .button.outline { background:#fff8; }
+.rev-hybrid-strip .rev-price-actions { flex:0 0 auto; }
+.rev-detail-panel { grid-column:1 / -1; min-width:0; width:100%; margin-top:18px; padding:clamp(18px,3vw,40px); border:1px solid #d9c9e9; border-radius:30px; background:linear-gradient(145deg,#f7f1fc,#f9fcff); box-shadow:inset 0 1px 0 #fff; }
+.rev-detail-top { display:flex; align-items:flex-start; justify-content:space-between; gap:28px; margin-bottom:28px; }
+.rev-detail-top h3 { margin:10px 0 8px; font-size:clamp(29px,3vw,46px); line-height:1.12; color:#132e4d; }
+.rev-detail-top p { max-width:710px; font-size:16px; line-height:1.55; }
+.rev-detail-top > button { flex:none; padding:9px 12px; border:1px solid #b8c9d8; border-radius:12px; background:white; font-size:13px; font-weight:800; }
+.rev-program-detail { padding:0; background:none!important; }
+.rev-program-detail .section-title h2 { font-size:clamp(29px,3.5vw,54px); }
+.rev-program-detail .song-picker { margin:22px 0 0; }
+.rev-gift-detail { margin-top:24px; padding:0; border-radius:26px; overflow:hidden; }
+.revamped .rev-gift-detail .course-gift { width:100%; max-width:none; margin:0; padding:clamp(20px,3vw,38px); }
+.rev-gift-detail .gift-gallery { min-width:0; }
+.rev-personal-detail-grid { display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1fr); align-items:start; gap:clamp(20px,4vw,55px); }
+.rev-personal-detail-grid > img { width:100%; height:auto; display:block; border-radius:20px; box-shadow:0 18px 50px #132e4d32; }
+.rev-detail-plans { display:grid; gap:13px; }
+.rev-detail-plans > div { padding:18px 20px; border:1px solid #d7dce8; border-radius:18px; background:#ffffffdc; }
+.rev-detail-plans strong { font-size:19px; }
+.rev-detail-plans p { margin:7px 0 0; font-size:14px; line-height:1.5; }
+.rev-detail-plans > .button { justify-self:start; margin-top:8px; }
+.rev-catalog-visual .rev-offer-main-img { object-fit:cover; object-position:center top; }
+@media(max-width:900px) { .rev-personal-detail-grid { grid-template-columns:1fr; } .rev-personal-detail-grid > img { max-width:620px; margin:auto; } }
+@media(max-width:650px) { .rev-detail-panel { padding:18px 12px; } .rev-detail-top { flex-direction:column; } .rev-offer .rev-primary-actions .button { width:100%; justify-content:center; margin-top:0; } .rev-primary-actions { margin-top:22px; } .rev-hybrid-strip .rev-price-actions { width:100%; } .rev-program-detail .song-picker { margin-top:14px; } .revamped .rev-gift-detail .course-gift { padding:20px 14px; } }
