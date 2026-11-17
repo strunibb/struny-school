@@ -194,7 +194,7 @@ function OutLink({ href, children, className = "" }) {
     </a>
   );
 }
-function Dialog({ title, onClose, children, wide = false }) {
+function Dialog({ title, onClose, children, wide = false, details = false }) {
   const ref = useRef(null);
   useEffect(() => {
     const dialog = ref.current;
@@ -211,7 +211,7 @@ function Dialog({ title, onClose, children, wide = false }) {
   return (
     <dialog
       ref={ref}
-      className={"dialog" + (wide ? " dialog-wide" : "")}
+      className={"dialog" + (wide ? " dialog-wide" : "") + (details ? " rev-details-dialog" : "")}
       aria-labelledby="dialog-title"
       onCancel={onClose}
       onClick={(e) => {
@@ -219,6 +219,7 @@ function Dialog({ title, onClose, children, wide = false }) {
       }}
     >
       <div className="dialog-inner">
+        <div className="dialog-header">
         <button
           className="round-button dialog-close"
           aria-label="Закрыть окно"
@@ -227,6 +228,7 @@ function Dialog({ title, onClose, children, wide = false }) {
           <Icon name="close" />
         </button>
         <h2 id="dialog-title">{title}</h2>
+        </div>
         {children}
       </div>
     </dialog>
@@ -441,6 +443,7 @@ export default function Home() {
   };
   const openBooking = (selection = "Подобрать обучение", guitarOnly = false) => {
     setMenu(false);
+    setDetailView(null);
     setModal({
       type: "booking",
       selection,
@@ -569,54 +572,20 @@ export default function Home() {
                 {coursePlans.map((plan, i) => <div className="rev-mini-price" key={plan.title}>
                   <div><span>{plan.title}</span><strong>{plan.price} ₽</strong></div>
                   <p>{i === 0 ? "Полный курс · доступ на год" : "Полный курс · год доступа · 6 месяцев проверки ДЗ"}</p>
-                  <div className="rev-price-actions"><button onClick={() => openBooking(plan.selection, true)}>Выбрать <Icon name="arrow" /></button><button type="button" aria-expanded={detailView === "course"} aria-controls="course-details" onClick={() => setDetailView(detailView === "course" ? null : "course")}>Подробнее <Icon name="arrow" /></button></div>
+                  <div className="rev-price-actions"><button onClick={() => openBooking(plan.selection, true)}>Выбрать <Icon name="arrow" /></button></div>
                 </div>)}
+                <div className="rev-course-details-action"><button className="button outline rev-details-button" type="button" aria-haspopup="dialog" aria-controls="course-details" onClick={() => setDetailView("course")}>Подробнее <Icon name="arrow" /></button></div>
                 <a className="rev-sample" href={lessonRequest} target="_blank" rel="noopener noreferrer">Посмотреть пример урока <Icon name="external" /></a>
               </div>
 
-              {detailView === "course" && <div className="rev-detail-panel" id="course-details">
-                <div className="rev-detail-top"><div><span className="rev-kicker">ПОДРОБНЕЕ О КУРСЕ</span><h3>«Базовый минимум»</h3><p>Полная программа в обоих тарифах. Самостоятельный доступ на год; в тарифе с проверкой я проверяю задания в течение шести месяцев.</p></div><button type="button" onClick={() => setDetailView(null)} aria-label="Закрыть подробности курса">Закрыть ×</button></div>
-        <div className="program pale rev-program-detail" id="program">
-          <div className="rev-detail-inner">
-            <div className="section-title"><div><span className="rev-kicker">03 / КУРС ГИТАРЫ</span><h2>Что ты <span>сыграешь?</span></h2></div></div>
-            <div className="course-showcase">
-              <div className="showcase-card showcase-rhythm"><SectionIcon name="rhythm" className="showcase-art" /><span className="showcase-kicker">Ритм</span><strong>10 боёв</strong><p>Разбираем десять вариантов боя на песнях из курса.</p></div>
-              <div className="showcase-card showcase-song"><SectionIcon name="catalog" className="showcase-art" /><span className="showcase-kicker">Репертуар</span><strong>Любимые песни</strong><p>Разбираем аккорды и играем песню целиком.</p></div>
-              <div className="showcase-card showcase-hands"><SectionIcon name="chords" className="showcase-art" /><span className="showcase-kicker">Техника</span><strong>Переборы и приёмы</strong><p>Учимся играть перебором и менять ритм без остановок.</p></div>
-            </div>
-            <div className="song-picker">
-              <div className="song-picker-copy">
-                <span className="gift-kicker">Репертуар видеокурса</span><h3>Песни из курса</h3>
-                <div className="song-spotlight" aria-live="polite">
-                  <img key={courseSongs[songIndex].cover} className="song-cover" src={`./song-covers/${courseSongs[songIndex].cover}.webp`} alt={`Обложка релиза «${courseSongs[songIndex].release}»`} width="600" height="600" />
-                  <div><span>{courseSongs[songIndex].artist}</span><strong>{courseSongs[songIndex].title}</strong></div>
-                </div>
-                <button className="button primary" onClick={() => openBooking("Курс «Базовый минимум» — хочу сыграть «" + courseSongs[songIndex].title + "»", true)}>Хочу научиться <Icon name="arrow" /></button>
-              </div>
-              <div className="song-picker-list" role="group" aria-label="Выберите песню из курса">
-                {courseSongs.map((song, i) => <button key={song.artist + song.title} className={"song-pick" + (songIndex === i ? " active" : "")} aria-pressed={songIndex === i} onClick={() => setSongIndex(i)}><span>{String(i + 1).padStart(2, "0")}</span><strong>{song.title}</strong><small>{song.artist}</small></button>)}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="rev-gift rev-gift-detail" id="gift">
-          <div className="course-gift">
-            <div className="gift-story"><span className="gift-kicker">✦ БОНУС К ОБУЧЕНИЮ</span><h2>Подарок к курсу</h2><p>В подарок — тренажёры боя и аккордов, а также PDF со схемами для занятий.</p><div className="rev-gift-links"><a href="https://strunibb.github.io/boi/">Тренажёр боя <Icon name="external" /></a><a href="https://strunibb.github.io/akkordi_guitarpro/">Тренажёр аккордов <Icon name="external" /></a></div></div>
-            <div className="gift-gallery" aria-label="Подарки к курсу">
-              <div className="gift-item gift-present"><SectionIcon name="gift" className="gift-art" /><strong>Подарок</strong><small>К каждому тарифу</small></div>
-              <div className="gift-item gift-pdf"><SectionIcon name="pdf" className="gift-art" /><strong>PDF-блокнот</strong><small>Схемы и упражнения</small></div>
-              <div className="gift-item gift-practice"><SectionIcon name="practice" className="gift-art" /><strong>Тренажёры</strong><small>Ритм и аккорды</small></div>
-            </div>
-          </div>
-        </div>
-              </div>}
+
             </article>
             <article className="rev-offer rev-offer-personal" id="individual">
               <div className="rev-offer-copy">
                 <h3>Индивидуальные онлайн-уроки</h3>
                 <p>На личных уроках мы разбираем все «подвохи», учимся тому, что вам действительно нравится, и пропускаем лишнюю теорию.</p>
                 <div className="rev-price-line"><strong>3 990 ₽</strong><span>/ 4 занятия</span></div>
-                <div className="rev-primary-actions"><button className="button lime" onClick={() => openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")}>Записаться на уроки <Icon name="arrow" /></button><button className="button outline" type="button" aria-expanded={detailView === "personal"} aria-controls="personal-details" onClick={() => setDetailView(detailView === "personal" ? null : "personal")}>Подробнее <Icon name="arrow" /></button></div>
+                <div className="rev-primary-actions"><button className="button lime" onClick={() => openBooking("Индивидуально — 4 × 40 минут, 3 990 ₽")}>Записаться на уроки <Icon name="arrow" /></button><button className="button outline rev-details-button" type="button" aria-haspopup="dialog" aria-controls="personal-details" onClick={() => setDetailView("personal")}>Подробнее <Icon name="arrow" /></button></div>
               </div>
               <div className="rev-offer-visual rev-personal-visual">
                 <img className="rev-offer-main-img" src="./personal-lesson.webp" loading="lazy" alt="Никита объясняет материал ученику на онлайн-уроке" width="1000" height="667" />
@@ -626,23 +595,10 @@ export default function Home() {
                 <SectionIcon name="hybrid" />
                 <div><strong>Абонемент «2+2»</strong><p>Два личных урока по 40 минут и две недели работы по видео с проверкой записи.</p></div>
                 <span>2 990 ₽ / 4 недели</span>
-                <div className="rev-price-actions"><button onClick={() => openBooking("Гитара — «2+2», 2 990 ₽ за четыре недели", true)}>Выбрать <Icon name="arrow" /></button><button type="button" aria-expanded={detailView === "personal"} aria-controls="personal-details" onClick={() => setDetailView(detailView === "personal" ? null : "personal")}>Подробнее <Icon name="arrow" /></button></div>
+                <div className="rev-price-actions"><button onClick={() => openBooking("Гитара — «2+2», 2 990 ₽ за четыре недели", true)}>Выбрать <Icon name="arrow" /></button></div>
               </div>
 
-              {detailView === "personal" && <div className="rev-detail-panel rev-personal-detail" id="personal-details">
-                <div className="rev-detail-top"><div><span className="rev-kicker">ФОРМАТЫ И ЦЕНЫ</span><h3>Личные уроки и «2+2»</h3><p>Выберите удобный ритм занятий. Каждый личный урок длится 40 минут.</p></div><button type="button" onClick={() => setDetailView(null)} aria-label="Закрыть подробности уроков">Закрыть ×</button></div>
-                <div className="rev-personal-detail-grid">
-                  <img src="./winter-tariffs.png" alt="Зимние тарифы: разовое занятие 1 150 ₽; четыре урока 3 990 ₽ в месяц или 7 490 ₽ за два месяца; абонемент «2+2» 2 990 ₽ в месяц; восемь уроков 7 490 ₽" loading="lazy" width="1200" height="1344" />
-                  <div className="rev-detail-plans">
-                    <div><strong>Разовое занятие — 1 150 ₽</strong><p>Один онлайн-урок на 40 минут: разберём конкретный вопрос или песню.</p></div>
-                    <div><strong>4 занятия — 3 990 ₽ / месяц</strong><p>Личный урок раз в неделю. Абонемент на два месяца — 7 490 ₽ за 8 занятий.</p></div>
-                    <div><strong>«2+2» — 2 990 ₽ / месяц</strong><p>В течение четырёх недель чередуются видеоуроки и личные онлайн-встречи: два урока по видеосвязи и две недели по видеоматериалам.</p></div>
-                    <div><strong>8 занятий — 7 490 ₽ / месяц</strong><p>Два личных урока в неделю по 40 минут.</p></div>
-                    <button className="button lime" onClick={() => openBooking("Индивидуальные уроки — подобрать абонемент")}>Выбрать абонемент <Icon name="arrow" /></button>
-                  </div>
-                </div>
-                <Techniques />
-              </div>}
+
             </article>
             <article className="rev-offer rev-offer-catalog" id="catalog">
               <div className="rev-offer-visual rev-catalog-visual">
@@ -653,10 +609,10 @@ export default function Home() {
                 <span className="rev-offer-label">03 / ПЕСНИ ПО ВАШЕМУ ВЫБОРУ</span>
                 <h3>Разборы песен и табы</h3>
                 <p>А если вы уже умеете играть и хотите понятных и интерактивных разборов, то вам сюда!</p>
-                <div className="rev-primary-actions"><a className="button lime" href={catalog}>Открыть каталог <Icon name="arrow" /></a><button type="button" className="button outline" aria-expanded={detailView === "catalog"} aria-controls="catalog-details" onClick={() => setDetailView(detailView === "catalog" ? null : "catalog")}>Подробнее <Icon name="arrow" /></button></div>
+                <div className="rev-primary-actions"><a className="button lime" href={catalog}>Открыть каталог <Icon name="arrow" /></a><button className="button outline rev-details-button" type="button" aria-haspopup="dialog" aria-controls="catalog-details" onClick={() => setDetailView("catalog")}>Подробнее <Icon name="arrow" /></button></div>
               </div>
 
-              {detailView === "catalog" && <div className="rev-detail-panel" id="catalog-details"><div className="rev-detail-top"><div><span className="rev-kicker">КАТАЛОГ ПЕСЕН</span><h3>Выберите разбор под себя</h3><p>В каталоге есть разборы песен и табы. На странице каждой песни указан состав материалов и цена.</p></div><button type="button" onClick={() => setDetailView(null)} aria-label="Закрыть подробности каталога">Закрыть ×</button></div><a className="button lime" href={catalog}>Перейти к песням <Icon name="arrow" /></a></div>}
+
             </article>
           </div>
         </section>
@@ -712,6 +668,57 @@ export default function Home() {
       </main>
       <footer className="footer wrap"><div className="footer-top"><a href="#top" aria-label="Струны будущего — к началу"><Logo /></a><p>Курс гитары, уроки и разборы песен<br />Никита Осадчук</p><div className="footer-socials"><OutLink href={channel}>Канал Telegram <Icon name="external" className="inline-icon" /></OutLink><OutLink href="https://vk.com/strunib">ВКонтакте <Icon name="external" className="inline-icon" /></OutLink><OutLink href={reviews}>Профи.ру <Icon name="external" className="inline-icon" /></OutLink></div></div><div className="footer-bottom"><span>© 2026 «Струны будущего»</span><a href="./student-info/">Памятка ученика</a><a href="#top">Наверх ↑</a></div></footer>
       <a className="hub-mobile-cta" href="#contact">Оставить заявку <Icon name="arrow" /></a>
+      {detailView === "course" && <Dialog title="Курс «Базовый минимум»" wide details onClose={() => setDetailView(null)}><div className="rev-details-content"><div className="rev-detail-panel" id="course-details">
+                <div className="rev-detail-top"><div><span className="rev-kicker">ПОДРОБНЕЕ О КУРСЕ</span><p>Полная программа в обоих тарифах. Самостоятельный доступ на год; в тарифе с проверкой я проверяю задания в течение шести месяцев.</p></div></div>
+        <div className="program pale rev-program-detail" id="program">
+          <div className="rev-detail-inner">
+            <div className="section-title"><div><span className="rev-kicker">03 / КУРС ГИТАРЫ</span><h2>Что ты <span>сыграешь?</span></h2></div></div>
+            <div className="course-showcase">
+              <div className="showcase-card showcase-rhythm"><SectionIcon name="rhythm" className="showcase-art" /><span className="showcase-kicker">Ритм</span><strong>10 боёв</strong><p>Разбираем десять вариантов боя на песнях из курса.</p></div>
+              <div className="showcase-card showcase-song"><SectionIcon name="catalog" className="showcase-art" /><span className="showcase-kicker">Репертуар</span><strong>Любимые песни</strong><p>Разбираем аккорды и играем песню целиком.</p></div>
+              <div className="showcase-card showcase-hands"><SectionIcon name="chords" className="showcase-art" /><span className="showcase-kicker">Техника</span><strong>Переборы и приёмы</strong><p>Учимся играть перебором и менять ритм без остановок.</p></div>
+            </div>
+            <div className="song-picker">
+              <div className="song-picker-copy">
+                <span className="gift-kicker">Репертуар видеокурса</span><h3>Песни из курса</h3>
+                <div className="song-spotlight" aria-live="polite">
+                  <img key={courseSongs[songIndex].cover} className="song-cover" src={`./song-covers/${courseSongs[songIndex].cover}.webp`} alt={`Обложка релиза «${courseSongs[songIndex].release}»`} width="600" height="600" />
+                  <div><span>{courseSongs[songIndex].artist}</span><strong>{courseSongs[songIndex].title}</strong></div>
+                </div>
+                <button className="button primary" onClick={() => openBooking("Курс «Базовый минимум» — хочу сыграть «" + courseSongs[songIndex].title + "»", true)}>Хочу научиться <Icon name="arrow" /></button>
+              </div>
+              <div className="song-picker-list" role="group" aria-label="Выберите песню из курса">
+                {courseSongs.map((song, i) => <button key={song.artist + song.title} className={"song-pick" + (songIndex === i ? " active" : "")} aria-pressed={songIndex === i} onClick={() => setSongIndex(i)}><span>{String(i + 1).padStart(2, "0")}</span><strong>{song.title}</strong><small>{song.artist}</small></button>)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="rev-gift rev-gift-detail" id="gift">
+          <div className="course-gift">
+            <div className="gift-story"><span className="gift-kicker">✦ БОНУС К ОБУЧЕНИЮ</span><h2>Подарок к курсу</h2><p>В подарок — тренажёры боя и аккордов, а также PDF со схемами для занятий.</p><div className="rev-gift-links"><a href="https://strunibb.github.io/boi/">Тренажёр боя <Icon name="external" /></a><a href="https://strunibb.github.io/akkordi_guitarpro/">Тренажёр аккордов <Icon name="external" /></a></div></div>
+            <div className="gift-gallery" aria-label="Подарки к курсу">
+              <div className="gift-item gift-present"><SectionIcon name="gift" className="gift-art" /><strong>Подарок</strong><small>К каждому тарифу</small></div>
+              <div className="gift-item gift-pdf"><SectionIcon name="pdf" className="gift-art" /><strong>PDF-блокнот</strong><small>Схемы и упражнения</small></div>
+              <div className="gift-item gift-practice"><SectionIcon name="practice" className="gift-art" /><strong>Тренажёры</strong><small>Ритм и аккорды</small></div>
+            </div>
+          </div>
+        </div>
+              </div></div></Dialog>}
+      {detailView === "personal" && <Dialog title="Личные уроки и «2+2»" wide details onClose={() => setDetailView(null)}><div className="rev-details-content"><div className="rev-detail-panel rev-personal-detail" id="personal-details">
+                <div className="rev-detail-top"><div><span className="rev-kicker">ФОРМАТЫ И ЦЕНЫ</span><p>Выберите удобный ритм занятий. Каждый личный урок длится 40 минут.</p></div></div>
+                <div className="rev-personal-detail-grid">
+                  <img src="./winter-tariffs.png" alt="Зимние тарифы: разовое занятие 1 150 ₽; четыре урока 3 990 ₽ в месяц или 7 490 ₽ за два месяца; абонемент «2+2» 2 990 ₽ в месяц; восемь уроков 7 490 ₽" loading="lazy" width="1200" height="1344" />
+                  <div className="rev-detail-plans">
+                    <div><strong>Разовое занятие — 1 150 ₽</strong><p>Один онлайн-урок на 40 минут: разберём конкретный вопрос или песню.</p></div>
+                    <div><strong>4 занятия — 3 990 ₽ / месяц</strong><p>Личный урок раз в неделю. Абонемент на два месяца — 7 490 ₽ за 8 занятий.</p></div>
+                    <div><strong>«2+2» — 2 990 ₽ / месяц</strong><p>В течение четырёх недель чередуются видеоуроки и личные онлайн-встречи: два урока по видеосвязи и две недели по видеоматериалам.</p></div>
+                    <div><strong>8 занятий — 7 490 ₽ / месяц</strong><p>Два личных урока в неделю по 40 минут.</p></div>
+                    <button className="button lime" onClick={() => openBooking("Индивидуальные уроки — подобрать абонемент")}>Выбрать абонемент <Icon name="arrow" /></button>
+                  </div>
+                </div>
+                <Techniques />
+              </div></div></Dialog>}
+      {detailView === "catalog" && <Dialog title="Разборы песен и табы" wide details onClose={() => setDetailView(null)}><div className="rev-details-content"><div className="rev-detail-panel" id="catalog-details"><div className="rev-detail-top"><div><span className="rev-kicker">КАТАЛОГ ПЕСЕН</span><p>В каталоге есть разборы песен и табы. На странице каждой песни указан состав материалов и цена.</p></div></div><a className="button lime" href={catalog}>Перейти к песням <Icon name="arrow" /></a></div></div></Dialog>}
       {modal?.type === "booking" && <BookingDialog selection={modal.selection} instrument={modal.instrument} initialLevel={modal.initialLevel} guitarOnly={modal.guitarOnly} onClose={() => setModal(null)} />}
       {modal?.type === "case" && <Dialog title={"Кейс " + modal.item.id} wide onClose={() => setModal(null)}><video className="case-story-player" src={modal.item.video} controls autoPlay playsInline preload="auto">Ваш браузер не поддерживает воспроизведение видео.</video></Dialog>}
     </div>

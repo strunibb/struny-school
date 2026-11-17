@@ -514,3 +514,33 @@ button.case-story-play:hover { background: #ed461e; transform: translate(-50%, -
 .rev-personal-detail .techniques { margin-top:32px; padding:28px 0 12px; border-top:1px solid #d7dce8; }
 .rev-personal-detail .techniques .wrap { width:100%; max-width:none; }
 .rev-personal-detail .techniques h2 { font-size:clamp(26px,3vw,42px); }
+
+/* One consistent details action per offer; contents open above the page. */
+.rev-details-button.button.outline {
+  display:inline-flex; align-items:center; justify-content:center; gap:36px;
+  min-height:64px; padding:18px 38px; border:1px solid #092a49;
+  border-radius:999px; background:transparent; color:#092a49;
+  font-size:clamp(16px,1.6vw,22px); font-weight:600; line-height:1.25;
+}
+.rev-details-button.button.outline svg { width:28px; height:28px; }
+.rev-details-button.button.outline:hover { background:#e9edf5; color:#092a49; }
+.rev-details-button:focus-visible { outline:3px solid #6689c5; outline-offset:4px; }
+.rev-course-details-action { grid-column:1 / -1; }
+.rev-details-dialog.dialog { width:min(1120px,calc(100% - 32px)); max-height:calc(100dvh - 32px); margin:auto; background:#f8f8fc; }
+.rev-details-dialog .dialog-inner { padding:0; }
+.rev-details-dialog .dialog-header { position:sticky; top:0; z-index:5; padding:26px 72px 24px 32px; border-bottom:1px solid #dbe0ea; background:#f8f8fc; }
+.rev-details-dialog .dialog-header h2 { margin:0; padding:0; font-size:clamp(25px,3vw,36px); }
+.rev-details-dialog .dialog-close { top:22px; right:22px; }
+.rev-details-content { padding:28px 32px 36px; }
+.rev-details-dialog .rev-detail-panel { margin:0; padding:0; border:0; border-radius:0; background:none; box-shadow:none; }
+.rev-details-dialog .rev-detail-top { margin-bottom:24px; }
+.rev-details-dialog .rev-detail-top p { margin:10px 0 0; }
+.rev-details-dialog .rev-gift-detail .course-gift { width:100%; max-width:none; margin:0; padding:clamp(20px,3vw,38px); }
+@media(max-width:650px) {
+  .rev-details-button.button.outline { min-height:56px; padding:16px 28px; gap:28px; }
+  .rev-course-details-action .rev-details-button { width:100%; }
+  .rev-details-dialog.dialog { width:calc(100% - 16px); max-height:calc(100dvh - 16px); border-radius:22px; }
+  .rev-details-dialog .dialog-header { padding:22px 60px 20px 18px; }
+  .rev-details-dialog .dialog-close { top:18px; right:16px; }
+  .rev-details-content { padding:22px 16px 28px; }
+}
