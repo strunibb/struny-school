@@ -40,8 +40,7 @@
 .rev-video-slot { position:relative; aspect-ratio:1.25; overflow:hidden; border-radius:36px; background:#274662; box-shadow:0 30px 60px #071b3490; }
 .rev-video-slot > img { width:100%; height:100%; object-fit:cover; opacity:.7; }
 .rev-video-slot:after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,#0b1f38ba,transparent 55%); pointer-events:none; }
-.rev-video-slot > div { position:absolute; z-index:2; left:32px; bottom:26px; display:flex; align-items:center; gap:10px; color:white; font-size:17px; font-weight:800; line-height:1.4; }
-.rev-video-slot .section-icon { width:92px; height:92px; }
+.rev-why-intro { max-width:43ch; margin:20px 0 0; color:#f5f7fa; font-size:clamp(16px,2vw,20px); line-height:1.6; }
 .revamped .directions { background:linear-gradient(155deg,#e9f4fc,#f5f9fd 70%,#f1eafa); }
 .revamped .directions h2 { text-align:left; }
 .revamped .direction-cards { margin-top:60px; }
@@ -78,8 +77,11 @@
 .rev-mini-price p { margin:9px 0 18px; }
 .rev-mini-price button { display:inline-flex; align-items:center; gap:10px; align-self:flex-start; margin-top:auto; color:#315d89; font-weight:800; }
 .rev-mini-price button svg { width:18px; }
-.rev-sample { grid-column:1 / -1; display:inline-flex; gap:12px; align-items:center; width:max-content; text-decoration:underline; text-underline-offset:5px; font-weight:750; }
-.rev-sample svg { width:17px; }
+.rev-sample { grid-column:1 / -1; display:inline-flex; gap:12px; align-items:center; justify-self:start; max-width:100%; padding:0; border:0; background:none; color:inherit; text-align:left; text-decoration:underline; text-underline-offset:5px; font:inherit; font-weight:750; cursor:pointer; }
+.rev-sample svg { flex:none; width:17px; }
+.rev-course-note { grid-column:1 / -1; margin:0; font-size:14px; line-height:1.5; }
+.rev-course-lesson-player { display:block; width:100%; aspect-ratio:16 / 9; border:0; background:#14161b; }
+.rev-cases[hidden], .case-story-card[hidden] { display:none; }
 .rev-offer-personal .rev-offer-copy { padding:10px 0; }
 .rev-price-line { display:flex; gap:12px; align-items:baseline; margin-top:27px; }
 .rev-price-line strong { font-size:clamp(34px,3.3vw,55px); letter-spacing:-.05em; }
@@ -179,8 +181,6 @@
   .rev-why h2 { font-size:43px; }
   .rev-why-points { margin-top:22px; }
   .rev-video-slot { aspect-ratio:1.15; border-radius:24px; }
-  .rev-video-slot > div { left:15px; bottom:13px; font-size:12px; }
-  .rev-video-slot .section-icon { width:70px; height:70px; }
   .revamped .direction-cards { margin-top:35px; }
   .revamped .hub-selection { display:block; padding:20px; }
   .revamped .hub-selection .button { margin-top:18px; }

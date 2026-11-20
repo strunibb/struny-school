@@ -8,11 +8,12 @@ const channel = "https://t.me/nikguita";
 const booking = "https://n1313298.yclients.ru";
 const reviews = "https://profi.ru/profile/OsadchukNA2/";
 const catalog = "https://strunibb.github.io/struny-songs/";
+const courseLessonEmbed = process.env.NEXT_PUBLIC_COURSE_LESSON_EMBED_URL?.trim();
 const lessonRequest =
   telegram +
   "?text=" +
   encodeURIComponent(
-    "Никита, здравствуйте! Пришлите, пожалуйста, пример урока курса «Базовый минимум».",
+    "Никита, здравствуйте! Пришлите, пожалуйста, бесплатный первый урок курса «Базовый минимум».",
   );
 const instruments = [
   {
@@ -353,20 +354,19 @@ function BookingDialog({
   );
 }
 
-function StudentVideoCase({ item, onOpen }) {
-  const [videoReady, setVideoReady] = useState(false);
+function StudentVideoCase({ item, videoReady, onReady, onOpen }) {
   return (
-    <article className="case-story-card" aria-label={"Кейс " + item.id + " из пяти"}>
+    <article className="case-story-card" aria-label={"Кейс " + item.id} hidden={!videoReady}>
       <header className="case-story-brand">
         <span>СТРУНЫ БУДУЩЕГО</span>
         <span>ИСТОРИИ УЧЕНИКОВ</span>
       </header>
       <div className="case-story-body">
         <div className="case-story-copy">
-          <span className="case-story-number">{String(item.id).padStart(2, "0")} / 05</span>
+          <span className="case-story-number">{String(item.id).padStart(2, "0")}</span>
           <h3>{"КЕЙС " + String(item.id).padStart(2, "0")}</h3>
           <strong>ВИДЕО УЧЕНИКА</strong>
-          <p>{videoReady ? "Нажмите, чтобы посмотреть видео ученика." : "Место для видео ученика. Запись появится после загрузки."}</p>
+          <p>Посмотрите, как играет ученик.</p>
         </div>
         <div className="case-story-visual">
           <span className="case-story-abstract case-story-abstract-one" aria-hidden="true" />
@@ -378,18 +378,16 @@ function StudentVideoCase({ item, onOpen }) {
             preload="metadata"
             playsInline
             muted
-            onLoadedMetadata={() => setVideoReady(true)}
-            onError={() => setVideoReady(false)}
+            onLoadedMetadata={() => onReady(item.id, true)}
+            onError={() => onReady(item.id, false)}
             aria-hidden="true"
             tabIndex={-1}
           />
-          {videoReady
-            ? <button className="case-story-play" type="button" onClick={() => onOpen(item)} aria-label={"Смотреть видео, кейс " + item.id}><Icon name="play" /></button>
-            : <span className="case-story-play is-placeholder" aria-hidden="true"><Icon name="play" /></span>}
+          <button className="case-story-play" type="button" onClick={() => onOpen(item)} aria-label={"Смотреть видео, кейс " + item.id}><Icon name="play" /></button>
         </div>
       </div>
       <footer className="case-story-footer">
-        <span>{videoReady ? "ВИДЕО ДОСТУПНО" : "ВИДЕО СКОРО ПОЯВИТСЯ"}</span>
+        <span>ВИДЕО УЧЕНИКА</span>
         <span>{String(item.id).padStart(2, "0")}</span>
       </footer>
     </article>
@@ -402,7 +400,9 @@ export default function Home() {
   const [songIndex, setSongIndex] = useState(0);
   const [detailView, setDetailView] = useState(null);
   const caseTrackRef = useRef(null);
-  const [caseNav, setCaseNav] = useState({ back: false, forward: true });
+  const [caseNav, setCaseNav] = useState({ back: false, forward: false });
+  const [readyCaseVideos, setReadyCaseVideos] = useState({});
+  const readyCaseCount = Object.values(readyCaseVideos).filter(Boolean).length;
   const [modal, setModal] = useState(null);
   const [menu, setMenu] = useState(false);
   const [leadName, setLeadName] = useState("");
@@ -456,6 +456,9 @@ export default function Home() {
     id,
     video: "./cases/student-" + String(id).padStart(2, "0") + ".mp4",
   }));
+  const setCaseVideoReady = (id, ready) => {
+    setReadyCaseVideos((videos) => videos[id] === ready ? videos : { ...videos, [id]: ready });
+  };
   const updateCaseNav = () => {
     const track = caseTrackRef.current;
     if (!track) return;
@@ -467,7 +470,7 @@ export default function Home() {
   const scrollCases = (direction) => {
     const track = caseTrackRef.current;
     if (!track) return;
-    const first = track.firstElementChild;
+    const first = track.querySelector(".case-story-card:not([hidden])");
     const gap = parseFloat(window.getComputedStyle(track).gap) || 18;
     const width = first ? first.getBoundingClientRect().width : 400;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -485,7 +488,7 @@ export default function Home() {
     sync();
     window.addEventListener("resize", sync);
     return () => window.removeEventListener("resize", sync);
-  }, []);
+  }, [readyCaseCount]);
   const submitLead = (event) => {
     event.preventDefault();
     const message = [
@@ -505,11 +508,11 @@ export default function Home() {
         <div className="header-inner">
           <a href="#top" aria-label="Струны будущего — на главную"><Logo /></a>
           <nav ref={menuRef} id="navigation" className={menu ? "navigation is-open" : "navigation"} aria-label="Главное меню">
-            <a href="#why" onClick={() => setMenu(false)}>Почему мы</a>
+            <a href="#why" onClick={() => setMenu(false)}>Подход</a>
             <a href="#directions" onClick={() => setMenu(false)}>Инструменты</a>
             <a href="#learning" onClick={() => setMenu(false)}>Обучение</a>
             <a href="#teacher" onClick={() => setMenu(false)}>Обо мне</a>
-            <a href="#cases" onClick={() => setMenu(false)}>Кейсы</a>
+            {readyCaseCount > 0 && <a href="#cases" onClick={() => setMenu(false)}>Кейсы</a>}
             <a href="#reviews" onClick={() => setMenu(false)}>Отзывы</a>
           </nav>
           <a className="header-cta" href="#contact">Оставить заявку <Icon name="arrow" /></a>
@@ -525,8 +528,8 @@ export default function Home() {
           <div className="wrap rev-hero-content">
             <h1>Онлайн-школа<br />музыки <em>Никиты<br />Осадчука</em></h1>
             <div className="rev-hero-actions">
-              <a className="button lime" href="#learning">Выбрать обучение <Icon name="arrow" /></a>
-              <a className="rev-text-link" href="#why">Как проходят занятия ↓</a>
+              <a className="button lime" href="#course">Курс гитары с нуля <Icon name="arrow" /></a>
+              <a className="rev-text-link" href="#learning">Все форматы обучения ↓</a>
             </div>
             <span className="rev-hero-bottom">ГИТАРА · ЭЛЕКТРОГИТАРА · УКУЛЕЛЕ · ФОРТЕПИАНО</span>
           </div>
@@ -536,11 +539,11 @@ export default function Home() {
           <div className="wrap rev-why-grid">
             <div>
               <span className="rev-kicker">01 / ЗНАКОМСТВО</span>
-              <h2>Почему <span>«Струны будущего»?</span></h2>
+              <h2>Учимся <span>на песнях</span></h2>
+              <p className="rev-why-intro">Если вы берёте гитару впервые или уже знаете пару аккордов, но сбиваетесь в песне, двигайтесь по шагам. Сначала разберите движения рук и ритм, затем соедините их в знакомой песне.</p>
             </div>
             <div className="rev-video-slot">
               <img src="./lesson-planning.webp" alt="Никита готовит материалы для урока" loading="lazy" width="1000" height="668" />
-              <div><SectionIcon name="video" /><span>Скоро здесь будет видео<br />о школе и занятиях</span></div>
             </div>
           </div>
         </section>
@@ -575,7 +578,10 @@ export default function Home() {
                   <div className="rev-price-actions"><button onClick={() => openBooking(plan.selection, true)}>Выбрать <Icon name="arrow" /></button></div>
                 </div>)}
                 <div className="rev-course-details-action"><button className="button outline rev-details-button" type="button" aria-haspopup="dialog" aria-controls="course-details" onClick={() => setDetailView("course")}>Подробнее <Icon name="arrow" /></button></div>
-                <a className="rev-sample" href={lessonRequest} target="_blank" rel="noopener noreferrer">Посмотреть пример урока <Icon name="external" /></a>
+                {courseLessonEmbed
+                  ? <button className="rev-sample" type="button" aria-haspopup="dialog" onClick={() => setModal({ type: "course-lesson" })}>Смотреть бесплатный урок · 16 мин <Icon name="play" /></button>
+                  : <OutLink className="rev-sample" href={lessonRequest}>Получить бесплатный урок в Telegram <Icon name="external" /></OutLink>}
+                <p className="rev-course-note">Выберите тариф и отправьте заявку в Telegram. Никита ответит и поможет с оплатой и доступом.</p>
               </div>
 
 
@@ -625,27 +631,29 @@ export default function Home() {
         </section>
 
 
-        <section className="section rev-cases" id="cases">
+        <section className="section rev-cases" id="cases" hidden={readyCaseCount === 0}>
           <div className="wrap">
             <div className="rev-cases-head">
               <div>
                 <h2>НАШИ КЕЙСЫ</h2>
               </div>
-              <div className="rev-case-controls" aria-label="Управление каруселью">
+              {readyCaseCount > 1 && <div className="rev-case-controls" aria-label="Управление каруселью">
                 <button type="button" aria-label="Предыдущий кейс" disabled={!caseNav.back} onClick={() => scrollCases(-1)}><Icon name="arrow" /></button>
                 <button type="button" aria-label="Следующий кейс" disabled={!caseNav.forward} onClick={() => scrollCases(1)}><Icon name="arrow" /></button>
-              </div>
+              </div>}
             </div>
-            <div className="case-story-track" ref={caseTrackRef} onScroll={updateCaseNav} role="region" aria-roledescription="карусель" aria-label="Пять видео-кейсов учеников" tabIndex={0}>
-              {cases.map((item) => <StudentVideoCase key={item.id} item={item} onOpen={(selected) => setModal({ type: "case", item: selected })} />)}
+            <div className="case-story-track" ref={caseTrackRef} onScroll={updateCaseNav} role="region" aria-roledescription="карусель" aria-label="Видео учеников" tabIndex={0}>
+              {cases.map((item) => (
+                <StudentVideoCase key={item.id} item={item} videoReady={Boolean(readyCaseVideos[item.id])} onReady={setCaseVideoReady} onOpen={(selected) => setModal({ type: "case", item: selected })} />
+              ))}
             </div>
-            <div className="case-story-hint" aria-hidden="true">ЛИСТАЙТЕ <span>↔</span> 01 — 05</div>
+            {readyCaseCount > 1 && <div className="case-story-hint" aria-hidden="true">ЛИСТАЙТЕ <span>↔</span></div>}
           </div>
         </section>
 
         <section className="section reviews pale rev-reviews" id="reviews">
           <div className="wrap rev-reviews-grid">
-            <div><span className="rev-kicker">05 / ОТЗЫВЫ</span><h2>Отзывы <span>учеников</span></h2><p>Отзывы об уроках можно прочитать в моём профиле на Профи.ру. Фотографии отзывов добавим в этот раздел.</p><OutLink className="button outline" href={reviews}>Читать отзывы на Профи.ру <Icon name="external" /></OutLink></div>
+            <div><span className="rev-kicker">05 / ОТЗЫВЫ</span><h2>Отзывы <span>учеников</span></h2><p>Отзывы о занятиях собраны в моём профиле на Профи.ру.</p><OutLink className="button outline" href={reviews}>Читать отзывы на Профи.ру <Icon name="external" /></OutLink></div>
             {reviewPhotos.length ? <div className="rev-review-gallery">{reviewPhotos.map((src, i) => <img key={src} src={src} alt={`Отзыв ученика №${i + 1}`} loading="lazy" />)}</div> : <div className="rev-review-visual"><SectionIcon name="reviews" /><div><span>Отзывы учеников</span><strong>Профи.ру</strong><small>Ссылка на независимый профиль</small></div></div>}
           </div>
         </section>
@@ -720,6 +728,10 @@ export default function Home() {
               </div></div></Dialog>}
       {detailView === "catalog" && <Dialog title="Разборы песен и табы" wide details onClose={() => setDetailView(null)}><div className="rev-details-content"><div className="rev-detail-panel" id="catalog-details"><div className="rev-detail-top"><div><span className="rev-kicker">КАТАЛОГ ПЕСЕН</span><p>В каталоге есть разборы песен и табы. На странице каждой песни указан состав материалов и цена.</p></div></div><a className="button lime" href={catalog}>Перейти к песням <Icon name="arrow" /></a></div></div></Dialog>}
       {modal?.type === "booking" && <BookingDialog selection={modal.selection} instrument={modal.instrument} initialLevel={modal.initialLevel} guitarOnly={modal.guitarOnly} onClose={() => setModal(null)} />}
+      {modal?.type === "course-lesson" && <Dialog title="Первый урок курса «Базовый минимум»" wide onClose={() => setModal(null)}>
+        <iframe className="rev-course-lesson-player" src={courseLessonEmbed} title="Бесплатный урок гитары" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
+        <p className="form-note"><OutLink href={lessonRequest}>Получить ссылку на урок в Telegram</OutLink></p>
+      </Dialog>}
       {modal?.type === "case" && <Dialog title={"Кейс " + modal.item.id} wide onClose={() => setModal(null)}><video className="case-story-player" src={modal.item.video} controls autoPlay playsInline preload="auto">Ваш браузер не поддерживает воспроизведение видео.</video></Dialog>}
     </div>
   );
